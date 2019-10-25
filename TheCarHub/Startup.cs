@@ -12,6 +12,7 @@ using TheCarHub.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TheCarHub.Repositories;
 
 namespace TheCarHub
 {
@@ -27,35 +28,19 @@ namespace TheCarHub
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ICarRepository, CarRepository>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("AppReferential"))
+                options.UseSqlServer(Configuration.GetConnectionString("AppReferential"))
             );
 
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("AppIdentity")
-                )
+                options.UseSqlServer(Configuration.GetConnectionString("AppIdentity"))
             );
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
                 
-            // services.AddIdentity<IdentityUser, IdentityRole>()
-            //     .AddEntityFrameworkStores<AppIdentityDbContext>()
-            //     .AddDefaultTokenProviders();
-
-            // services.ConfigureApplicationCookie(options =>
-            // {
-            //     // Cookie settings
-            //     options.Cookie.HttpOnly = true;
-            //     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-            //     options.LoginPath = "/Identity/Account/Login";
-            //     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-            //     options.SlidingExpiration = true;
-            // });
-
             services.AddControllersWithViews();
 
            services.AddRazorPages();
