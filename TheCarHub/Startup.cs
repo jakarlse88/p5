@@ -77,7 +77,7 @@ namespace TheCarHub
                 endpoints.MapRazorPages();
             });
 
-            IdentitySeedData.EnsurePopulated(app);
+            // IdentitySeedData.EnsurePopulated(app);
         }
     }
 }
