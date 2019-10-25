@@ -7,8 +7,8 @@ namespace TheCarHub.Repositories
 {
     public interface ICarRepository
     {
-        void Save(CarItem car);
-        Task<CarItem> GetCarById(Guid id);
-        Task<IList<CarItem>> GetAllCars();
+        void Save(CarEntity car);
+        Task<CarEntity> GetCarById(int id);
+        Task<IList<CarEntity>> GetAllCars();
     }
 }

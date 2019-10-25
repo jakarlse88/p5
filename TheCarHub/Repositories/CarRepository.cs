@@ -16,19 +16,19 @@ namespace TheCarHub.Repositories
             _context = context;
         }
 
-        public async Task<IList<CarItem>> GetAllCars()
+        public async Task<IList<CarEntity>> GetAllCars()
         {
             var results = await _context.Cars.ToListAsync();
 
             return results;
         }
 
-        public Task<CarItem> GetCarById(Guid id)
+        public Task<CarEntity> GetCarById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Save(CarItem car)
+        public void Save(CarEntity car)
         {
             throw new NotImplementedException();
         }

@@ -2,11 +2,11 @@ using System;
 
 namespace TheCarHub.Models 
 {
-    public class CarItem
+    public class CarEntity
     {
         public int CarId { get; set; }
-        public int ListingItemId { get; set; }
-        public ListingItem Listing { get; set; }
+        public int ListingEntityId { get; set; }
+        public ListingEntity Listing { get; set; }
         public string VIN { get; set; }
         public DateTime Year { get; set; }
         public string Make { get; set; }

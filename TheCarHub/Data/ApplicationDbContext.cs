@@ -15,9 +15,9 @@ namespace TheCarHub.Data
         {
         }
 
-        public DbSet<CarItem> Cars { get; set; }
-        public DbSet<ListingItem> Listings { get; set; }
-        public DbSet<ImageItem> Images { get; set; }
+        public DbSet<CarEntity> Cars { get; set; }
+        public DbSet<ListingEntity> Listings { get; set; }
+        public DbSet<ImageEntity> Images { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,76 +31,76 @@ namespace TheCarHub.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<CarItem>()
+            builder.Entity<CarEntity>()
                 .HasKey(x => x.CarId);
 
-            builder.Entity<ListingItem>()
-                .HasKey(x => x.ListingItemId);
+            builder.Entity<ListingEntity>()
+                .HasKey(x => x.ListingEntityId);
 
-            builder.Entity<ImageItem>()
-                .HasKey(x => x.ImageItemId);
+            builder.Entity<ImageEntity>()
+                .HasKey(x => x.ImageEntityId);
 
-            builder.Entity<ImageItem>()
+            builder.Entity<ImageEntity>()
                 .HasOne(x => x.Listing)
                 .WithMany(y => y.Images)
-                .HasForeignKey(z => z.ListingItemId)
+                .HasForeignKey(z => z.ListingEntityId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<ListingItem>()
+            builder.Entity<ListingEntity>()
                 .HasOne(x => x.Car)
                 .WithOne(y => y.Listing)
-                .HasForeignKey<CarItem>(z => z.ListingItemId);
+                .HasForeignKey<CarEntity>(z => z.ListingEntityId);
 
-            builder.Entity<ListingItem>()
+            builder.Entity<ListingEntity>()
                 .HasData(
-                     new ListingItem {
-                        ListingItemId = 1,
+                     new ListingEntity {
+                        ListingEntityId = 1,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
-                     new ListingItem {
-                        ListingItemId = 2,
+                     new ListingEntity {
+                        ListingEntityId = 2,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
-                     new ListingItem {
-                        ListingItemId = 3,
+                     new ListingEntity {
+                        ListingEntityId = 3,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
-                     new ListingItem {
-                        ListingItemId = 4,
+                     new ListingEntity {
+                        ListingEntityId = 4,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
-                     new ListingItem {
-                        ListingItemId = 5,
+                     new ListingEntity {
+                        ListingEntityId = 5,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
-                     new ListingItem {
-                        ListingItemId = 6,
+                     new ListingEntity {
+                        ListingEntityId = 6,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     });
 
-                builder.Entity<CarItem>()
+                builder.Entity<CarEntity>()
                     .HasData(
-                        new CarItem {
+                        new CarEntity {
                         CarId = 1,
-                        ListingItemId = 1,
+                        ListingEntityId = 1,
                         VIN = "",
                         Year = new DateTime(1991),
                         Make = "Mazda",
@@ -114,9 +114,9 @@ namespace TheCarHub.Data
                         SellingPrice = 1800 + 7600 + 500,
                         SaleDate = new DateTime(2019, 4, 8)
                     },
-                    new CarItem {
+                    new CarEntity {
                         CarId = 2,
-                        ListingItemId = 2,
+                        ListingEntityId = 2,
                         VIN = "",
                         Year = new DateTime(2007),
                         Make = "Jeep",
@@ -130,9 +130,9 @@ namespace TheCarHub.Data
                         SellingPrice = 4500 + 350 + 500,
                         SaleDate = null
                     },
-                    new CarItem {
+                    new CarEntity {
                         CarId = 3,
-                        ListingItemId = 3,
+                        ListingEntityId = 3,
                         VIN = "",
                         Year = new DateTime(2017),
                         Make = "Ford",
@@ -146,9 +146,9 @@ namespace TheCarHub.Data
                         SellingPrice = 24350 + 1100 + 500, 
                         SaleDate = null
                     },
-                    new CarItem {
+                    new CarEntity {
                         CarId = 4,
-                        ListingItemId = 4,
+                        ListingEntityId = 4,
                         VIN = "",
                         Year = new DateTime(2008),
                         Make = "Honda",
@@ -162,9 +162,9 @@ namespace TheCarHub.Data
                         SellingPrice = 4000 + 475 + 500,
                         SaleDate = new DateTime(2019, 4, 9)
                     },
-                    new CarItem {
+                    new CarEntity {
                         CarId = 5,
-                        ListingItemId = 5,
+                        ListingEntityId = 5,
                         VIN = "",
                         Year = new DateTime(2016),
                         Make = "Volkswagen",
@@ -178,9 +178,9 @@ namespace TheCarHub.Data
                         SellingPrice = 15250 + 440 + 500,
                         SaleDate = new DateTime(2019, 4, 12)
                     },
-                    new CarItem {
+                    new CarEntity {
                         CarId = 6,
-                        ListingItemId = 6,
+                        ListingEntityId = 6,
                         VIN = "",
                         Year = new DateTime(2013),
                         Make = "Ford",
