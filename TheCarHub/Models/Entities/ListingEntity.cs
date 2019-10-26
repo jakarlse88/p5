@@ -6,6 +6,7 @@ namespace TheCarHub.Models
     public class ListingEntity 
     {
         public int ListingId { get; set; }
+        public int CarForeignKey { get; set; }
         public CarEntity Car { get; set; }
         public List<ImageEntity> Images { get; set; }
         public string Description { get; set; }

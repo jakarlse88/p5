@@ -19,15 +19,12 @@ namespace TheCarHub.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TheCarHub.Models.CarItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.CarEntity", b =>
                 {
                     b.Property<int>("CarId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ListingItemId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("LotDate")
                         .HasColumnType("datetime2");
@@ -67,16 +64,12 @@ namespace TheCarHub.Migrations
 
                     b.HasKey("CarId");
 
-                    b.HasIndex("ListingItemId")
-                        .IsUnique();
-
                     b.ToTable("Cars");
 
                     b.HasData(
                         new
                         {
                             CarId = 1,
-                            ListingItemId = 1,
                             LotDate = new DateTime(2019, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Make = "Mazda",
                             Model = "Miata",
@@ -93,7 +86,6 @@ namespace TheCarHub.Migrations
                         new
                         {
                             CarId = 2,
-                            ListingItemId = 2,
                             LotDate = new DateTime(2019, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Make = "Jeep",
                             Model = "Liberty",
@@ -109,7 +101,6 @@ namespace TheCarHub.Migrations
                         new
                         {
                             CarId = 3,
-                            ListingItemId = 3,
                             LotDate = new DateTime(2019, 4, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Make = "Ford",
                             Model = "Explorer",
@@ -125,7 +116,6 @@ namespace TheCarHub.Migrations
                         new
                         {
                             CarId = 4,
-                            ListingItemId = 4,
                             LotDate = new DateTime(2019, 4, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Make = "Honda",
                             Model = "Civic",
@@ -142,7 +132,6 @@ namespace TheCarHub.Migrations
                         new
                         {
                             CarId = 5,
-                            ListingItemId = 5,
                             LotDate = new DateTime(2019, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Make = "Volkswagen",
                             Model = "GTI",
@@ -159,7 +148,6 @@ namespace TheCarHub.Migrations
                         new
                         {
                             CarId = 6,
-                            ListingItemId = 6,
                             LotDate = new DateTime(2019, 4, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Make = "Ford",
                             Model = "Edge",
@@ -175,32 +163,38 @@ namespace TheCarHub.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.ImageItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.ImageEntity", b =>
                 {
-                    b.Property<int>("ImageItemId")
+                    b.Property<int>("ImageEntityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ImageLocation")
+                    b.Property<string>("Caption")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ListingItemId")
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("ListingEntityId")
                         .HasColumnType("int");
 
-                    b.HasKey("ImageItemId");
+                    b.HasKey("ImageEntityId");
 
-                    b.HasIndex("ListingItemId");
+                    b.HasIndex("ListingEntityId");
 
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.ListingItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.ListingEntity", b =>
                 {
-                    b.Property<int>("ListingItemId")
+                    b.Property<int>("ListingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CarForeignKey")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -214,69 +208,28 @@ namespace TheCarHub.Migrations
                     b.Property<string>("ListingStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ListingItemId");
+                    b.HasKey("ListingId");
+
+                    b.HasIndex("CarForeignKey")
+                        .IsUnique();
 
                     b.ToTable("Listings");
-
-                    b.HasData(
-                        new
-                        {
-                            ListingItemId = 1,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 272, DateTimeKind.Local).AddTicks(4370),
-                            Description = "",
-                            ListingStatus = "Available"
-                        },
-                        new
-                        {
-                            ListingItemId = 2,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2010),
-                            Description = "",
-                            ListingStatus = "Available"
-                        },
-                        new
-                        {
-                            ListingItemId = 3,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2070),
-                            Description = "",
-                            ListingStatus = "Available"
-                        },
-                        new
-                        {
-                            ListingItemId = 4,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2080),
-                            Description = "",
-                            ListingStatus = "Available"
-                        },
-                        new
-                        {
-                            ListingItemId = 5,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2080),
-                            Description = "",
-                            ListingStatus = "Available"
-                        },
-                        new
-                        {
-                            ListingItemId = 6,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2090),
-                            Description = "",
-                            ListingStatus = "Available"
-                        });
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.CarItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.ImageEntity", b =>
                 {
-                    b.HasOne("TheCarHub.Models.ListingItem", "Listing")
-                        .WithOne("Car")
-                        .HasForeignKey("TheCarHub.Models.CarItem", "ListingItemId")
+                    b.HasOne("TheCarHub.Models.ListingEntity", "Listing")
+                        .WithMany("Images")
+                        .HasForeignKey("ListingEntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.ImageItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.ListingEntity", b =>
                 {
-                    b.HasOne("TheCarHub.Models.ListingItem", "Listing")
-                        .WithMany("Images")
-                        .HasForeignKey("ListingItemId")
+                    b.HasOne("TheCarHub.Models.CarEntity", "Car")
+                        .WithOne("Listing")
+                        .HasForeignKey("TheCarHub.Models.ListingEntity", "CarForeignKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -23,7 +23,6 @@ namespace TheCarHub.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-
             }
         }
 
@@ -40,67 +39,26 @@ namespace TheCarHub.Data
             builder.Entity<ImageEntity>()
                 .HasKey(x => x.ImageEntityId);
 
+            // builder.Entity<ImageEntity>()
+            //     .HasOne(x => x.Listing)
+            //     .WithMany(y => y.Images)
+            //     .HasForeignKey(z => z.ListingEntityId)
+            //     .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<ImageEntity>()
                 .HasOne(x => x.Listing)
                 .WithMany(y => y.Images)
-                .HasForeignKey(z => z.ListingEntityId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(z => z.ListingEntityId);
 
-            builder.Entity<ListingEntity>()
-                .HasOne(x => x.Car)
-                .WithOne(y => y.Listing)
-                .HasForeignKey<CarEntity>(z => z.ListingEntityId);
-
-            builder.Entity<ListingEntity>()
-                .HasData(
-                     new ListingEntity {
-                        ListingId = 1,
-                        Description = "",
-                        ListingStatus = "Available",
-                        DateCreated = DateTime.Now,
-                        DateLastUpdated = null
-                    },
-                     new ListingEntity {
-                        ListingId = 2,
-                        Description = "",
-                        ListingStatus = "Available",
-                        DateCreated = DateTime.Now,
-                        DateLastUpdated = null
-                    },
-                     new ListingEntity {
-                        ListingId = 3,
-                        Description = "",
-                        ListingStatus = "Available",
-                        DateCreated = DateTime.Now,
-                        DateLastUpdated = null
-                    },
-                     new ListingEntity {
-                        ListingId = 4,
-                        Description = "",
-                        ListingStatus = "Available",
-                        DateCreated = DateTime.Now,
-                        DateLastUpdated = null
-                    },
-                     new ListingEntity {
-                        ListingId = 5,
-                        Description = "",
-                        ListingStatus = "Available",
-                        DateCreated = DateTime.Now,
-                        DateLastUpdated = null
-                    },
-                     new ListingEntity {
-                        ListingId = 6,
-                        Description = "",
-                        ListingStatus = "Available",
-                        DateCreated = DateTime.Now,
-                        DateLastUpdated = null
-                    });
+            builder.Entity<CarEntity>()
+                .HasOne(x => x.Listing)
+                .WithOne(y => y.Car)
+                .HasForeignKey<ListingEntity>(z => z.CarForeignKey);
 
                 builder.Entity<CarEntity>()
                     .HasData(
                         new CarEntity {
                         CarId = 1,
-                        ListingEntityId = 1,
                         VIN = "",
                         Year = new DateTime(1991),
                         Make = "Mazda",
@@ -116,7 +74,6 @@ namespace TheCarHub.Data
                     },
                     new CarEntity {
                         CarId = 2,
-                        ListingEntityId = 2,
                         VIN = "",
                         Year = new DateTime(2007),
                         Make = "Jeep",
@@ -132,7 +89,6 @@ namespace TheCarHub.Data
                     },
                     new CarEntity {
                         CarId = 3,
-                        ListingEntityId = 3,
                         VIN = "",
                         Year = new DateTime(2017),
                         Make = "Ford",
@@ -148,7 +104,6 @@ namespace TheCarHub.Data
                     },
                     new CarEntity {
                         CarId = 4,
-                        ListingEntityId = 4,
                         VIN = "",
                         Year = new DateTime(2008),
                         Make = "Honda",
@@ -164,7 +119,6 @@ namespace TheCarHub.Data
                     },
                     new CarEntity {
                         CarId = 5,
-                        ListingEntityId = 5,
                         VIN = "",
                         Year = new DateTime(2016),
                         Make = "Volkswagen",
@@ -180,7 +134,6 @@ namespace TheCarHub.Data
                     },
                     new CarEntity {
                         CarId = 6,
-                        ListingEntityId = 6,
                         VIN = "",
                         Year = new DateTime(2013),
                         Make = "Ford",

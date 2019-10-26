@@ -6,6 +6,7 @@ namespace TheCarHub.Models
     {
         public int ImageEntityId { get; set; }
         public byte[] Content { get; set; }
+        public string Caption { get; set; }
         public int ListingEntityId { get; set; }
         public ListingEntity Listing { get; set; }
     }

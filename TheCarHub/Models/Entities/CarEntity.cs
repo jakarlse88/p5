@@ -5,7 +5,6 @@ namespace TheCarHub.Models
     public class CarEntity
     {
         public int CarId { get; set; }
-        public int ListingEntityId { get; set; }
         public ListingEntity Listing { get; set; }
         public string VIN { get; set; }
         public DateTime Year { get; set; }
