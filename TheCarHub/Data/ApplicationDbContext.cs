@@ -35,7 +35,7 @@ namespace TheCarHub.Data
                 .HasKey(x => x.CarId);
 
             builder.Entity<ListingEntity>()
-                .HasKey(x => x.ListingEntityId);
+                .HasKey(x => x.ListingId);
 
             builder.Entity<ImageEntity>()
                 .HasKey(x => x.ImageEntityId);
@@ -54,42 +54,42 @@ namespace TheCarHub.Data
             builder.Entity<ListingEntity>()
                 .HasData(
                      new ListingEntity {
-                        ListingEntityId = 1,
+                        ListingId = 1,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
                      new ListingEntity {
-                        ListingEntityId = 2,
+                        ListingId = 2,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
                      new ListingEntity {
-                        ListingEntityId = 3,
+                        ListingId = 3,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
                      new ListingEntity {
-                        ListingEntityId = 4,
+                        ListingId = 4,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
                      new ListingEntity {
-                        ListingEntityId = 5,
+                        ListingId = 5,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
                         DateLastUpdated = null
                     },
                      new ListingEntity {
-                        ListingEntityId = 6,
+                        ListingId = 6,
                         Description = "",
                         ListingStatus = "Available",
                         DateCreated = DateTime.Now,
