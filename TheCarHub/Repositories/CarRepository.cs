@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TheCarHub.Models;
 using TheCarHub.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace TheCarHub.Repositories 
 {
@@ -23,14 +24,46 @@ namespace TheCarHub.Repositories
             return results;
         }
 
-        public Task<CarEntity> GetCarById(int id)
+        public async Task<CarEntity> GetCarById(int id)
         {
-            throw new NotImplementedException();
+            CarEntity result = 
+                await _context
+                    .Cars
+                    .FirstOrDefaultAsync(x => x.CarId == id);
+            
+            return result;
         }
 
-        public void Save(CarEntity car)
+        public void DeleteCar(int id)
         {
-            throw new NotImplementedException();
+            CarEntity car = 
+                _context
+                .Cars
+                .FirstOrDefault(c => c.CarId == id);
+
+            if (car != null)
+            {
+                _context.Cars.Remove(car);
+                _context.SaveChanges();
+            }
+        }
+
+        public void UpdateCar(CarEntity car)
+        {
+            if (car != null)
+            {
+                _context.Cars.Update(car);
+                _context.SaveChanges();
+            }
+        }
+
+        public void SaveCar(CarEntity car)
+        {
+            if (car != null)
+            {
+                _context.Cars.Add(car);
+                _context.SaveChanges();
+            }
         }
     }
 }
