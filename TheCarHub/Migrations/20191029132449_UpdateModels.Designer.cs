@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheCarHub.Data;
 
 namespace TheCarHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191029132449_UpdateModels")]
+    partial class UpdateModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,6 +104,21 @@ namespace TheCarHub.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TheCarHub.Models.CarRepair", b =>
+                {
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RepairID")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarId", "RepairID");
+
+                    b.HasIndex("RepairID");
+
+                    b.ToTable("CarRepair");
+                });
+
             modelBuilder.Entity("TheCarHub.Models.Listing", b =>
                 {
                     b.Property<int>("Id")
@@ -124,21 +141,31 @@ namespace TheCarHub.Migrations
                     b.Property<string>("ListingStatus")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("LotDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RepairCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Repairs")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("SaleDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("SellingPrice")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarForeignKey");
+                    b.HasIndex("CarForeignKey")
+                        .IsUnique();
 
                     b.ToTable("Listings");
                 });
@@ -178,7 +205,7 @@ namespace TheCarHub.Migrations
 
                     b.HasIndex("ListingId");
 
-                    b.ToTable("Media");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
@@ -196,7 +223,7 @@ namespace TheCarHub.Migrations
                     b.ToTable("MediaTag");
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.RepairJob", b =>
+            modelBuilder.Entity("TheCarHub.Models.Repair", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,46 +231,14 @@ namespace TheCarHub.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("Cost")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("HourlyRate")
-                        .HasColumnType("money");
-
-                    b.Property<DateTime>("Hours")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListingId")
-                        .IsUnique();
-
-                    b.ToTable("RepairJob");
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.SparePart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("money");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RepairJobId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RepairJobId");
-
-                    b.ToTable("SparePart");
+                    b.ToTable("Repairs");
                 });
 
             modelBuilder.Entity("TheCarHub.Models.Tag", b =>
@@ -261,11 +256,26 @@ namespace TheCarHub.Migrations
                     b.ToTable("Tag");
                 });
 
+            modelBuilder.Entity("TheCarHub.Models.CarRepair", b =>
+                {
+                    b.HasOne("TheCarHub.Models.Car", "Car")
+                        .WithMany("CarRepairs")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TheCarHub.Models.Repair", "Repair")
+                        .WithMany("CarRepairs")
+                        .HasForeignKey("RepairID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TheCarHub.Models.Listing", b =>
                 {
                     b.HasOne("TheCarHub.Models.Car", "Car")
-                        .WithMany("Listings")
-                        .HasForeignKey("CarForeignKey")
+                        .WithOne("Listing")
+                        .HasForeignKey("TheCarHub.Models.Listing", "CarForeignKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -307,22 +317,6 @@ namespace TheCarHub.Migrations
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.RepairJob", b =>
-                {
-                    b.HasOne("TheCarHub.Models.Listing", "Listing")
-                        .WithOne("RepairJob")
-                        .HasForeignKey("TheCarHub.Models.RepairJob", "ListingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.SparePart", b =>
-                {
-                    b.HasOne("TheCarHub.Models.RepairJob", null)
-                        .WithMany("Parts")
-                        .HasForeignKey("RepairJobId");
                 });
 #pragma warning restore 612, 618
         }

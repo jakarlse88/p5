@@ -11,45 +11,45 @@ namespace TheCarHub.Tests
 {
     public class ListingRepositoryTests
     {
-        private readonly ListingEntity[] _testEntities = new ListingEntity[]
+        private readonly Listing[] _testEntities = new Listing[]
         {
-            new ListingEntity {
-                ListingId = 1,
+            new Listing {
+                Id = 1,
                 Description = "One",
                 ListingStatus = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
-                new ListingEntity {
-                ListingId = 2,
+                new Listing {
+                Id = 2,
                 Description = "Two",
                 ListingStatus = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
-                new ListingEntity {
-                ListingId = 3,
+                new Listing {
+                Id = 3,
                 Description = "Three",
                 ListingStatus = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
-                new ListingEntity {
-                ListingId = 4,
+                new Listing {
+                Id = 4,
                 Description = "Four",
                 ListingStatus = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
-                new ListingEntity {
-                ListingId = 5,
+                new Listing {
+                Id = 5,
                 Description = "Five",
                 ListingStatus = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
-                new ListingEntity {
-                ListingId = 6,
+                new Listing {
+                Id = 6,
                 Description = "Six",
                 ListingStatus = "Available",
                 DateCreated = DateTime.Now,
@@ -83,7 +83,7 @@ namespace TheCarHub.Tests
             // Arrange
             var options = BuildTestDbOptions();
             PrepareTestDb(options);
-            IList<ListingEntity> result;
+            IList<Listing> result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -110,7 +110,7 @@ namespace TheCarHub.Tests
             // Arrange
             var options = BuildTestDbOptions();
             PrepareTestDb(options);
-            ListingEntity result;
+            Listing result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -134,7 +134,7 @@ namespace TheCarHub.Tests
             // Arrange
             var options = BuildTestDbOptions();
             PrepareTestDb(options);
-            ListingEntity result;
+            Listing result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -174,7 +174,7 @@ namespace TheCarHub.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 var results = context.Listings.ToList();
-                Assert.DoesNotContain(results, l => l.ListingId == testId);
+                Assert.DoesNotContain(results, l => l.Id == testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -232,7 +232,7 @@ namespace TheCarHub.Tests
             {
                 var result = context.Listings.ToList();
 
-                Assert.Equal(1, result.First().ListingId);
+                Assert.Equal(1, result.First().Id);
 
                 context.Database.EnsureDeleted();
             }
@@ -243,7 +243,7 @@ namespace TheCarHub.Tests
         {
             // Arrange
             var options = BuildTestDbOptions();
-            ListingEntity testEntity = null;
+            Listing testEntity = null;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -279,7 +279,7 @@ namespace TheCarHub.Tests
                 var testEntity = 
                     context
                     .Listings
-                    .FirstOrDefault(l => l.ListingId == 1);
+                    .FirstOrDefault(l => l.Id == 1);
 
                 testEntity.Description = "Test";
 
@@ -292,7 +292,7 @@ namespace TheCarHub.Tests
                 var result = 
                     context
                     .Listings
-                    .FirstOrDefault(l => l.ListingId == 1);
+                    .FirstOrDefault(l => l.Id == 1);
 
                 Assert.Equal("Test", result.Description);
 
@@ -315,7 +315,7 @@ namespace TheCarHub.Tests
                 var testEntity = 
                     context
                     .Listings
-                    .FirstOrDefault(l => l.ListingId == 10);
+                    .FirstOrDefault(l => l.Id == 10);
 
                 repository.UpdateListing(testEntity);
             }
@@ -326,7 +326,7 @@ namespace TheCarHub.Tests
                 var result = 
                     context
                     .Listings
-                    .FirstOrDefault(l => l.ListingId == 1);
+                    .FirstOrDefault(l => l.Id == 1);
 
                 Assert.Equal("One", result.Description);
 

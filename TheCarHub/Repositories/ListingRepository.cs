@@ -19,10 +19,10 @@ namespace TheCarHub.Repositories
 
         public void DeleteListing(int id)
         {
-            ListingEntity listing =
+            Listing listing =
                 _context
                 .Listings
-                .FirstOrDefault(l => l.ListingId == id);
+                .FirstOrDefault(l => l.Id == id);
             
             if (listing != null)
             {
@@ -31,24 +31,24 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public async Task<IList<ListingEntity>> GetAllListings()
+        public async Task<IList<Listing>> GetAllListings()
         {
             var results = await _context.Listings.ToListAsync();
 
             return results;
         }
 
-        public async Task<ListingEntity> GetListingById(int id)
+        public async Task<Listing> GetListingById(int id)
         {
-            ListingEntity result =
+            Listing result =
                 await _context
                     .Listings
-                    .FirstOrDefaultAsync(l => l.ListingId == id);
+                    .FirstOrDefaultAsync(l => l.Id == id);
 
             return result;
         }
 
-        public void SaveListing(ListingEntity listing)
+        public void SaveListing(Listing listing)
         {
             if (listing != null)
             {
@@ -57,7 +57,7 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public void UpdateListing(ListingEntity listing)
+        public void UpdateListing(Listing listing)
         {
             if (listing != null)
             {

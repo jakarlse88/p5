@@ -12,11 +12,10 @@ namespace TheCarHub.Tests
     [Collection("DB")]
     public class CarRepositoryTests
     {
-        private readonly CarEntity[] _testEntities = new CarEntity[6]
+        private readonly Car[] _testEntities = new Car[6]
         {
-            new CarEntity {
-                CarId = 1,
-                ListingEntityId = 1,
+            new Car {
+                Id = 1,
                 VIN = "",
                 Year = new DateTime(1991),
                 Make = "Mazda",
@@ -30,9 +29,8 @@ namespace TheCarHub.Tests
                 SellingPrice = 1800 + 7600 + 500,
                 SaleDate = new DateTime(2019, 4, 8)
             },
-            new CarEntity {
-                CarId = 2,
-                ListingEntityId = 2,
+            new Car {
+                Id = 2,
                 VIN = "",
                 Year = new DateTime(2007),
                 Make = "Jeep",
@@ -46,9 +44,8 @@ namespace TheCarHub.Tests
                 SellingPrice = 4500 + 350 + 500,
                 SaleDate = null
             },
-            new CarEntity {
-                CarId = 3,
-                ListingEntityId = 3,
+            new Car {
+                Id = 3,
                 VIN = "",
                 Year = new DateTime(2017),
                 Make = "Ford",
@@ -62,9 +59,8 @@ namespace TheCarHub.Tests
                 SellingPrice = 24350 + 1100 + 500, 
                 SaleDate = null
             },
-            new CarEntity {
-                CarId = 4,
-                ListingEntityId = 4,
+            new Car {
+                Id = 4,
                 VIN = "",
                 Year = new DateTime(2008),
                 Make = "Honda",
@@ -78,9 +74,8 @@ namespace TheCarHub.Tests
                 SellingPrice = 4000 + 475 + 500,
                 SaleDate = new DateTime(2019, 4, 9)
             },
-            new CarEntity {
-                CarId = 5,
-                ListingEntityId = 5,
+            new Car {
+                Id = 5,
                 VIN = "",
                 Year = new DateTime(2016),
                 Make = "Volkswagen",
@@ -94,9 +89,8 @@ namespace TheCarHub.Tests
                 SellingPrice = 15250 + 440 + 500,
                 SaleDate = new DateTime(2019, 4, 12)
             },
-            new CarEntity {
-                CarId = 6,
-                ListingEntityId = 6,
+            new Car {
+                Id = 6,
                 VIN = "",
                 Year = new DateTime(2013),
                 Make = "Ford",
@@ -138,7 +132,7 @@ namespace TheCarHub.Tests
             // Arrange
             var options = BuildTestDbOptions();
             PrepareTestDb(options);
-            IList<CarEntity> result;
+            IList<Car> result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -165,7 +159,7 @@ namespace TheCarHub.Tests
             // Arrange
             var options = BuildTestDbOptions();
             PrepareTestDb(options);
-            CarEntity result;
+            Car result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -189,7 +183,7 @@ namespace TheCarHub.Tests
             // Arrange
             var options = BuildTestDbOptions();
             PrepareTestDb(options);
-            CarEntity result;
+            Car result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -229,7 +223,7 @@ namespace TheCarHub.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 var results = context.Cars.ToList();
-                Assert.DoesNotContain(results, c => c.CarId == testId);
+                Assert.DoesNotContain(results, c => c.Id == testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -287,7 +281,7 @@ namespace TheCarHub.Tests
             {
                 var result = context.Cars.ToList();
 
-                Assert.Equal(1, result.First().CarId);
+                Assert.Equal(1, result.First().Id);
 
                 context.Database.EnsureDeleted();
             }
@@ -298,7 +292,7 @@ namespace TheCarHub.Tests
         {
             // Arrange
             var options = BuildTestDbOptions();
-            CarEntity testEntity = null;
+            Car testEntity = null;
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -332,7 +326,7 @@ namespace TheCarHub.Tests
                 var repository = new CarRepository(context);
                 
                 var testEntity = 
-                    context.Cars.FirstOrDefault(c => c.CarId == 1);
+                    context.Cars.FirstOrDefault(c => c.Id == 1);
 
                 testEntity.Model = "Test";
 
@@ -343,7 +337,7 @@ namespace TheCarHub.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 var result = 
-                    context.Cars.FirstOrDefault(c => c.CarId == 1);
+                    context.Cars.FirstOrDefault(c => c.Id == 1);
 
                 Assert.Equal("Test", result.Model);
 
@@ -364,7 +358,7 @@ namespace TheCarHub.Tests
                 var repository = new CarRepository(context);
                 
                 var testEntity = 
-                    context.Cars.FirstOrDefault(c => c.CarId == 10);
+                    context.Cars.FirstOrDefault(c => c.Id == 10);
 
                 repository.UpdateCar(testEntity);
             }
@@ -373,7 +367,7 @@ namespace TheCarHub.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 var result = 
-                    context.Cars.FirstOrDefault(c => c.CarId == 1);
+                    context.Cars.FirstOrDefault(c => c.Id == 1);
 
                 Assert.Equal("Mazda", result.Make);
 

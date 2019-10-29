@@ -15,9 +15,9 @@ namespace TheCarHub.Data
         {
         }
 
-        public DbSet<CarEntity> Cars { get; set; }
-        public DbSet<ListingEntity> Listings { get; set; }
-        public DbSet<ImageEntity> Images { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Listing> Listings { get; set; }
+        public DbSet<Media> Media { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,122 +30,116 @@ namespace TheCarHub.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<CarEntity>()
-                .HasKey(x => x.CarId);
+            builder.Entity<Listing>()
+                .Property(l => l.PurchasePrice)
+                .HasColumnType("money");
 
-            builder.Entity<ListingEntity>()
-                .HasKey(x => x.ListingId);
+            builder.Entity<Listing>()
+                .Property(l => l.SellingPrice)
+                .HasColumnType("money");
 
-            builder.Entity<ImageEntity>()
-                .HasKey(x => x.ImageEntityId);
+            builder.Entity<RepairJob>()
+                .Property(rj => rj.Cost)
+                .HasColumnType("money");
+            
+            builder.Entity<RepairJob>()
+                .Property(rj => rj.HourlyRate)
+                .HasColumnType("money");
 
-            // builder.Entity<ImageEntity>()
-            //     .HasOne(x => x.Listing)
-            //     .WithMany(y => y.Images)
-            //     .HasForeignKey(z => z.ListingEntityId)
-            //     .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<SparePart>()
+                .Property(sp => sp.Cost)
+                .HasColumnType("money");
 
-            builder.Entity<ImageEntity>()
-                .HasOne(x => x.Listing)
-                .WithMany(y => y.Images)
-                .HasForeignKey(z => z.ListingEntityId);
+            builder.Entity<MediaTag>()
+                .HasKey(mt => new { mt.TagId, mt.MediaId });
 
-            builder.Entity<CarEntity>()
-                .HasOne(x => x.Listing)
-                .WithOne(y => y.Car)
-                .HasForeignKey<ListingEntity>(z => z.CarForeignKey);
+            builder.Entity<ListingTag>()
+                .HasKey(lt => new { lt.ListingId, lt.TagId });
 
-                builder.Entity<CarEntity>()
+            builder.Entity<MediaTag>()
+                .HasOne(mt => mt.Tag)
+                .WithMany(m => m.MediaTags)
+                .HasForeignKey(mt => mt.TagId);
+
+            builder.Entity<MediaTag>()
+                .HasOne(mt => mt.Media)
+                .WithMany(m => m.MediaTags)
+                .HasForeignKey(mt => mt.MediaId);
+
+            builder.Entity<ListingTag>()
+                .HasOne(lt => lt.Listing)
+                .WithMany(l => l.ListingTags)
+                .HasForeignKey(lt => lt.ListingId);
+
+            builder.Entity<ListingTag>()
+                .HasOne(lt => lt.Tag)
+                .WithMany(l => l.ListingTags)
+                .HasForeignKey(lt => lt.TagId);
+
+            builder.Entity<Media>()
+                .HasOne(m => m.Listing)
+                .WithMany(l => l.Media)
+                .HasForeignKey(m => m.ListingId);
+
+            builder.Entity<Listing>()
+                .HasOne(l => l.RepairJob)
+                .WithOne(rj => rj.Listing)
+                .HasForeignKey<RepairJob>(rj => rj.ListingId);
+
+            builder.Entity<Car>()
+                .HasMany(c => c.Listings)
+                .WithOne(l => l.Car)
+                .HasForeignKey(c => c.CarForeignKey);
+
+                builder.Entity<Car>()
                     .HasData(
-                        new CarEntity {
-                        CarId = 1,
+                        new Car {
+                        Id = 1,
                         VIN = "",
                         Year = new DateTime(1991),
                         Make = "Mazda",
                         Model = "Miata",
                         Trim = "LE",
-                        PurchaseDate = new DateTime(2019, 1, 7),
-                        PurchasePrice = 1800,
-                        Repairs = "Full restoration",
-                        RepairCost = 7600,
-                        LotDate = new DateTime(2019, 4, 7),
-                        SellingPrice = 1800 + 7600 + 500,
-                        SaleDate = new DateTime(2019, 4, 8)
                     },
-                    new CarEntity {
-                        CarId = 2,
+                    new Car {
+                        Id = 2,
                         VIN = "",
                         Year = new DateTime(2007),
                         Make = "Jeep",
                         Model = "Liberty",
                         Trim = "Sport",
-                        PurchaseDate = new DateTime(2019, 4, 2),
-                        PurchasePrice = 4500m,
-                        Repairs = "Front wheel bearings",
-                        RepairCost = 350m,
-                        LotDate = new DateTime(2019, 4, 7),
-                        SellingPrice = 4500 + 350 + 500,
-                        SaleDate = null
                     },
-                    new CarEntity {
-                        CarId = 3,
+                    new Car {
+                        Id = 3,
                         VIN = "",
                         Year = new DateTime(2017),
                         Make = "Ford",
                         Model = "Explorer",
                         Trim = "XLT",
-                        PurchaseDate = new DateTime(2019, 4, 5),
-                        PurchasePrice = 24350,
-                        Repairs = "Tyres, brakes",
-                        RepairCost = 1100,
-                        LotDate = new DateTime(2019, 4, 9),
-                        SellingPrice = 24350 + 1100 + 500, 
-                        SaleDate = null
                     },
-                    new CarEntity {
-                        CarId = 4,
+                    new Car {
+                        Id = 4,
                         VIN = "",
                         Year = new DateTime(2008),
                         Make = "Honda",
                         Model = "Civic",
                         Trim = "LX",
-                        PurchaseDate = new DateTime(2019, 4, 6),
-                        PurchasePrice = 4000,
-                        Repairs = "Ac, brakes",
-                        RepairCost = 475,
-                        LotDate = new DateTime(2019, 4, 9),
-                        SellingPrice = 4000 + 475 + 500,
-                        SaleDate = new DateTime(2019, 4, 9)
                     },
-                    new CarEntity {
-                        CarId = 5,
+                    new Car {
+                        Id = 5,
                         VIN = "",
                         Year = new DateTime(2016),
                         Make = "Volkswagen",
                         Model = "GTI",
                         Trim = "S",
-                        PurchaseDate = new DateTime(2019, 4, 6),
-                        PurchasePrice = 15250,
-                        Repairs = "Tyres",
-                        RepairCost = 440,
-                        LotDate = new DateTime(2019, 4, 10),
-                        SellingPrice = 15250 + 440 + 500,
-                        SaleDate = new DateTime(2019, 4, 12)
                     },
-                    new CarEntity {
-                        CarId = 6,
+                    new Car {
+                        Id = 6,
                         VIN = "",
                         Year = new DateTime(2013),
                         Make = "Ford",
                         Model = "Edge",
                         Trim = "SEL",
-                        PurchaseDate = new DateTime(2019, 4, 7),
-                        PurchasePrice = 10990,
-                        Repairs = "Tyres, brakes, AC",
-                        RepairCost = 950,
-                        LotDate = new DateTime(2019, 4, 11),
-                        SellingPrice = 10990 + 950 + 500,
-                        SaleDate = new DateTime(2019, 4, 12)
                     });
         }
     }

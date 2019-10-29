@@ -6,10 +6,10 @@ namespace TheCarHub.Repositories
 {
     public interface IListingRepository
     {
-        void UpdateListing(ListingEntity listing);
-        void SaveListing(ListingEntity listing);
+        void UpdateListing(Listing listing);
+        void SaveListing(Listing listing);
         void DeleteListing(int id);
-        Task<ListingEntity> GetListingById(int id);
-        Task<IList<ListingEntity>> GetAllListings();
+        Task<Listing> GetListingById(int id);
+        Task<IList<Listing>> GetAllListings();
     }
 }
