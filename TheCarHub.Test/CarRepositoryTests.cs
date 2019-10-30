@@ -21,13 +21,6 @@ namespace TheCarHub.Tests
                 Make = "Mazda",
                 Model = "Miata",
                 Trim = "LE",
-                PurchaseDate = new DateTime(2019, 1, 7),
-                PurchasePrice = 1800,
-                Repairs = "Full restoration",
-                RepairCost = 7600,
-                LotDate = new DateTime(2019, 4, 7),
-                SellingPrice = 1800 + 7600 + 500,
-                SaleDate = new DateTime(2019, 4, 8)
             },
             new Car {
                 Id = 2,
@@ -36,13 +29,6 @@ namespace TheCarHub.Tests
                 Make = "Jeep",
                 Model = "Liberty",
                 Trim = "Sport",
-                PurchaseDate = new DateTime(2019, 4, 2),
-                PurchasePrice = 4500m,
-                Repairs = "Front wheel bearings",
-                RepairCost = 350m,
-                LotDate = new DateTime(2019, 4, 7),
-                SellingPrice = 4500 + 350 + 500,
-                SaleDate = null
             },
             new Car {
                 Id = 3,
@@ -51,13 +37,6 @@ namespace TheCarHub.Tests
                 Make = "Ford",
                 Model = "Explorer",
                 Trim = "XLT",
-                PurchaseDate = new DateTime(2019, 4, 5),
-                PurchasePrice = 24350,
-                Repairs = "Tyres, brakes",
-                RepairCost = 1100,
-                LotDate = new DateTime(2019, 4, 9),
-                SellingPrice = 24350 + 1100 + 500, 
-                SaleDate = null
             },
             new Car {
                 Id = 4,
@@ -66,13 +45,6 @@ namespace TheCarHub.Tests
                 Make = "Honda",
                 Model = "Civic",
                 Trim = "LX",
-                PurchaseDate = new DateTime(2019, 4, 6),
-                PurchasePrice = 4000,
-                Repairs = "Ac, brakes",
-                RepairCost = 475,
-                LotDate = new DateTime(2019, 4, 9),
-                SellingPrice = 4000 + 475 + 500,
-                SaleDate = new DateTime(2019, 4, 9)
             },
             new Car {
                 Id = 5,
@@ -81,13 +53,6 @@ namespace TheCarHub.Tests
                 Make = "Volkswagen",
                 Model = "GTI",
                 Trim = "S",
-                PurchaseDate = new DateTime(2019, 4, 6),
-                PurchasePrice = 15250,
-                Repairs = "Tyres",
-                RepairCost = 440,
-                LotDate = new DateTime(2019, 4, 10),
-                SellingPrice = 15250 + 440 + 500,
-                SaleDate = new DateTime(2019, 4, 12)
             },
             new Car {
                 Id = 6,
@@ -96,13 +61,6 @@ namespace TheCarHub.Tests
                 Make = "Ford",
                 Model = "Edge",
                 Trim = "SEL",
-                PurchaseDate = new DateTime(2019, 4, 7),
-                PurchasePrice = 10990,
-                Repairs = "Tyres, brakes, AC",
-                RepairCost = 950,
-                LotDate = new DateTime(2019, 4, 11),
-                SellingPrice = 10990 + 950 + 500,
-                SaleDate = new DateTime(2019, 4, 12)
             }
         };
 
