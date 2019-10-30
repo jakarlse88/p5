@@ -29,6 +29,7 @@ namespace TheCarHub
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ICarRepository, CarRepository>();
+            services.AddTransient<IListingRepository, ListingRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AppReferential"))
@@ -44,8 +45,6 @@ namespace TheCarHub
             services.AddControllersWithViews();
 
             services.AddRazorPages();
-
-            // services.AddIdentity<ApplicationUser, IdentityRole>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
