@@ -91,56 +91,126 @@ namespace TheCarHub.Data
                 .WithOne(l => l.Car)
                 .HasForeignKey(c => c.CarForeignKey);
 
-                builder.Entity<Car>()
+                builder.Entity<Listing>()
                     .HasData(
-                        new Car {
-                        Id = 1,
-                        VIN = "",
-                        Year = new DateTime(1991),
-                        Make = "Mazda",
-                        Model = "Miata",
-                        Trim = "LE",
-                    },
-                    new Car {
-                        Id = 2,
-                        VIN = "",
-                        Year = new DateTime(2007),
-                        Make = "Jeep",
-                        Model = "Liberty",
-                        Trim = "Sport",
-                    },
-                    new Car {
-                        Id = 3,
-                        VIN = "",
-                        Year = new DateTime(2017),
-                        Make = "Ford",
-                        Model = "Explorer",
-                        Trim = "XLT",
-                    },
-                    new Car {
-                        Id = 4,
-                        VIN = "",
-                        Year = new DateTime(2008),
-                        Make = "Honda",
-                        Model = "Civic",
-                        Trim = "LX",
-                    },
-                    new Car {
-                        Id = 5,
-                        VIN = "",
-                        Year = new DateTime(2016),
-                        Make = "Volkswagen",
-                        Model = "GTI",
-                        Trim = "S",
-                    },
-                    new Car {
-                        Id = 6,
-                        VIN = "",
-                        Year = new DateTime(2013),
-                        Make = "Ford",
-                        Model = "Edge",
-                        Trim = "SEL",
-                    });
+                        new Listing {
+                            Id = 1,
+                            Car = new Car {
+                                Id = 1,
+                                VIN = "",
+                                Year = new DateTime(1991),
+                                Make = "Mazda",
+                                Model = "Miata",
+                                Trim = "LE",
+                            }
+                        },
+                        new Listing {
+                            Id = 2,
+                            Car = new Car {
+                                Id = 2,
+                                VIN = "",
+                                Year = new DateTime(2007),
+                                Make = "Jeep",
+                                Model = "Liberty",
+                                Trim = "Sport",
+                                }
+                        },
+                        new Listing {
+                            Id = 3,
+                            Car = new Car {
+                                Id = 3,
+                                VIN = "",
+                                Year = new DateTime(2017),
+                                Make = "Ford",
+                                Model = "Explorer",
+                                Trim = "XLT",
+                            }
+                        },
+                        new Listing {
+                            Id = 4, 
+                            Car = new Car {
+                                Id = 4,
+                                VIN = "",
+                                Year = new DateTime(2008),
+                                Make = "Honda",
+                                Model = "Civic",
+                                Trim = "LX",
+                            }
+                        },
+                        new Listing {
+                            Id = 5, 
+                            Car = new Car {
+                                Id = 5,
+                                VIN = "",
+                                Year = new DateTime(2016),
+                                Make = "Volkswagen",
+                                Model = "GTI",
+                                Trim = "S",
+                            }
+                        },
+                        new Listing {
+                            Id = 6,
+                            Car = new Car {
+                                Id = 6,
+                                VIN = "",
+                                Year = new DateTime(2013),
+                                Make = "Ford",
+                                Model = "Edge",
+                                Trim = "SEL",
+                            }
+                        }
+                    );
+
+                // builder.Entity<Car>()
+                //     .HasData(
+                //         new Car {
+                //         Id = 1,
+                //         VIN = "",
+                //         Year = new DateTime(1991),
+                //         Make = "Mazda",
+                //         Model = "Miata",
+                //         Trim = "LE",
+                //     },
+                //     new Car {
+                //         Id = 2,
+                //         VIN = "",
+                //         Year = new DateTime(2007),
+                //         Make = "Jeep",
+                //         Model = "Liberty",
+                //         Trim = "Sport",
+                //     },
+                //     new Car {
+                //         Id = 3,
+                //         VIN = "",
+                //         Year = new DateTime(2017),
+                //         Make = "Ford",
+                //         Model = "Explorer",
+                //         Trim = "XLT",
+                //     },
+                //     new Car {
+                //         Id = 4,
+                //         VIN = "",
+                //         Year = new DateTime(2008),
+                //         Make = "Honda",
+                //         Model = "Civic",
+                //         Trim = "LX",
+                //     },
+                //     new Car {
+                //         Id = 5,
+                //         VIN = "",
+                //         Year = new DateTime(2016),
+                //         Make = "Volkswagen",
+                //         Model = "GTI",
+                //         Trim = "S",
+                //     },
+                //     new Car {
+                //         Id = 6,
+                //         VIN = "",
+                //         Year = new DateTime(2013),
+                //         Make = "Ford",
+                //         Model = "Edge",
+                //         Trim = "SEL",
+                //     });
         }
     }
 }

@@ -12,7 +12,7 @@ namespace TheCarHub.Models
         public List<Media> Media { get; set; }
         public string Description { get; set; }
         public List<ListingTag> ListingTags { get; set; }
-        public string ListingStatus { get; set; }
+        public string Status { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateLastUpdated { get; set; }
         public DateTime PurchaseDate { get; set; }
