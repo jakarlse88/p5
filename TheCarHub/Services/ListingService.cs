@@ -23,7 +23,6 @@ namespace TheCarHub.Services
 
         public async Task<Listing> GetListingById(int id)
         {
-            // TODO: test
             var listing = await _listingRepository.GetListingById(id);
 
             return listing;

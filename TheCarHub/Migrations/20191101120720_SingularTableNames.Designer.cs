@@ -10,8 +10,8 @@ using TheCarHub.Data;
 namespace TheCarHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191101164902_MediaFilePath")]
-    partial class MediaFilePath
+    [Migration("20191101120720_SingularTableNames")]
+    partial class SingularTableNames
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -229,8 +229,8 @@ namespace TheCarHub.Migrations
                     b.Property<string>("Caption")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FilePath")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("ListingId")
                         .HasColumnType("int");
