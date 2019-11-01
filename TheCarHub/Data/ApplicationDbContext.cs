@@ -100,6 +100,7 @@ namespace TheCarHub.Data
                     Make = "Mazda",
                     Model = "Miata",
                     Trim = "LE",
+                    Listings = new List<Listing>()
                 },
                 new Car {
                     Id = 2,
@@ -108,6 +109,7 @@ namespace TheCarHub.Data
                     Make = "Jeep",
                     Model = "Liberty",
                     Trim = "Sport",
+                    Listings = new List<Listing>()
                 },
                 new Car {
                     Id = 3,
@@ -116,6 +118,7 @@ namespace TheCarHub.Data
                     Make = "Ford",
                     Model = "Explorer",
                     Trim = "XLT",
+                    Listings = new List<Listing>()
                 },
                 new Car {
                     Id = 4,
@@ -124,6 +127,7 @@ namespace TheCarHub.Data
                     Make = "Honda",
                     Model = "Civic",
                     Trim = "LX",
+                    Listings = new List<Listing>()
                 },
                 new Car {
                     Id = 5,
@@ -132,6 +136,7 @@ namespace TheCarHub.Data
                     Make = "Volkswagen",
                     Model = "GTI",
                     Trim = "S",
+                    Listings = new List<Listing>()
                 },
                 new Car {
                     Id = 6,
@@ -140,33 +145,40 @@ namespace TheCarHub.Data
                     Make = "Ford",
                     Model = "Edge",
                     Trim = "SEL",
+                    Listings = new List<Listing>()
                 });
 
             builder.Entity<Listing>()
                 .HasData(
                     new Listing {
                         Id = 1,
-                        CarId = 1
+                        CarId = 1,
+                        Media = new List<Media>()
                     },
                     new Listing {
                         Id = 2,
-                        CarId = 2
+                        CarId = 2,
+                        Media = new List<Media>()
                     },
                     new Listing {
                         Id = 3,
-                        CarId = 3
+                        CarId = 3,
+                        Media = new List<Media>()
                     },
                     new Listing {
                         Id = 4,
-                        CarId = 4
+                        CarId = 4,
+                        Media = new List<Media>()
                     },
                     new Listing {
                         Id = 5,
-                        CarId = 5
+                        CarId = 5,
+                        Media = new List<Media>()
                     },
                     new Listing {
                         Id = 6,
-                        CarId = 6
+                        CarId = 6,
+                        Media = new List<Media>()
                     }
                 );
 
