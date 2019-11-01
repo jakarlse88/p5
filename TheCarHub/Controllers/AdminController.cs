@@ -8,6 +8,8 @@ using System.Linq;
 using System;
 using AutoMapper;
 using System.Net;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace TheCarHub.Controllers
 {
@@ -18,16 +20,19 @@ namespace TheCarHub.Controllers
         private readonly ICarService _carService;
         private readonly IListingService _listingService;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         public AdminController(ILogger<AdminController> logger,
             ICarService carService,
             IListingService listingService,
-            IMapper mapper)
+            IMapper mapper,
+            IWebHostEnvironment hostEnvironment)
         {
             _logger = logger;
             _carService = carService;
             _listingService = listingService;
             _mapper = mapper;
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -64,9 +69,11 @@ namespace TheCarHub.Controllers
         }
 
         // [ValidateAntiForgeryToken]
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]
+        [ActionName("Edit")]
         public async Task<IActionResult> EditListing(ListingViewModel viewModel)
         {
+            // TODO: Testing!
             var listing = await _listingService.GetListingById(viewModel.Id);
 
             if (listing == null)
@@ -76,14 +83,25 @@ namespace TheCarHub.Controllers
 
             if (ModelState.IsValid)
             {
+                string uniqueFileName = null;
+
+                if (viewModel.FormFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + '_' + viewModel.FormFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    viewModel.FormFile.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+
                 listing.Title = viewModel.Title;
 
                 _listingService.UpdateListing(listing);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Listing", new { Id = viewModel.Id });
             }
 
             return View(viewModel);
         }
+
     }
 }

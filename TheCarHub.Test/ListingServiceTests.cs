@@ -58,5 +58,23 @@ namespace TheCarHub.Tests
             // Assert
             Assert.Equal(3, result.Count());
         }
+
+        [Fact]
+        public void TestGetListingById()
+        {
+            // Arrange
+            var mockRepository = new Mock<IListingRepository>();
+            mockRepository
+                .Setup(x => x.GetListingById(It.IsAny<int>()))
+                .Verifiable();
+
+            // Act
+            var service = new ListingService(mockRepository.Object);
+            var result = service.GetListingById(1);
+
+            // Assert
+            mockRepository
+                .Verify(x => x.GetListingById(It.IsAny<int>()), Times.Once);
+        }
     }
 }

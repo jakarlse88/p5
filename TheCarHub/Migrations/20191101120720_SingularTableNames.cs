@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TheCarHub.Migrations
 {
-    public partial class MediaFilePath : Migration
+    public partial class SingularTableNames : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,10 +35,6 @@ namespace TheCarHub.Migrations
                 table: "Cars");
 
             migrationBuilder.DropColumn(
-                name: "Content",
-                table: "Media");
-
-            migrationBuilder.DropColumn(
                 name: "CarForeignKey",
                 table: "Listings");
 
@@ -50,11 +45,6 @@ namespace TheCarHub.Migrations
             migrationBuilder.RenameTable(
                 name: "Cars",
                 newName: "Car");
-
-            migrationBuilder.AddColumn<string>(
-                name: "FilePath",
-                table: "Media",
-                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "CarId",
@@ -183,10 +173,6 @@ namespace TheCarHub.Migrations
                 table: "Car");
 
             migrationBuilder.DropColumn(
-                name: "FilePath",
-                table: "Media");
-
-            migrationBuilder.DropColumn(
                 name: "CarId",
                 table: "Listing");
 
@@ -197,12 +183,6 @@ namespace TheCarHub.Migrations
             migrationBuilder.RenameTable(
                 name: "Car",
                 newName: "Cars");
-
-            migrationBuilder.AddColumn<byte[]>(
-                name: "Content",
-                table: "Media",
-                type: "varbinary(max)",
-                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "CarForeignKey",
