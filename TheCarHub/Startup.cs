@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TheCarHub.Repositories;
 using AutoMapper;
+using TheCarHub.Services;
 
 namespace TheCarHub
 {
@@ -43,6 +44,9 @@ namespace TheCarHub
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
                 
+            services.AddScoped<ICarService, CarService>();
+            services.AddScoped<IListingService, ListingService>();
+
             services.AddControllersWithViews();
 
             services.AddAutoMapper(typeof(Startup));
