@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TheCarHub.Repositories;
+using AutoMapper;
 
 namespace TheCarHub
 {
@@ -44,6 +45,8 @@ namespace TheCarHub
                 
             services.AddControllersWithViews();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddRazorPages();
         }
 
@@ -58,7 +61,8 @@ namespace TheCarHub
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // The default HSTS value is 30 days. You may want to change this 
+                // for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             
