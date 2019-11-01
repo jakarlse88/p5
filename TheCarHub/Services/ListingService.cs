@@ -26,30 +26,15 @@ namespace TheCarHub.Services
             // TODO: test
             var listing = await _listingRepository.GetListingById(id);
 
-            // var model = new ListingViewModel
-            // {
-            //     Id = listing.Id,
-            //     Title = listing.Title,
-            //     Car = listing.Car,
-            //     Media = listing.Media,
-            //     Description = listing.Description,
-            //     ListingTags = listing.ListingTags,
-            //     Status = listing.Status,
-            //     DateCreated = listing.DateCreated,
-            //     DateLastUpdated = listing.DateLastUpdated,
-            //     PurchaseDate = listing.PurchaseDate,
-            //     PurchasePrice = listing.PurchasePrice,
-            //     RepairJob = listing.RepairJob,
-            //     SellingPrice = listing.SellingPrice,
-            //     SaleDate = listing.SaleDate
-            // };
-
             return listing;
         }
 
         public void UpdateListing(Listing listing)
         {
-            _listingRepository.UpdateListing(listing);
+            if (listing != null)
+            {
+                _listingRepository.UpdateListing(listing);
+            }
         }
     }
 }
