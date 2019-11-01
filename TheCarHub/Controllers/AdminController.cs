@@ -87,7 +87,7 @@ namespace TheCarHub.Controllers
 
                 if (viewModel.FormFile != null)
                 {
-                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                    string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "media");
                     uniqueFileName = Guid.NewGuid().ToString() + '_' + viewModel.FormFile.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                     viewModel.FormFile.CopyTo(new FileStream(filePath, FileMode.Create));
