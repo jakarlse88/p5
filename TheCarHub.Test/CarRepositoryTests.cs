@@ -119,7 +119,7 @@ namespace TheCarHub.Tests
             {
                 foreach (var carEntity in _testEntities)
                 {
-                    context.Cars.Add(carEntity);
+                    context.Car.Add(carEntity);
                 }
 
                 context.SaveChanges();
@@ -222,7 +222,7 @@ namespace TheCarHub.Tests
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var results = context.Cars.ToList();
+                var results = context.Car.ToList();
                 Assert.DoesNotContain(results, c => c.Id == testId);
 
                 context.Database.EnsureDeleted();
@@ -245,7 +245,7 @@ namespace TheCarHub.Tests
             {
                 var repository = new CarRepository(context);
 
-                expected = context.Cars.ToList().Count;
+                expected = context.Car.ToList().Count;
 
                 repository.DeleteCar(testId);
             }
@@ -253,7 +253,7 @@ namespace TheCarHub.Tests
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                int actual = context.Cars.ToList().Count;
+                int actual = context.Car.ToList().Count;
                 
                 Assert.Equal(expected, actual);
 
@@ -279,7 +279,7 @@ namespace TheCarHub.Tests
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = context.Cars.ToList();
+                var result = context.Car.ToList();
 
                 Assert.Equal(1, result.First().Id);
 
@@ -305,7 +305,7 @@ namespace TheCarHub.Tests
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = context.Cars.ToList();
+                var result = context.Car.ToList();
 
                 Assert.Empty(result);
 
@@ -326,7 +326,7 @@ namespace TheCarHub.Tests
                 var repository = new CarRepository(context);
                 
                 var testEntity = 
-                    context.Cars.FirstOrDefault(c => c.Id == 1);
+                    context.Car.FirstOrDefault(c => c.Id == 1);
 
                 testEntity.Model = "Test";
 
@@ -337,7 +337,7 @@ namespace TheCarHub.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 var result = 
-                    context.Cars.FirstOrDefault(c => c.Id == 1);
+                    context.Car.FirstOrDefault(c => c.Id == 1);
 
                 Assert.Equal("Test", result.Model);
 
@@ -358,7 +358,7 @@ namespace TheCarHub.Tests
                 var repository = new CarRepository(context);
                 
                 var testEntity = 
-                    context.Cars.FirstOrDefault(c => c.Id == 10);
+                    context.Car.FirstOrDefault(c => c.Id == 10);
 
                 repository.UpdateCar(testEntity);
             }
@@ -367,7 +367,7 @@ namespace TheCarHub.Tests
             using (var context = new ApplicationDbContext(options))
             {
                 var result = 
-                    context.Cars.FirstOrDefault(c => c.Id == 1);
+                    context.Car.FirstOrDefault(c => c.Id == 1);
 
                 Assert.Equal("Mazda", result.Make);
 

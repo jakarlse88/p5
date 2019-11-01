@@ -19,7 +19,7 @@ namespace TheCarHub.Repositories
 
         public async Task<IList<Car>> GetAllCars()
         {
-            var results = await _context.Cars.ToListAsync();
+            var results = await _context.Car.ToListAsync();
 
             return results;
         }
@@ -28,7 +28,7 @@ namespace TheCarHub.Repositories
         {
             Car result = 
                 await _context
-                    .Cars
+                    .Car
                     .FirstOrDefaultAsync(x => x.Id == id);
             
             return result;
@@ -38,12 +38,12 @@ namespace TheCarHub.Repositories
         {
             Car car = 
                 _context
-                .Cars
+                .Car
                 .FirstOrDefault(c => c.Id == id);
 
             if (car != null)
             {
-                _context.Cars.Remove(car);
+                _context.Car.Remove(car);
                 _context.SaveChanges();
             }
         }
@@ -52,7 +52,7 @@ namespace TheCarHub.Repositories
         {
             if (car != null)
             {
-                _context.Cars.Update(car);
+                _context.Car.Update(car);
                 _context.SaveChanges();
             }
         }
@@ -61,7 +61,7 @@ namespace TheCarHub.Repositories
         {
             if (car != null)
             {
-                _context.Cars.Add(car);
+                _context.Car.Add(car);
                 _context.SaveChanges();
             }
         }

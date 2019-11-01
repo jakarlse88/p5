@@ -7,7 +7,7 @@ namespace TheCarHub.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public int CarForeignKey { get; set; }
+        public int CarId { get; set; }
         public Car Car { get; set; }
         public List<Media> Media { get; set; }
         public string Description { get; set; }

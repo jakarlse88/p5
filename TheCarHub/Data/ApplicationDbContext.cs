@@ -15,8 +15,8 @@ namespace TheCarHub.Data
         {
         }
 
-        public DbSet<Car> Cars { get; set; }
-        public DbSet<Listing> Listings { get; set; }
+        public DbSet<Car> Car { get; set; }
+        public DbSet<Listing> Listing { get; set; }
         public DbSet<Media> Media { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -89,7 +89,7 @@ namespace TheCarHub.Data
             builder.Entity<Car>()
                 .HasMany(c => c.Listings)
                 .WithOne(l => l.Car)
-                .HasForeignKey(c => c.CarForeignKey);
+                .HasForeignKey(c => c.CarId);
 
             builder.Entity<Car>()
                 .HasData(
@@ -146,27 +146,27 @@ namespace TheCarHub.Data
                 .HasData(
                     new Listing {
                         Id = 1,
-                        CarForeignKey = 1
+                        CarId = 1
                     },
                     new Listing {
                         Id = 2,
-                        CarForeignKey = 2
+                        CarId = 2
                     },
                     new Listing {
                         Id = 3,
-                        CarForeignKey = 3
+                        CarId = 3
                     },
                     new Listing {
                         Id = 4,
-                        CarForeignKey = 4
+                        CarId = 4
                     },
                     new Listing {
                         Id = 5,
-                        CarForeignKey = 5
+                        CarId = 5
                     },
                     new Listing {
                         Id = 6,
-                        CarForeignKey = 6
+                        CarId = 6
                     }
                 );
 

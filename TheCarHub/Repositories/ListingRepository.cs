@@ -21,19 +21,19 @@ namespace TheCarHub.Repositories
         {
             Listing listing =
                 _context
-                .Listings
+                .Listing
                 .FirstOrDefault(l => l.Id == id);
             
             if (listing != null)
             {
-                _context.Listings.Remove(listing);
+                _context.Listing.Remove(listing);
                 _context.SaveChanges();
             }
         }
 
         public async Task<IList<Listing>> GetAllListings()
         {
-            var results = await _context.Listings.ToListAsync();
+            var results = await _context.Listing.ToListAsync();
 
             return results;
         }
@@ -42,7 +42,7 @@ namespace TheCarHub.Repositories
         {
             Listing result =
                 await _context
-                    .Listings
+                    .Listing
                     .FirstOrDefaultAsync(l => l.Id == id);
 
             return result;
@@ -52,7 +52,7 @@ namespace TheCarHub.Repositories
         {
             if (listing != null)
             {
-                _context.Listings.Add(listing);
+                _context.Listing.Add(listing);
                 _context.SaveChanges();
             }
         }
@@ -61,7 +61,7 @@ namespace TheCarHub.Repositories
         {
             if (listing != null)
             {
-                _context.Listings.Update(listing);
+                _context.Listing.Update(listing);
                 _context.SaveChanges();
             }
         }
