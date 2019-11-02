@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheCarHub.Data;
 
 namespace TheCarHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191101211809_UpdateSeedData")]
+    partial class UpdateSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,7 +229,7 @@ namespace TheCarHub.Migrations
                     b.Property<string>("Caption")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ListingId")

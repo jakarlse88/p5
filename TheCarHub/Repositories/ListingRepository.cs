@@ -40,10 +40,16 @@ namespace TheCarHub.Repositories
 
         public async Task<Listing> GetListingById(int id)
         {
+            // Listing result =
+            //     await _context
+            //         .Listing
+            //         .FirstOrDefaultAsync(l => l.Id == id);
+
             Listing result =
                 await _context
-                    .Listing
-                    .FirstOrDefaultAsync(l => l.Id == id);
+                .Listing
+                .Include(l => l.Media)
+                .SingleOrDefaultAsync(l => l.Id == id);
 
             return result;
         }

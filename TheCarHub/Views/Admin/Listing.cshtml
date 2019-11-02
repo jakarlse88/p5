@@ -42,6 +42,19 @@
                 <label asp-for="FormFile" class="custom-file-label"></label>
             </div>
 
+            <div class="col-12">
+                @{
+                    if (Model?.Media != null && Model.Media.Any())
+                    {
+                        foreach(var media in Model.Media)
+                        {
+                            var mediaPath = "/media/" + media.FileName;
+                            <img class="img-fluid" src="@mediaPath" alt="@media.Caption">
+                        }
+                    }
+                }
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>

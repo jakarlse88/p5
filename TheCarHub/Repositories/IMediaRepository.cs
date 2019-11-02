@@ -6,6 +6,6 @@ namespace TheCarHub.Repositories
 {
     public interface IMediaRepository
     {
-        // TODO: implement
+        void Add(Media media);
     }
 }
