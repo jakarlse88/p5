@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Data;
 using Microsoft.Extensions.Configuration;
@@ -30,8 +24,11 @@ namespace TheCarHub
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IConfiguration>(Configuration);
+            
             services.AddTransient<ICarRepository, CarRepository>();
             services.AddTransient<IListingRepository, ListingRepository>();
+            services.AddTransient<IMediaRepository, MediaRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AppReferential"))
@@ -46,6 +43,7 @@ namespace TheCarHub
                 
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IListingService, ListingService>();
+            services.AddScoped<IMediaService, MediaService>();
 
             services.AddControllersWithViews();
 
