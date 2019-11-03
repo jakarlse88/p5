@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using TheCarHub.Data;
-using TheCarHub.Models;
+using TheCarHub.Models.Entities;
 using TheCarHub.Repositories;
-using Xunit;
-using System.Linq;
 using TheCarHub.Services;
-using System.Threading.Tasks;
+using Xunit;
 
-namespace TheCarHub.Tests
+namespace TheCarHub.Test
 {
     public class ListingServiceTests
     {

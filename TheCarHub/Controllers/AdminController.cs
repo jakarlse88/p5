@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using TheCarHub.Models.Entities;
+using TheCarHub.Models.ViewModels;
 
 namespace TheCarHub.Controllers
 {
@@ -75,65 +77,60 @@ namespace TheCarHub.Controllers
         [ActionName("Edit")]
         public async Task<IActionResult> EditListing(ListingViewModel viewModel)
         {
-            // TODO: Testing!
-            var listing = await _listingService.GetListingById(viewModel.Id);
-
-            if (listing == null)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-//                string uniqueFileName = null;
+                // TODO: Testing!
+                var listing = await _listingService.GetListingById(viewModel.Id);
 
-                if (viewModel.FormFile != null && viewModel.FormFile.Length > 0)
+                if (listing == null)
                 {
-//                    // Media directory path
-//                    var mediaDir = Path.Combine(_hostEnvironment.WebRootPath, "media");
-//
-//                    // Don't trust user-supplied filenames!
-//                    uniqueFileName = Guid.NewGuid().ToString() + '_' + viewModel.FormFile.FileName;
+                    return NotFound();
+                }
 
 
-//                    var filePath = Path.Combine(mediaDir, uniqueFileName);
-                    var fileName = Path.GetRandomFileName() + Path.GetExtension(viewModel.FormFile.FileName);
-//                    var filePath = Path.Combine(_configuration["Media:Directory"], fileName);
-                    
-                    var path = Path.Combine(_hostEnvironment.WebRootPath, _configuration["Media:Directory"], $"{fileName}");
-                    
-                    // Add filepath to the Listing's list of Media objects
-                    if (listing.Media == null)
+                // Image upload
+                if (viewModel.FormFiles != null && viewModel.FormFiles.Count > 0)
+                {
+                    foreach (var file in viewModel.FormFiles)
                     {
-                        listing.Media = new List<Media>();
+                        var fileName =
+                            Path.GetRandomFileName() + Path.GetExtension(file.FileName);
+
+                        var path =
+                            Path.Combine(_hostEnvironment.WebRootPath,
+                                _configuration["Media:Directory"], $"{fileName}");
+
+                        if (listing.Media == null)
+                        {
+                            listing.Media = new List<Media>();
+                        }
+
+                        listing.Media.Add(new Media
+                        {
+                            FileName = fileName,
+                            ListingId = listing.Id,
+                            Listing = listing,
+                            Caption = "",
+                            MediaTags = new List<MediaTag>()
+                        });
+
+                        using (var stream = System.IO.File.Create(path))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
                     }
-
-                    listing.Media.Add(new Media
-                    {
-                        FileName = fileName,
-                        ListingId = viewModel.Id,
-                        Listing = listing
-                        // TODO: Caption, MediaTags
-                    });
-
-                    // Copy file to media directory
-                    
-
-                    using (var stream = System.IO.File.Create(path))
-                    {
-                        await viewModel.FormFile.CopyToAsync(stream);
-                    }
-//                    viewModel.FormFile.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
 
                 listing.Title = viewModel.Title;
+                listing.DateLastUpdated = DateTime.Today;
+                listing.Status = viewModel.Status;
 
                 _listingService.UpdateListing(listing);
 
                 return RedirectToAction("Listing", new {Id = viewModel.Id});
             }
 
-            return View(viewModel);
+            return View("Listing", viewModel);
         }
     }
 }

@@ -1,4 +1,4 @@
-@model ListingViewModel
+@model TheCarHub.Models.ViewModels.ListingViewModel
 
 @{
     ViewData["Title"] = @Model.Title ?? "Listing Title";
@@ -15,31 +15,37 @@
             <div class="form-group">
                 <label asp-for="Title"></label>
                 <input asp-for="Title" class="form-control">
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Description"></label>
                 <input asp-for="Description" class="form-control">
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="ListingTags"></label>
                 <input asp-for="ListingTags" class="form-control">
+                <span asp-validation-for="ListingTags" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Status"></label>
                 <input asp-for="Status" class="form-control">
+                <span asp-validation-for="Status" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="SellingPrice"></label>
                 <input asp-for="SellingPrice" class="form-control">
+                <span asp-validation-for="SellingPrice" class="text-danger"></span>
             </div>
 
             <div class="custom-file">
-                <input asp-for="FormFile" class="custom-file-input">
-                <label asp-for="FormFile" class="custom-file-label"></label>
+                <input asp-for="FormFiles" class="custom-file-input">
+                <label asp-for="FormFiles" class="custom-file-label"></label>
+                <span asp-validation-for="FormFiles" class="text-danger"></span>
             </div>
 
             <div class="col-12">

@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TheCarHub.Models.Entities;
 
-namespace TheCarHub.Models
+namespace TheCarHub.Models.ViewModels
 {
     public class ListingViewModel
     {   
@@ -15,13 +15,10 @@ namespace TheCarHub.Models
         [DisplayName("Listing Title")]
         public string Title { get; set; }
         
-        [HiddenInput]
-        public int CarId { get; set; }
-
         public List<Media> Media { get; set; }
 
         [DisplayName("Media")]
-        public IFormFile FormFile { get; set; }
+        public List<IFormFile> FormFiles { get; set; }
         
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }

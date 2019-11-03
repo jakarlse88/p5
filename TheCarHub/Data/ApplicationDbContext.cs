@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Models;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Data
 {

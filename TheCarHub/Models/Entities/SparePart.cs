@@ -1,4 +1,4 @@
-namespace TheCarHub.Models
+namespace TheCarHub.Models.Entities
 {
     public class SparePart
     {

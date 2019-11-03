@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using TheCarHub.Models.Entities;
 
-namespace TheCarHub.Models
+namespace TheCarHub.Models.ViewModels
 {
     public class AdminViewModel
     {
