@@ -1,6 +1,8 @@
 using AutoMapper;
+using TheCarHub.Models.Entities;
+using TheCarHub.Models.ViewModels;
 
-namespace TheCarHub.Models
+namespace TheCarHub.Models.Profiles
 {
     public class OrganisationProfile : Profile 
     {

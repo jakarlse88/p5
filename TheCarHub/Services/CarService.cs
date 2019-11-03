@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TheCarHub.Models;
 using TheCarHub.Repositories;
 using System.Linq;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Services
 {

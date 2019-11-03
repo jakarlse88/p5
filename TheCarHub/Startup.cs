@@ -8,6 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TheCarHub.Repositories;
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using TheCarHub.Models.Validators;
+using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
 
 namespace TheCarHub
@@ -45,8 +49,11 @@ namespace TheCarHub
             services.AddScoped<IListingService, ListingService>();
             services.AddScoped<IMediaService, MediaService>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddFluentValidation(fv =>
+                fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false);
 
+            services.AddTransient<IValidator<ListingViewModel>, ListingValidator>();
+            
             services.AddAutoMapper(typeof(Startup));
 
             services.AddRazorPages();
