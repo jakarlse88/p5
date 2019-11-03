@@ -20,7 +20,7 @@ namespace TheCarHub.Repositories
 
         public void DeleteListing(int id)
         {
-            Listing listing =
+            var listing =
                 _context
                 .Listing
                 .FirstOrDefault(l => l.Id == id);
@@ -41,12 +41,7 @@ namespace TheCarHub.Repositories
 
         public async Task<Listing> GetListingById(int id)
         {
-            // Listing result =
-            //     await _context
-            //         .Listing
-            //         .FirstOrDefaultAsync(l => l.Id == id);
-
-            Listing result =
+            var result =
                 await _context
                 .Listing
                 .Include(l => l.Media)

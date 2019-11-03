@@ -204,7 +204,7 @@ namespace TheCarHub.Test
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                int actual = context.Listing.ToList().Count;
+                var actual = context.Listing.ToList().Count;
                 
                 Assert.Equal(expected, actual);
 

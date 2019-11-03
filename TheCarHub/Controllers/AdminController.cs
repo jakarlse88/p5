@@ -42,6 +42,7 @@ namespace TheCarHub.Controllers
             _configuration = configuration;
         }
 
+        // GET: Admin
         public async Task<IActionResult> Index()
         {
             var cars = await _carService.GetAllCars();
@@ -86,7 +87,6 @@ namespace TheCarHub.Controllers
                 {
                     return NotFound();
                 }
-
 
                 // Image upload
                 if (viewModel.FormFiles != null && viewModel.FormFiles.Count > 0)

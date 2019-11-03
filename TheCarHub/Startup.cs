@@ -53,6 +53,7 @@ namespace TheCarHub
                 fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false);
 
             services.AddTransient<IValidator<ListingViewModel>, ListingValidator>();
+            services.AddTransient<IValidator<CarViewModel>, CarViewModelValidator>();
             
             services.AddAutoMapper(typeof(Startup));
 
