@@ -9,6 +9,8 @@ namespace TheCarHub.Models.Profiles
         public OrganisationProfile()
         {
             CreateMap<Listing, ListingViewModel>();
+            CreateMap<Car, CarViewModel>();
+            CreateMap<CarViewModel, Car>();
         }
     }
 }

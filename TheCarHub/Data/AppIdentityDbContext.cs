@@ -28,7 +28,7 @@ namespace TheCarHub.Data
                 PhoneNumberConfirmed = false
             };
 
-            PasswordHasher<IdentityUser> ph = new PasswordHasher<IdentityUser>();
+            var ph = new PasswordHasher<IdentityUser>();
             adminUser.PasswordHash = ph.HashPassword(adminUser, "P@ssword123");
 
             builder
