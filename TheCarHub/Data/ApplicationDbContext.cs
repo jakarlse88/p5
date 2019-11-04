@@ -96,7 +96,7 @@ namespace TheCarHub.Data
                     new Car {
                     Id = 1,
                     VIN = "",
-                    Year = new DateTime(1991),
+                    Year = new DateTime(1991, 1, 1),
                     Make = "Mazda",
                     Model = "Miata",
                     Trim = "LE",
@@ -105,7 +105,7 @@ namespace TheCarHub.Data
                 new Car {
                     Id = 2,
                     VIN = "",
-                    Year = new DateTime(2007),
+                    Year = new DateTime(2007, 1, 1),
                     Make = "Jeep",
                     Model = "Liberty",
                     Trim = "Sport",
@@ -114,7 +114,7 @@ namespace TheCarHub.Data
                 new Car {
                     Id = 3,
                     VIN = "",
-                    Year = new DateTime(2017),
+                    Year = new DateTime(2017, 1, 1),
                     Make = "Ford",
                     Model = "Explorer",
                     Trim = "XLT",
@@ -123,7 +123,7 @@ namespace TheCarHub.Data
                 new Car {
                     Id = 4,
                     VIN = "",
-                    Year = new DateTime(2008),
+                    Year = new DateTime(2008, 1, 1),
                     Make = "Honda",
                     Model = "Civic",
                     Trim = "LX",
@@ -132,7 +132,7 @@ namespace TheCarHub.Data
                 new Car {
                     Id = 5,
                     VIN = "",
-                    Year = new DateTime(2016),
+                    Year = new DateTime(2016, 1, 1),
                     Make = "Volkswagen",
                     Model = "GTI",
                     Trim = "S",
@@ -141,7 +141,7 @@ namespace TheCarHub.Data
                 new Car {
                     Id = 6,
                     VIN = "",
-                    Year = new DateTime(2013),
+                    Year = new DateTime(2013, 1, 1),
                     Make = "Ford",
                     Model = "Edge",
                     Trim = "SEL",
