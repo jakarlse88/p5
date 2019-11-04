@@ -15,26 +15,39 @@ namespace TheCarHub.Services
             _listingRepository = listingRepository;
         }
 
-        public async Task<IEnumerable<Listing>> GetAllListings()
+        public async Task<IEnumerable<Listing>> GetAll()
         {
-            var results = await _listingRepository.GetAllListings();
+            var results = await _listingRepository.GetAll();
 
             return results;
         }
 
-        public async Task<Listing> GetListingById(int id)
+        public async Task<Listing> GetById(int id)
         {
-            var listing = await _listingRepository.GetListingById(id);
+            var listing = await _listingRepository.GetById(id);
 
             return listing;
         }
 
-        public void UpdateListing(Listing listing)
+        public void Edit(Listing listing)
         {
             if (listing != null)
             {
-                _listingRepository.UpdateListing(listing);
+                _listingRepository.Edit(listing);
             }
+        }
+
+        public void Add(Listing listing)
+        {
+            if (listing != null)
+            {
+                _listingRepository.Add(listing);
+            }
+        }
+
+        public void Delete(int id)
+        {
+            _listingRepository.Delete(id);
         }
     }
 }

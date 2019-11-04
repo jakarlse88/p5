@@ -18,7 +18,7 @@ namespace TheCarHub.Repositories
             _context = context;
         }
 
-        public void DeleteListing(int id)
+        public void Delete(int id)
         {
             var listing =
                 _context
@@ -32,14 +32,14 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public async Task<IList<Listing>> GetAllListings()
+        public async Task<IList<Listing>> GetAll()
         {
             var results = await _context.Listing.ToListAsync();
 
             return results;
         }
 
-        public async Task<Listing> GetListingById(int id)
+        public async Task<Listing> GetById(int id)
         {
             var result =
                 await _context
@@ -50,7 +50,7 @@ namespace TheCarHub.Repositories
             return result;
         }
 
-        public void SaveListing(Listing listing)
+        public void Add(Listing listing)
         {
             if (listing != null)
             {
@@ -59,7 +59,7 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public void UpdateListing(Listing listing)
+        public void Edit(Listing listing)
         {
             if (listing != null)
             {

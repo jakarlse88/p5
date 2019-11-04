@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,27 +9,22 @@ using TheCarHub.Models.Entities;
 namespace TheCarHub.Models.ViewModels
 {
     public class ListingViewModel
-    {   
-        [HiddenInput]
+    {
         public int Id { get; set; }
-        
-        [DisplayName("Listing Title")]
         public string Title { get; set; }
-        
+        public int CarId { get; set; }
+        public Car Car { get; set; }
         public List<Media> Media { get; set; }
-
-        [DisplayName("Media")]
         public List<IFormFile> FormFiles { get; set; }
-        
-        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
-
-        [DisplayName("Tags")]
         public List<ListingTag> ListingTags { get; set; }
-        
         public string Status { get; set; }
-
-        [DisplayName("Price")]    
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateLastUpdated { get; set; }
+        public DateTime PurchaseDate { get; set; }
+        public RepairJob RepairJob { get; set; }
         public decimal SellingPrice { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public DateTime? SaleDate { get; set; }
     }
 }

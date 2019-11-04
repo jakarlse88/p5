@@ -89,7 +89,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var repository = new ListingRepository(context);
-                result = await repository.GetAllListings();
+                result = await repository.GetAll();
 
                 context.Database.EnsureDeleted();
             }
@@ -116,7 +116,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var repository = new ListingRepository(context);
-                result = await repository.GetListingById(testId);
+                result = await repository.GetById(testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -140,7 +140,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var repository = new ListingRepository(context);
-                result = await repository.GetListingById(testId);
+                result = await repository.GetById(testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -167,7 +167,7 @@ namespace TheCarHub.Test
             {
                 var repository = new ListingRepository(context);
 
-                repository.DeleteListing(testId);
+                repository.Delete(testId);
             }
 
             // Assert
@@ -198,7 +198,7 @@ namespace TheCarHub.Test
 
                 expected = context.Listing.ToList().Count;
 
-                repository.DeleteListing(testId);
+                repository.Delete(testId);
             }
 
             // Assert
@@ -224,7 +224,7 @@ namespace TheCarHub.Test
             {
                 var repository = new ListingRepository(context);
                 
-                repository.SaveListing(testEntity);
+                repository.Add(testEntity);
             }
 
             // Assert
@@ -250,7 +250,7 @@ namespace TheCarHub.Test
             {
                 var repository = new ListingRepository(context);
                 
-                repository.SaveListing(testEntity);
+                repository.Add(testEntity);
             }
 
             // Assert
@@ -283,7 +283,7 @@ namespace TheCarHub.Test
 
                 testEntity.Description = "Test";
 
-                repository.UpdateListing(testEntity);
+                repository.Edit(testEntity);
             }
 
             // Assert
@@ -317,7 +317,7 @@ namespace TheCarHub.Test
                     .Listing
                     .FirstOrDefault(l => l.Id == 10);
 
-                repository.UpdateListing(testEntity);
+                repository.Edit(testEntity);
             }
 
             // Assert

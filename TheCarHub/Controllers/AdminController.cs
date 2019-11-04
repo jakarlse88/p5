@@ -46,7 +46,7 @@ namespace TheCarHub.Controllers
         public async Task<IActionResult> Index()
         {
             var cars = await _carService.GetAllCars();
-            var listings = await _listingService.GetAllListings();
+            var listings = await _listingService.GetAll();
 
             var model = new AdminViewModel
             {
@@ -64,7 +64,7 @@ namespace TheCarHub.Controllers
             //     return new BadRequestResult();
             // }
 
-            var model = await _listingService.GetListingById(id);
+            var model = await _listingService.GetById(id);
 
             if (model == null) return NotFound();
 
@@ -81,7 +81,7 @@ namespace TheCarHub.Controllers
             if (ModelState.IsValid)
             {
                 // TODO: Testing!
-                var listing = await _listingService.GetListingById(viewModel.Id);
+                var listing = await _listingService.GetById(viewModel.Id);
 
                 if (listing == null)
                 {
@@ -125,7 +125,7 @@ namespace TheCarHub.Controllers
                 listing.DateLastUpdated = DateTime.Today;
                 listing.Status = viewModel.Status;
 
-                _listingService.UpdateListing(listing);
+                _listingService.Edit(listing);
 
                 return RedirectToAction("Listing", new {Id = viewModel.Id});
             }

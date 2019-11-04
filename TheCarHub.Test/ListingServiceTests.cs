@@ -44,7 +44,7 @@ namespace TheCarHub.Test
                 var mockRepository = new Mock<IListingRepository>();
 
                 mockRepository
-                    .Setup(x => x.GetAllListings())
+                    .Setup(x => x.GetAll())
                     .ReturnsAsync(testListings);
 
             // Act
@@ -52,7 +52,7 @@ namespace TheCarHub.Test
             {
                 var service = new ListingService(mockRepository.Object);
                 
-                result = await service.GetAllListings();
+                result = await service.GetAll();
             }
 
             // Assert
@@ -65,16 +65,16 @@ namespace TheCarHub.Test
             // Arrange
             var mockRepository = new Mock<IListingRepository>();
             mockRepository
-                .Setup(x => x.GetListingById(It.IsAny<int>()))
+                .Setup(x => x.GetById(It.IsAny<int>()))
                 .Verifiable();
 
             // Act
             var service = new ListingService(mockRepository.Object);
-            var result = service.GetListingById(1);
+            var result = service.GetById(1);
 
             // Assert
             mockRepository
-                .Verify(x => x.GetListingById(It.IsAny<int>()), Times.Once);
+                .Verify(x => x.GetById(It.IsAny<int>()), Times.Once);
         }
     }
 }

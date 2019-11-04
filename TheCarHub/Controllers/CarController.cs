@@ -49,12 +49,14 @@ namespace TheCarHub.Controllers
 
             var car = await _carService.GetCarById(id.GetValueOrDefault());
 
-            if (car == null)
+            var viewModel = _mapper.Map<CarViewModel>(car);
+            
+            if (car == null || viewModel == null)
             {
                 return NotFound();
             }
 
-            return View(car);
+            return View(viewModel);
         }
 
         // GET: Car/Create
@@ -169,10 +171,8 @@ namespace TheCarHub.Controllers
         // POST: Car/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var car = await _carService.GetCarById(id);
-
             _carService.Delete(id);
 
             return RedirectToAction(nameof(Index));

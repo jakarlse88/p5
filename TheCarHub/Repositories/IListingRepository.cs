@@ -7,10 +7,10 @@ namespace TheCarHub.Repositories
 {
     public interface IListingRepository
     {
-        void UpdateListing(Listing listing);
-        void SaveListing(Listing listing);
-        void DeleteListing(int id);
-        Task<Listing> GetListingById(int id);
-        Task<IList<Listing>> GetAllListings();
+        void Edit(Listing listing);
+        void Add(Listing listing);
+        void Delete(int id);
+        Task<Listing> GetById(int id);
+        Task<IList<Listing>> GetAll();
     }
 }
