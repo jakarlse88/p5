@@ -10,7 +10,6 @@ using TheCarHub.Data;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
-using System.Linq;
 
 namespace TheCarHub.Controllers
 {
@@ -70,17 +69,17 @@ namespace TheCarHub.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(
-            [Bind("VIN,Year,Make,Model,Trim")] CarViewModel model)
+            [Bind("VIN,Year,Make,Model,Trim")] CarViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var car = _mapper.Map<Car>(model);
+                var car = _mapper.Map<Car>(viewModel);
                 _carService.Add(car);
 
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(model);
+            return View(viewModel);
         }
 
         // GET: Car/Edit/5
