@@ -1,5 +1,4 @@
 using TheCarHub.Data;
-using TheCarHub.Models;
 using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories

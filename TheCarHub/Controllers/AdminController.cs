@@ -7,7 +7,6 @@ using TheCarHub.Services;
 using System.Linq;
 using System;
 using AutoMapper;
-using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Collections.Generic;

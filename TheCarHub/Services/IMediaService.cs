@@ -1,4 +1,3 @@
-using TheCarHub.Models;
 using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Services 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TheCarHub.Data;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
@@ -30,6 +30,7 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var listings = await _listingService.GetAll();
@@ -68,6 +69,7 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing/Create
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             var cars = await _carService.GetAllCars();
@@ -81,18 +83,30 @@ namespace TheCarHub.Controllers
         // POST: Listing/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             [Bind(
-                "Id,Title,CarId,Description,Status,DateCreated," +
+                "Title,CarId,Description,Status," +
                 "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
                 "SaleDate")]
             ListingViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var listing = _mapper.Map<Listing>(viewModel);
+                var listing = new Listing
+                {
+                    Title = viewModel.Title,
+                    CarId = viewModel.CarId,
+                    Description = viewModel.Description,
+                    Status = viewModel.Status,
+                    DateCreated = DateTime.Today,
+                    DateLastUpdated = DateTime.Today,
+                    PurchaseDate = viewModel.PurchaseDate,
+                    SellingPrice = viewModel.SellingPrice,
+                    SaleDate = viewModel.SaleDate
+                };
 
                 _listingService.Add(listing);
 
@@ -104,6 +118,7 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -128,11 +143,12 @@ namespace TheCarHub.Controllers
         // POST: Listing/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
             [Bind(
-                "Id,Title,CarId,Description,Status,DateCreated," +
+                "Title,CarId,Description,Status,DateCreated," +
                 "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
                 "SaleDate")]
             ListingViewModel viewModel)
@@ -142,10 +158,20 @@ namespace TheCarHub.Controllers
                 return NotFound();
             }
 
-            var listing = _mapper.Map<Listing>(viewModel);
-            
             if (ModelState.IsValid)
             {
+                var listing = await _listingService.GetById(id);
+
+                listing.Title = viewModel.Title;
+                listing.CarId = viewModel.CarId;
+                listing.Description = viewModel.Description;
+                listing.Status = viewModel.Status;
+                listing.DateCreated = viewModel.DateCreated;
+                listing.DateLastUpdated = DateTime.Today;
+                listing.PurchaseDate = viewModel.PurchaseDate;
+                listing.SellingPrice = viewModel.SellingPrice;
+                listing.SaleDate = viewModel.SaleDate;
+
                 try
                 {
                     _listingService.Edit(listing);
@@ -153,7 +179,7 @@ namespace TheCarHub.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     var listingExists = await ListingExists(viewModel.Id);
-                    
+
                     if (!listingExists)
                     {
                         return NotFound();
@@ -172,6 +198,7 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,7 +207,7 @@ namespace TheCarHub.Controllers
             }
 
             var listing = await _listingService.GetById(id.GetValueOrDefault());
-            
+
             if (listing == null)
             {
                 return NotFound();
@@ -192,22 +219,23 @@ namespace TheCarHub.Controllers
         }
 
         // POST: Listing/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var listing = await _listingService.GetById(id);
-            
+
             _listingService.Delete(id);
-            
+
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ListingExists(int id)
         {
             var listings = await _listingService.GetAll();
-            
-            return listings.Any(e => e.Id == id); 
+
+            return listings.Any(e => e.Id == id);
         }
     }
 }

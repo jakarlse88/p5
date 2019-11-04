@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
 using FluentValidation;
-using TheCarHub.Models.Entities;
 using TheCarHub.Models.ViewModels;
 
 namespace TheCarHub.Models.Validators

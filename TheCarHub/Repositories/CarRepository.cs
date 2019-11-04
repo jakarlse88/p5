@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TheCarHub.Models;
 using TheCarHub.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
