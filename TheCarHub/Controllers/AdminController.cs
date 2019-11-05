@@ -133,3 +133,8 @@ namespace TheCarHub.Controllers
         }
     }
 }
+
+// Next:
+// 1. Figure out object creation patterns
+// 2. Testing
+// 3. File upload

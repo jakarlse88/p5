@@ -220,7 +220,7 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public void TestSaveCarValidCarEntity()
+        public void TestAddCarValidCarEntity()
         {
             // Arrange
             var options = BuildTestDbOptions();
