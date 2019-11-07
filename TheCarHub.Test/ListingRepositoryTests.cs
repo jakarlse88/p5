@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Data;
-using TheCarHub.Models;
+using TheCarHub.Models.Entities;
 using TheCarHub.Repositories;
 using Xunit;
 
-namespace TheCarHub.Tests
+namespace TheCarHub.Test
 {
     public class ListingRepositoryTests
     {

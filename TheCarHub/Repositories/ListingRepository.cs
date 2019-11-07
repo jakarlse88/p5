@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TheCarHub.Data;
 using TheCarHub.Models;
 using Microsoft.EntityFrameworkCore;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories
 {

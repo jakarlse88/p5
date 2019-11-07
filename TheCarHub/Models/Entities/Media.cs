@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace TheCarHub.Models
+namespace TheCarHub.Models.Entities
 {
     public class Media
     {

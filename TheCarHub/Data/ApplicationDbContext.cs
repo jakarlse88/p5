@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Models;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Data
 {
@@ -42,14 +43,6 @@ namespace TheCarHub.Data
                 .Property(rj => rj.Cost)
                 .HasColumnType("money");
             
-            builder.Entity<RepairJob>()
-                .Property(rj => rj.HourlyRate)
-                .HasColumnType("money");
-
-            builder.Entity<SparePart>()
-                .Property(sp => sp.Cost)
-                .HasColumnType("money");
-
             builder.Entity<MediaTag>()
                 .HasKey(mt => new { mt.TagId, mt.MediaId });
 

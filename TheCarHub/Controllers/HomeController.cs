@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheCarHub.Models;
+using TheCarHub.Models.ViewModels;
 
 namespace TheCarHub.Controllers
 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheCarHub.Models;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories
 {

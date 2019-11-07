@@ -1,3 +1,5 @@
+using TheCarHub.Models.Entities;
+
 namespace TheCarHub.Models
 {
     public class ListingTag
