@@ -16,42 +16,42 @@ namespace TheCarHub.Test
             new Listing {
                 Id = 1,
                 Description = "One",
-                ListingStatus = "Available",
+                Status = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
                 new Listing {
                 Id = 2,
                 Description = "Two",
-                ListingStatus = "Available",
+                Status = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
                 new Listing {
                 Id = 3,
                 Description = "Three",
-                ListingStatus = "Available",
+                Status = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
                 new Listing {
                 Id = 4,
                 Description = "Four",
-                ListingStatus = "Available",
+                Status = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
                 new Listing {
                 Id = 5,
                 Description = "Five",
-                ListingStatus = "Available",
+                Status = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             },
                 new Listing {
                 Id = 6,
                 Description = "Six",
-                ListingStatus = "Available",
+                Status = "Available",
                 DateCreated = DateTime.Now,
                 DateLastUpdated = null
             }

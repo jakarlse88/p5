@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheCarHub.Data;
 
 namespace TheCarHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191107091008_NoNavProp")]
+    partial class NoNavProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,12 +217,12 @@ namespace TheCarHub.Migrations
                     b.Property<string>("FileName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ListingForeignKey")
+                    b.Property<int>("ListingId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ListingForeignKey");
+                    b.HasIndex("ListingId");
 
                     b.ToTable("Media");
                 });
@@ -235,15 +237,15 @@ namespace TheCarHub.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("money");
 
-                    b.Property<int>("ListingForeignKey")
+                    b.Property<int>("ListingId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Tax")
-                        .HasColumnType("money");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ListingForeignKey")
+                    b.HasIndex("ListingId")
                         .IsUnique();
 
                     b.ToTable("RepairJob");
@@ -266,30 +268,30 @@ namespace TheCarHub.Migrations
 
             modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
                 {
-                    b.Property<int>("ListingForeignKey")
+                    b.Property<int>("ListingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TagForeignKey")
+                    b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.HasKey("ListingForeignKey", "TagForeignKey");
+                    b.HasKey("ListingId", "TagId");
 
-                    b.HasIndex("TagForeignKey");
+                    b.HasIndex("TagId");
 
                     b.ToTable("ListingTag");
                 });
 
             modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
                 {
-                    b.Property<int>("TagForeignKey")
+                    b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MediaForeignKey")
+                    b.Property<int>("MediaId")
                         .HasColumnType("int");
 
-                    b.HasKey("TagForeignKey", "MediaForeignKey");
+                    b.HasKey("TagId", "MediaId");
 
-                    b.HasIndex("MediaForeignKey");
+                    b.HasIndex("MediaId");
 
                     b.ToTable("MediaTag");
                 });
@@ -305,48 +307,48 @@ namespace TheCarHub.Migrations
 
             modelBuilder.Entity("TheCarHub.Models.Entities.Media", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Entities.Listing", null)
-                        .WithMany()
-                        .HasForeignKey("ListingForeignKey")
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithMany("Media")
+                        .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("TheCarHub.Models.Entities.RepairJob", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Entities.Listing", null)
-                        .WithOne()
-                        .HasForeignKey("TheCarHub.Models.Entities.RepairJob", "ListingForeignKey")
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithOne("RepairJob")
+                        .HasForeignKey("TheCarHub.Models.Entities.RepairJob", "ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Entities.Listing", null)
-                        .WithMany()
-                        .HasForeignKey("ListingForeignKey")
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithMany("ListingTags")
+                        .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TheCarHub.Models.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagForeignKey")
+                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
+                        .WithMany("ListingTags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Entities.Media", null)
-                        .WithMany()
-                        .HasForeignKey("MediaForeignKey")
+                    b.HasOne("TheCarHub.Models.Entities.Media", "Media")
+                        .WithMany("MediaTags")
+                        .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TheCarHub.Models.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagForeignKey")
+                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
+                        .WithMany("MediaTags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
