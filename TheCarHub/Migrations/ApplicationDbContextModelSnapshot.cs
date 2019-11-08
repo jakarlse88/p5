@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheCarHub.Data;
 
 namespace TheCarHub.Migrations
@@ -316,12 +317,6 @@ namespace TheCarHub.Migrations
                     b.HasOne("TheCarHub.Models.Entities.Listing", null)
                         .WithOne()
                         .HasForeignKey("TheCarHub.Models.Entities.RepairJob", "ListingForeignKey")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
-                        .WithMany("ListingTags")
-                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

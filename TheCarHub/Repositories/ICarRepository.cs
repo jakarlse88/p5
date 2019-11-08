@@ -6,10 +6,10 @@ namespace TheCarHub.Repositories
 {
     public interface ICarRepository
     {
-        void Edit(Car car);
-        void Add(Car car);
-        void Delete(int id);
-        Task<Car> GetById(int id);
-        Task<IList<Car>> GetAll();
+        void EditCar(Car car);
+        void AddCar(Car car);
+        void DeleteCar(int id);
+        Task<Car> GetCarById(int id);
+        Task<IList<Car>> GetAllCars();
     }
 }

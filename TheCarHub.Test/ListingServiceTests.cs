@@ -68,7 +68,7 @@ namespace TheCarHub.Test
             {
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
-                result = await service.GetAll();
+                result = await service.GetAllListings();
             }
 
             // Assert
@@ -93,7 +93,7 @@ namespace TheCarHub.Test
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
 
-                result = await service.GetById(1);
+                result = await service.GetListingById(1);
             }
 
             // Assert
@@ -116,11 +116,11 @@ namespace TheCarHub.Test
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
 
-                var listing = await service.GetById(1);
+                var listing = await service.GetListingById(1);
 
                 listing.Title = "edited";
 
-                service.Edit(listing);
+                service.EditListing(listing);
             }
 
             // Assert
@@ -129,7 +129,7 @@ namespace TheCarHub.Test
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
 
-                var result = await service.GetById(1);
+                var result = await service.GetListingById(1);
 
                 Assert.Equal("edited", result.Title);
             }
@@ -147,16 +147,16 @@ namespace TheCarHub.Test
             var mockRepository = new Mock<IListingRepository>();
 
             mockRepository
-                .Setup(mr => mr.Edit(It.IsAny<Listing>()))
+                .Setup(mr => mr.EditListing(It.IsAny<Listing>()))
                 .Verifiable();
 
             var service = new ListingService(mockRepository.Object);
 
-            service.Edit(testObject);
+            service.EditListing(testObject);
 
             // Assert
             mockRepository
-                .Verify(mr => mr.Edit(It.IsAny<Listing>()), Times.Never);
+                .Verify(mr => mr.EditListing(It.IsAny<Listing>()), Times.Never);
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace TheCarHub.Test
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
 
-                service.Add(testEntity);
+                service.AddListing(testEntity);
             }
 
             // Assert
@@ -203,7 +203,7 @@ namespace TheCarHub.Test
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
 
-                service.Add(testObject);
+                service.AddListing(testObject);
             }
 
             // Assert
@@ -227,19 +227,19 @@ namespace TheCarHub.Test
             {
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
-                
-                service.Delete(1);
+
+                service.DeleteListing(1);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
                 var result = context.Listing.ToList();
-                
+
                 Assert.DoesNotContain(result, l => l.Id == 1);
             }
         }
-        
+
         [Fact]
         public void TestDeleteInvalidId()
         {
@@ -252,18 +252,17 @@ namespace TheCarHub.Test
             {
                 var repository = new ListingRepository(context);
                 var service = new ListingService(repository);
-                
-                service.Delete(4);
+
+                service.DeleteListing(4);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
                 var result = context.Listing.ToList();
-                
+
                 Assert.Equal(3, result.Count);
             }
         }
-
     }
 }

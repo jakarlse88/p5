@@ -16,7 +16,7 @@ namespace TheCarHub.Repositories
             _context = context;
         }
 
-        public void Delete(int id)
+        public void DeleteListing(int id)
         {
             var listing =
                 _context
@@ -30,40 +30,37 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public async Task<IList<Listing>> GetAll()
+        public async Task<IList<Listing>> GetAllListings()
         {
             var results = await _context.Listing.ToListAsync();
 
             return results;
         }
 
-        public async Task<Listing> GetById(int id)
+        public async Task<Listing> GetListingById(int id)
         {
             var result =
                 await _context
                 .Listing
-                .Include(l => l.Media)
                 .SingleOrDefaultAsync(l => l.Id == id);
 
             return result;
         }
 
-        public void Add(Listing listing)
+        public void AddListing(Listing listing)
         {
-            if (listing != null)
-            {
-                _context.Listing.Add(listing);
-                _context.SaveChanges();
-            }
+            if (listing == null) return;
+            
+            _context.Listing.Add(listing);
+            _context.SaveChanges();
         }
 
-        public void Edit(Listing listing)
+        public void EditListing(Listing listing)
         {
-            if (listing != null)
-            {
-                _context.Listing.Update(listing);
-                _context.SaveChanges();
-            }
+            if (listing == null) return;
+            
+            _context.Listing.Update(listing);
+            _context.SaveChanges();
         }
     }
 }

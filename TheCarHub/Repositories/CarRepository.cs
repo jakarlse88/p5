@@ -16,14 +16,14 @@ namespace TheCarHub.Repositories
             _context = context;
         }
 
-        public async Task<IList<Car>> GetAll()
+        public async Task<IList<Car>> GetAllCars()
         {
             var results = await _context.Car.ToListAsync();
 
             return results;
         }
 
-        public async Task<Car> GetById(int id)
+        public async Task<Car> GetCarById(int id)
         {
             var result = 
                 await _context
@@ -33,7 +33,7 @@ namespace TheCarHub.Repositories
             return result;
         }
 
-        public void Delete(int id)
+        public void DeleteCar(int id)
         {
             var car = 
                 _context
@@ -47,7 +47,7 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public void Edit(Car car)
+        public void EditCar(Car car)
         {
             if (car != null)
             {
@@ -56,7 +56,7 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public void Add(Car car)
+        public void AddCar(Car car)
         {
             if (car != null)
             {

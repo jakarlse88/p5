@@ -11,6 +11,7 @@ using TheCarHub.Services;
 
 namespace TheCarHub.Controllers
 {
+    [Authorize]
     public class CarController : Controller
     {
         private readonly ICarService _carService;
@@ -23,7 +24,6 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Car
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             var cars = await _carService.GetAllCars();
@@ -48,18 +48,17 @@ namespace TheCarHub.Controllers
 
             var car = await _carService.GetCarById(id.GetValueOrDefault());
 
-            var viewModel = _mapper.Map<CarViewModel>(car);
-            
-            if (car == null || viewModel == null)
+            if (car == null)
             {
                 return NotFound();
             }
+            
+            var viewModel = _mapper.Map<CarViewModel>(car);
 
             return View(viewModel);
         }
 
         // GET: Car/Create
-        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -68,7 +67,6 @@ namespace TheCarHub.Controllers
         // POST: Car/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         //  more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(
@@ -85,7 +83,7 @@ namespace TheCarHub.Controllers
                     Trim = viewModel.Trim
                 };
 
-                _carService.Add(car);
+                _carService.AddCar(car);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -94,7 +92,6 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Car/Edit/5
-        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -119,7 +116,6 @@ namespace TheCarHub.Controllers
         // POST: Car/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -132,7 +128,6 @@ namespace TheCarHub.Controllers
 
             if (ModelState.IsValid)
             {
-//                var car = _mapper.Map<Car>(viewModel);
                 var car = await _carService.GetCarById(id);
 
                 if (car == null)
@@ -148,11 +143,11 @@ namespace TheCarHub.Controllers
                 
                 try
                 {
-                    _carService.Edit(car);
+                    _carService.EditCar(car);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await CarExists(viewModel.Id)))                    
+                    if (! await CarExists(viewModel.Id))                    
                     {
                         return NotFound();
                     }
@@ -170,7 +165,6 @@ namespace TheCarHub.Controllers
 
 
         // GET: Car/Delete/5
-        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -191,12 +185,11 @@ namespace TheCarHub.Controllers
         }
 
         // POST: Car/Delete/5
-        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            _carService.Delete(id);
+            _carService.DeleteCar(id);
 
             return RedirectToAction(nameof(Index));
         }

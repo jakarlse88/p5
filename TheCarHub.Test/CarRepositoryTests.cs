@@ -96,7 +96,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var repository = new CarRepository(context);
-                result = await repository.GetAll();
+                result = await repository.GetAllCars();
 
                 context.Database.EnsureDeleted();
             }
@@ -123,7 +123,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var repository = new CarRepository(context);
-                result = await repository.GetById(testId);
+                result = await repository.GetCarById(testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -147,7 +147,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var repository = new CarRepository(context);
-                result = await repository.GetById(testId);
+                result = await repository.GetCarById(testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -174,7 +174,7 @@ namespace TheCarHub.Test
             {
                 var repository = new CarRepository(context);
 
-                repository.Delete(testId);
+                repository.DeleteCar(testId);
             }
 
             // Assert
@@ -205,7 +205,7 @@ namespace TheCarHub.Test
 
                 expected = context.Car.ToList().Count;
 
-                repository.Delete(testId);
+                repository.DeleteCar(testId);
             }
 
             // Assert
@@ -231,7 +231,7 @@ namespace TheCarHub.Test
             {
                 var repository = new CarRepository(context);
                 
-                repository.Add(testEntity);
+                repository.AddCar(testEntity);
             }
 
             // Assert
@@ -257,7 +257,7 @@ namespace TheCarHub.Test
             {
                 var repository = new CarRepository(context);
                 
-                repository.Add(testEntity);
+                repository.AddCar(testEntity);
             }
 
             // Assert
@@ -288,7 +288,7 @@ namespace TheCarHub.Test
 
                 testEntity.Model = "Test";
 
-                repository.Edit(testEntity);
+                repository.EditCar(testEntity);
             }
 
             // Assert
@@ -318,7 +318,7 @@ namespace TheCarHub.Test
                 var testEntity = 
                     context.Car.FirstOrDefault(c => c.Id == 10);
 
-                repository.Edit(testEntity);
+                repository.EditCar(testEntity);
             }
 
             // Assert

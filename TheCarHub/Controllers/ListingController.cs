@@ -33,7 +33,7 @@ namespace TheCarHub.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var listings = await _listingService.GetAll();
+            var listings = await _listingService.GetAllListings();
 
             var viewModels = new List<ListingViewModel>();
 
@@ -55,7 +55,7 @@ namespace TheCarHub.Controllers
             }
 
             var listing =
-                await _listingService.GetById(id.GetValueOrDefault());
+                await _listingService.GetListingById(id.GetValueOrDefault());
 
             var viewModel = _mapper.Map<ListingViewModel>(listing);
 
@@ -98,7 +98,7 @@ namespace TheCarHub.Controllers
                 var listing = new Listing
                 {
                     Title = viewModel.Title,
-                    CarId = viewModel.CarId,
+                    CarForeignKey = viewModel.CarId,
                     Description = viewModel.Description,
                     Status = viewModel.Status,
                     DateCreated = DateTime.Today,
@@ -108,7 +108,7 @@ namespace TheCarHub.Controllers
                     SaleDate = viewModel.SaleDate
                 };
 
-                _listingService.Add(listing);
+                _listingService.AddListing(listing);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -126,7 +126,7 @@ namespace TheCarHub.Controllers
                 return NotFound();
             }
 
-            var listing = await _listingService.GetById(id.GetValueOrDefault());
+            var listing = await _listingService.GetListingById(id.GetValueOrDefault());
 
             if (listing == null)
             {
@@ -160,10 +160,10 @@ namespace TheCarHub.Controllers
 
             if (ModelState.IsValid)
             {
-                var listing = await _listingService.GetById(id);
+                var listing = await _listingService.GetListingById(id);
 
                 listing.Title = viewModel.Title;
-                listing.CarId = viewModel.CarId;
+                listing.CarForeignKey = viewModel.CarId;
                 listing.Description = viewModel.Description;
                 listing.Status = viewModel.Status;
                 listing.DateCreated = viewModel.DateCreated;
@@ -174,7 +174,7 @@ namespace TheCarHub.Controllers
 
                 try
                 {
-                    _listingService.Edit(listing);
+                    _listingService.EditListing(listing);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -206,7 +206,7 @@ namespace TheCarHub.Controllers
                 return NotFound();
             }
 
-            var listing = await _listingService.GetById(id.GetValueOrDefault());
+            var listing = await _listingService.GetListingById(id.GetValueOrDefault());
 
             if (listing == null)
             {
@@ -224,16 +224,16 @@ namespace TheCarHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var listing = await _listingService.GetById(id);
+            var listing = await _listingService.GetListingById(id);
 
-            _listingService.Delete(id);
+            _listingService.DeleteListing(id);
 
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ListingExists(int id)
         {
-            var listings = await _listingService.GetAll();
+            var listings = await _listingService.GetAllListings();
 
             return listings.Any(e => e.Id == id);
         }

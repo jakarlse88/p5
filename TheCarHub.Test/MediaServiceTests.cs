@@ -12,7 +12,7 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-    public class CarServiceTests
+    public class MediaServiceTests
     {
         private DbContextOptions<ApplicationDbContext> BuildDbContextOptions()
         {
@@ -25,22 +25,22 @@ namespace TheCarHub.Test
 
         private void PrepareTestDb(DbContextOptions<ApplicationDbContext> contextOptions)
         {
-            var testEntities = new List<Car>
+            var testEntities = new[]
             {
-                new Car
+                new Media
                 {
                     Id = 1,
-                    Model = "Mazda"
+                    FileName = "file one"
                 },
-                new Car
+                new Media
                 {
                     Id = 2,
-                    Model = "BMW"
+                    FileName = "file two"
                 },
-                new Car
+                new Media
                 {
                     Id = 3,
-                    Model = "Mercedes"
+                    FileName = "file three"
                 }
             };
 
@@ -48,7 +48,7 @@ namespace TheCarHub.Test
             {
                 foreach (var item in testEntities)
                 {
-                    context.Car.Add(item);
+                    context.Media.Add(item);
                 }
 
                 context.SaveChanges();
@@ -56,20 +56,20 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public async void TestGetAllCars()
+        public async void TestGetAllMedia()
         {
             // Arrange
             var options = BuildDbContextOptions();
             PrepareTestDb(options);
-            IEnumerable<Car> results;
+            IEnumerable<Media> results;
 
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                results = await service.GetAllCars();
+                results = await service.GetAllMedia();
             }
 
             // Assert
@@ -77,47 +77,47 @@ namespace TheCarHub.Test
         }
 
         [Theory]
-        [InlineData(1, "Mazda")]
-        [InlineData(2, "BMW")]
-        [InlineData(3, "Mercedes")]
-        public async void TestGetCarByIdValidId(int testId, string expectedModel)
+        [InlineData(1, "file one")]
+        [InlineData(2, "file two")]
+        [InlineData(3, "file three")]
+        public async void TestGetMediaByIdValidId(int testId, string expectedFileName)
         {
             // Arrange
             var options = BuildDbContextOptions();
             PrepareTestDb(options);
-            Car result;
+            Media result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                result = await service.GetCarById(testId);
+                result = await service.GetMediaById(testId);
             }
 
             // Assert
-            Assert.Equal(expectedModel, result.Model);
+            Assert.Equal(expectedFileName, result.FileName);
         }
 
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(99)]
-        public async void TestGetCarByIdInvalidId(int testId)
+        public async void TestGetMediaByIdInvalidId(int testId)
         {
             // Arrange
             var options = BuildDbContextOptions();
             PrepareTestDb(options);
-            Car result;
+            Media result;
 
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                result = await service.GetCarById(testId);
+                result = await service.GetMediaById(testId);
             }
 
             // Assert
@@ -129,25 +129,25 @@ namespace TheCarHub.Test
         {
             // Arrange
             var options = BuildDbContextOptions();
-            var testEntity = new Car
+            var testEntity = new Media
             {
                 Id = 1,
-                Model = "Test"
+                FileName = "Test"
             };
 
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                service.AddCar(testEntity);
+                service.AddMedia(testEntity);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = context.Car.ToList();
+                var result = context.Media.ToList();
 
                 Assert.Single(result);
                 Assert.Equal(1, result.First().Id);
@@ -155,32 +155,32 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public void TestAddNullObject()
+        public void TestAddMediaNullObject()
         {
             // Arrange
             var options = BuildDbContextOptions();
-            Car testObject = null;
+            Media testObject = null;
 
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                service.AddCar(testObject);
+                service.AddMedia(testObject);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = context.Car.ToList();
+                var result = context.Media.ToList();
 
                 Assert.Empty(result);
             }
         }
 
         [Fact]
-        public void TestEditNonNullObject()
+        public void TestEditMediaNonNullObject()
         {
             // Arrange
             var options = BuildDbContextOptions();
@@ -189,49 +189,49 @@ namespace TheCarHub.Test
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                var car = context.Car.ToList().FirstOrDefault(i => i.Id == 1);
+                var media = context.Media.ToList().FirstOrDefault(i => i.Id == 1);
 
-                car.Model = "VW";
+                media.FileName = "test";
 
-                service.EditCar(car);
+                service.EditMedia(media);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = context.Car.ToList().FirstOrDefault(i => i.Id == 1);
+                var result = context.Media.ToList().FirstOrDefault(i => i.Id == 1);
 
-                Assert.Equal("VW", result.Model);
+                Assert.Equal("test", result.FileName);
             }
         }
 
         [Fact]
-        public void TestEditNullObject()
+        public void TestEditMediaNullObject()
         {
             // Arrange
             var options = BuildDbContextOptions();
             PrepareTestDb(options);
 
             // Act
-            var mockRepository = new Mock<ICarRepository>();
+            var mockRepository = new Mock<IMediaRepository>();
             mockRepository
-                .Setup(x => x.DeleteCar(It.IsAny<int>()))
+                .Setup(x => x.DeleteMedia(It.IsAny<int>()))
                 .Verifiable();
 
-            var service = new CarService(mockRepository.Object);
+            var service = new MediaService(mockRepository.Object);
 
-            service.DeleteCar(10);
+            service.DeleteMedia(10);
 
             // Assert
             mockRepository
-                .Verify(x => x.DeleteCar(It.IsAny<int>()), Times.Once);
+                .Verify(x => x.DeleteMedia(It.IsAny<int>()), Times.Once);
         }
         
         [Fact]
-        public void TestDeleteCarValidId()
+        public void TestDeleteMediaValidId()
         {
             // Arrange
             var options = BuildDbContextOptions();
@@ -240,23 +240,23 @@ namespace TheCarHub.Test
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                service.DeleteCar(1);
+                service.DeleteMedia(1);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = context.Car.ToList();
+                var result = context.Media.ToList();
 
                 Assert.DoesNotContain(result, l => l.Id == 1);
             }
         }
 
         [Fact]
-        public void TestDeleteCarInvalidId()
+        public void TestDeleteMediaInvalidId()
         {
             // Arrange
             var options = BuildDbContextOptions();
@@ -265,16 +265,16 @@ namespace TheCarHub.Test
             // Act
             using (var context = new ApplicationDbContext(options))
             {
-                var repository = new CarRepository(context);
-                var service = new CarService(repository);
+                var repository = new MediaRepository(context);
+                var service = new MediaService(repository);
 
-                service.DeleteCar(4);
+                service.DeleteMedia(4);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = context.Car.ToList();
+                var result = context.Media.ToList();
 
                 Assert.Equal(3, result.Count);
             }

@@ -10,6 +10,7 @@ namespace TheCarHub.Models.Profiles
         {
             CreateMap<Listing, ListingViewModel>();
             CreateMap<Car, CarViewModel>();
+            CreateMap<Media, MediaViewModel>();
         }
     }
 }

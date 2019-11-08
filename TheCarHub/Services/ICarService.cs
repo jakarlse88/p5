@@ -8,8 +8,8 @@ namespace TheCarHub.Services
     {
         Task<IList<Car>> GetAllCars();
         Task<Car> GetCarById(int id);
-        void Add(Car car);
-        void Edit(Car car);
-        void Delete(int id);
+        void AddCar(Car car);
+        void EditCar(Car car);
+        void DeleteCar(int id);
     }
 }

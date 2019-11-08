@@ -16,37 +16,37 @@ namespace TheCarHub.Services
 
         public async Task<IList<Car>> GetAllCars()
         {
-            var cars = await _carRepository.GetAll();
+            var cars = await _carRepository.GetAllCars();
 
             return cars;
         }
 
         public async Task<Car> GetCarById(int id)
         {
-            var car = await _carRepository.GetById(id);
+            var car = await _carRepository.GetCarById(id);
 
             return car;
         }
 
-        public void Add(Car car)
+        public void AddCar(Car car)
         {
             if (car != null)
             {
-                _carRepository.Add(car);
+                _carRepository.AddCar(car);
             }
         }
 
-        public void Edit(Car car)
+        public void EditCar(Car car)
         {
             if (car != null)
             {
-                _carRepository.Edit(car);
+                _carRepository.EditCar(car);
             }
         }
 
-        public void Delete(int id)
+        public void DeleteCar(int id)
         {
-            _carRepository.Delete(id);
+            _carRepository.DeleteCar(id);
         }
     }
 }

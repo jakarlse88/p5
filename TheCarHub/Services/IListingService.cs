@@ -6,10 +6,10 @@ namespace TheCarHub.Services
 {
     public interface IListingService
     {
-        Task<IEnumerable<Listing>> GetAll();
-        Task<Listing> GetById(int id);
-        void Edit(Listing listing);
-        void Add(Listing listing);
-        void Delete(int id);
+        Task<IEnumerable<Listing>> GetAllListings();
+        Task<Listing> GetListingById(int id);
+        void EditListing(Listing listing);
+        void AddListing(Listing listing);
+        void DeleteListing(int id);
     }
 }
