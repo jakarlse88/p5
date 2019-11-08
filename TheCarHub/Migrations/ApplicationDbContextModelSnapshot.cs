@@ -319,6 +319,12 @@ namespace TheCarHub.Migrations
                         .HasForeignKey("TheCarHub.Models.Entities.RepairJob", "ListingForeignKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
+                        .WithMany("ListingTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
