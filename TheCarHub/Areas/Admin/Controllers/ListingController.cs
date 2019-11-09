@@ -13,6 +13,8 @@ using TheCarHub.Services;
 
 namespace TheCarHub.Controllers
 {
+    [Authorize]
+    [Area("Admin")]
     public class ListingController : Controller
     {
         private readonly IListingService _listingService;
@@ -30,7 +32,6 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             var listings = await _listingService.GetAllListings();
@@ -69,7 +70,6 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing/Create
-        [Authorize]
         public async Task<IActionResult> Create()
         {
             var cars = await _carService.GetAllCars();
@@ -83,7 +83,6 @@ namespace TheCarHub.Controllers
         // POST: Listing/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
@@ -118,7 +117,6 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing/Edit/5
-        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -143,7 +141,6 @@ namespace TheCarHub.Controllers
         // POST: Listing/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
@@ -198,7 +195,6 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing/Delete/5
-        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -219,7 +215,6 @@ namespace TheCarHub.Controllers
         }
 
         // POST: Listing/Delete/5
-        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

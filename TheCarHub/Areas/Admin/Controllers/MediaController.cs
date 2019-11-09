@@ -19,6 +19,7 @@ using TheCarHub.Services;
 namespace TheCarHub.Controllers
 {
     [Authorize]
+    [Area("Admin")]
     public class MediaController : Controller
     {
         private readonly IMediaService _mediaService;

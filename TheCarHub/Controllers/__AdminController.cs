@@ -17,16 +17,16 @@
 //namespace TheCarHub.Controllers
 //{
 //    [Authorize]
-//    public class AdminController : Controller
+//    public class __AdminController : Controller
 //    {
-//        private readonly ILogger<AdminController> _logger;
+//        private readonly ILogger<__AdminController> _logger;
 //        private readonly ICarService _carService;
 //        private readonly IListingService _listingService;
 //        private readonly IMapper _mapper;
 //        private readonly IWebHostEnvironment _hostEnvironment;
 //        private readonly IConfiguration _configuration;
 //
-//        public AdminController(ILogger<AdminController> logger,
+//        public __AdminController(ILogger<__AdminController> logger,
 //            ICarService carService,
 //            IListingService listingService,
 //            IMapper mapper,

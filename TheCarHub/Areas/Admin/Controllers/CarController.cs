@@ -12,6 +12,7 @@ using TheCarHub.Services;
 namespace TheCarHub.Controllers
 {
     [Authorize]
+    [Area("Admin")]
     public class CarController : Controller
     {
         private readonly ICarService _carService;
