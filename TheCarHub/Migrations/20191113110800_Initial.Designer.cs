@@ -10,8 +10,8 @@ using TheCarHub.Data;
 namespace TheCarHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191101164902_MediaFilePath")]
-    partial class MediaFilePath
+    [Migration("20191113110800_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace TheCarHub.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TheCarHub.Models.Car", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Car", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace TheCarHub.Migrations
                             Model = "Miata",
                             Trim = "LE",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1991)
+                            Year = new DateTime(1991, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -64,7 +64,7 @@ namespace TheCarHub.Migrations
                             Model = "Liberty",
                             Trim = "Sport",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2007)
+                            Year = new DateTime(2007, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -73,7 +73,7 @@ namespace TheCarHub.Migrations
                             Model = "Explorer",
                             Trim = "XLT",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2017)
+                            Year = new DateTime(2017, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -82,7 +82,7 @@ namespace TheCarHub.Migrations
                             Model = "Civic",
                             Trim = "LX",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2008)
+                            Year = new DateTime(2008, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -91,7 +91,7 @@ namespace TheCarHub.Migrations
                             Model = "GTI",
                             Trim = "S",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2016)
+                            Year = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -100,11 +100,11 @@ namespace TheCarHub.Migrations
                             Model = "Edge",
                             Trim = "SEL",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2013)
+                            Year = new DateTime(2013, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.Listing", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Listing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,6 +204,67 @@ namespace TheCarHub.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TheCarHub.Models.Entities.Media", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ListingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListingId");
+
+                    b.ToTable("Media");
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.RepairJob", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("money");
+
+                    b.Property<int>("ListingId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("money");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListingId");
+
+                    b.ToTable("RepairJob");
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tag");
+                });
+
             modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
                 {
                     b.Property<int>("ListingId")
@@ -217,29 +278,6 @@ namespace TheCarHub.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("ListingTag");
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.Media", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Caption")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListingId");
-
-                    b.ToTable("Media");
                 });
 
             modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
@@ -257,133 +295,61 @@ namespace TheCarHub.Migrations
                     b.ToTable("MediaTag");
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.RepairJob", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Listing", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("money");
-
-                    b.Property<decimal>("HourlyRate")
-                        .HasColumnType("money");
-
-                    b.Property<DateTime>("Hours")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListingId")
-                        .IsUnique();
-
-                    b.ToTable("RepairJob");
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.SparePart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("money");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RepairJobId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RepairJobId");
-
-                    b.ToTable("SparePart");
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("TagName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tag");
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.Listing", b =>
-                {
-                    b.HasOne("TheCarHub.Models.Car", "Car")
+                    b.HasOne("TheCarHub.Models.Entities.Car", "Car")
                         .WithMany("Listings")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Media", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Listing", "Listing")
-                        .WithMany("ListingTags")
-                        .HasForeignKey("ListingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TheCarHub.Models.Tag", "Tag")
-                        .WithMany("ListingTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.Media", b =>
-                {
-                    b.HasOne("TheCarHub.Models.Listing", "Listing")
+                    b.HasOne("TheCarHub.Models.Entities.Listing", null)
                         .WithMany("Media")
                         .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.RepairJob", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Media", "Media")
-                        .WithMany("MediaTags")
-                        .HasForeignKey("MediaId")
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithMany()
+                        .HasForeignKey("ListingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
+                {
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithMany("Tags")
+                        .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TheCarHub.Models.Tag", "Tag")
-                        .WithMany("MediaTags")
+                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
+                        .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.RepairJob", b =>
+            modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Listing", "Listing")
-                        .WithOne("RepairJob")
-                        .HasForeignKey("TheCarHub.Models.RepairJob", "ListingId")
+                    b.HasOne("TheCarHub.Models.Entities.Media", "Media")
+                        .WithMany("Tags")
+                        .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("TheCarHub.Models.SparePart", b =>
-                {
-                    b.HasOne("TheCarHub.Models.RepairJob", null)
-                        .WithMany("Parts")
-                        .HasForeignKey("RepairJobId");
+                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
