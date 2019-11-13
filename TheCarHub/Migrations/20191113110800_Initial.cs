@@ -44,7 +44,7 @@ namespace TheCarHub.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(nullable: true),
-                    CarForeignKey = table.Column<int>(nullable: false),
+                    CarId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
@@ -58,8 +58,8 @@ namespace TheCarHub.Migrations
                 {
                     table.PrimaryKey("PK_Listing", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Listing_Car_CarForeignKey",
-                        column: x => x.CarForeignKey,
+                        name: "FK_Listing_Car_CarId",
+                        column: x => x.CarId,
                         principalTable: "Car",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -69,21 +69,21 @@ namespace TheCarHub.Migrations
                 name: "ListingTag",
                 columns: table => new
                 {
-                    ListingForeignKey = table.Column<int>(nullable: false),
-                    TagForeignKey = table.Column<int>(nullable: false)
+                    ListingId = table.Column<int>(nullable: false),
+                    TagId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ListingTag", x => new { x.ListingForeignKey, x.TagForeignKey });
+                    table.PrimaryKey("PK_ListingTag", x => new { x.ListingId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_ListingTag_Listing_ListingForeignKey",
-                        column: x => x.ListingForeignKey,
+                        name: "FK_ListingTag_Listing_ListingId",
+                        column: x => x.ListingId,
                         principalTable: "Listing",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ListingTag_Tag_TagForeignKey",
-                        column: x => x.TagForeignKey,
+                        name: "FK_ListingTag_Tag_TagId",
+                        column: x => x.TagId,
                         principalTable: "Tag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -97,14 +97,14 @@ namespace TheCarHub.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FileName = table.Column<string>(nullable: true),
                     Caption = table.Column<string>(nullable: true),
-                    ListingForeignKey = table.Column<int>(nullable: false)
+                    ListingId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Media", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Media_Listing_ListingForeignKey",
-                        column: x => x.ListingForeignKey,
+                        name: "FK_Media_Listing_ListingId",
+                        column: x => x.ListingId,
                         principalTable: "Listing",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -116,7 +116,7 @@ namespace TheCarHub.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ListingForeignKey = table.Column<int>(nullable: false),
+                    ListingId = table.Column<int>(nullable: false),
                     Cost = table.Column<decimal>(type: "money", nullable: false),
                     Tax = table.Column<decimal>(type: "money", nullable: false)
                 },
@@ -124,8 +124,8 @@ namespace TheCarHub.Migrations
                 {
                     table.PrimaryKey("PK_RepairJob", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RepairJob_Listing_ListingForeignKey",
-                        column: x => x.ListingForeignKey,
+                        name: "FK_RepairJob_Listing_ListingId",
+                        column: x => x.ListingId,
                         principalTable: "Listing",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -135,21 +135,21 @@ namespace TheCarHub.Migrations
                 name: "MediaTag",
                 columns: table => new
                 {
-                    TagForeignKey = table.Column<int>(nullable: false),
-                    MediaForeignKey = table.Column<int>(nullable: false)
+                    TagId = table.Column<int>(nullable: false),
+                    MediaId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MediaTag", x => new { x.TagForeignKey, x.MediaForeignKey });
+                    table.PrimaryKey("PK_MediaTag", x => new { x.TagId, x.MediaId });
                     table.ForeignKey(
-                        name: "FK_MediaTag_Media_MediaForeignKey",
-                        column: x => x.MediaForeignKey,
+                        name: "FK_MediaTag_Media_MediaId",
+                        column: x => x.MediaId,
                         principalTable: "Media",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MediaTag_Tag_TagForeignKey",
-                        column: x => x.TagForeignKey,
+                        name: "FK_MediaTag_Tag_TagId",
+                        column: x => x.TagId,
                         principalTable: "Tag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -170,7 +170,7 @@ namespace TheCarHub.Migrations
 
             migrationBuilder.InsertData(
                 table: "Listing",
-                columns: new[] { "Id", "CarForeignKey", "DateCreated", "DateLastUpdated", "Description", "PurchaseDate", "PurchasePrice", "SaleDate", "SellingPrice", "Status", "Title" },
+                columns: new[] { "Id", "CarId", "DateCreated", "DateLastUpdated", "Description", "PurchaseDate", "PurchasePrice", "SaleDate", "SellingPrice", "Status", "Title" },
                 values: new object[,]
                 {
                     { 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, null, null },
@@ -182,30 +182,29 @@ namespace TheCarHub.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Listing_CarForeignKey",
+                name: "IX_Listing_CarId",
                 table: "Listing",
-                column: "CarForeignKey");
+                column: "CarId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ListingTag_TagForeignKey",
+                name: "IX_ListingTag_TagId",
                 table: "ListingTag",
-                column: "TagForeignKey");
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Media_ListingForeignKey",
+                name: "IX_Media_ListingId",
                 table: "Media",
-                column: "ListingForeignKey");
+                column: "ListingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MediaTag_MediaForeignKey",
+                name: "IX_MediaTag_MediaId",
                 table: "MediaTag",
-                column: "MediaForeignKey");
+                column: "MediaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RepairJob_ListingForeignKey",
+                name: "IX_RepairJob_ListingId",
                 table: "RepairJob",
-                column: "ListingForeignKey",
-                unique: true);
+                column: "ListingId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

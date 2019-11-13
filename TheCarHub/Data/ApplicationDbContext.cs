@@ -45,45 +45,45 @@ namespace TheCarHub.Data
                 .HasColumnType("money");
             
             builder.Entity<MediaTag>()
-                .HasKey(mt => new { TagId = mt.TagForeignKey, MediaId = mt.MediaForeignKey });
+                .HasKey(mt => new { TagId = mt.TagId, MediaId = mt.MediaId });
 
             builder.Entity<ListingTag>()
-                .HasKey(lt => new { ListingId = lt.ListingForeignKey, TagId = lt.TagForeignKey });
-
-            builder.Entity<MediaTag>()
-                .HasOne<Tag>()
-                .WithMany()
-                .HasForeignKey(mt => mt.TagForeignKey);
-
-            builder.Entity<MediaTag>()
-                .HasOne<Media>()
-                .WithMany()
-                .HasForeignKey(mt => mt.MediaForeignKey);
-
-            builder.Entity<ListingTag>()
-                .HasOne<Listing>()
-                .WithMany()
-                .HasForeignKey(lt => lt.ListingForeignKey);
-
-            builder.Entity<ListingTag>()
-                .HasOne<Tag>()
-                .WithMany()
-                .HasForeignKey(lt => lt.TagForeignKey);
-
-            builder.Entity<Listing>()
-                .HasOne<RepairJob>()
-                .WithOne()
-                .HasForeignKey<RepairJob>(rj => rj.ListingForeignKey);
-
-            builder.Entity<Car>()
-                .HasMany<Listing>()
-                .WithOne()
-                .HasForeignKey(c => c.CarForeignKey);
-
-            builder.Entity<Listing>()
-                .HasMany<Media>()
-                .WithOne()
-                .HasForeignKey(m => m.ListingForeignKey);
+                .HasKey(lt => new { ListingId = lt.ListingId, TagId = lt.TagId });
+//
+//            builder.Entity<MediaTag>()
+//                .HasOne<Tag>()
+//                .WithMany()
+//                .HasForeignKey(mt => mt.TagId);
+//
+//            builder.Entity<MediaTag>()
+//                .HasOne<Media>()
+//                .WithMany()
+//                .HasForeignKey(mt => mt.MediaId);
+//
+//            builder.Entity<ListingTag>()
+//                .HasOne<Listing>()
+//                .WithMany()
+//                .HasForeignKey(lt => lt.ListingId);
+//
+//            builder.Entity<ListingTag>()
+//                .HasOne<Tag>()
+//                .WithMany()
+//                .HasForeignKey(lt => lt.TagId);
+//
+//            builder.Entity<Listing>()
+//                .HasOne<RepairJob>()
+//                .WithOne()
+//                .HasForeignKey<RepairJob>(rj => rj.ListingId);
+//
+//            builder.Entity<Car>()
+//                .HasMany<Listing>()
+//                .WithOne()
+//                .HasForeignKey(c => c.CarId);
+//
+//            builder.Entity<Listing>()
+//                .HasMany<Media>()
+//                .WithOne()
+//                .HasForeignKey(m => m.ListingId);
 
             builder.Entity<Car>()
                 .HasData(
@@ -140,27 +140,27 @@ namespace TheCarHub.Data
                 .HasData(
                     new Listing {
                         Id = 1,
-                        CarForeignKey = 1
+                        CarId = 1
                     },
                     new Listing {
                         Id = 2,
-                        CarForeignKey = 2
+                        CarId = 2
                     },
                     new Listing {
                         Id = 3,
-                        CarForeignKey = 3
+                        CarId = 3
                     },
                     new Listing {
                         Id = 4,
-                        CarForeignKey = 4
+                        CarId = 4
                     },
                     new Listing {
                         Id = 5,
-                        CarForeignKey = 5
+                        CarId = 5
                     },
                     new Listing {
                         Id = 6,
-                        CarForeignKey = 6
+                        CarId = 6
                     }
                 );
 

@@ -45,6 +45,16 @@
     <_ContentIncludedByDefault Remove="Views\Media\Details.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Media\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Media\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\10.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\11.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\12.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\8.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\9.jpg" />
   </ItemGroup>
 
 </Project>

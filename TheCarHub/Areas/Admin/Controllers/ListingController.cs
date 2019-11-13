@@ -97,7 +97,7 @@ namespace TheCarHub.Controllers
                 var listing = new Listing
                 {
                     Title = viewModel.Title,
-                    CarForeignKey = viewModel.CarId,
+                    CarId = viewModel.CarId,
                     Description = viewModel.Description,
                     Status = viewModel.Status,
                     DateCreated = DateTime.Today,
@@ -160,7 +160,7 @@ namespace TheCarHub.Controllers
                 var listing = await _listingService.GetListingById(id);
 
                 listing.Title = viewModel.Title;
-                listing.CarForeignKey = viewModel.CarId;
+                listing.CarId = viewModel.CarId;
                 listing.Description = viewModel.Description;
                 listing.Status = viewModel.Status;
                 listing.DateCreated = viewModel.DateCreated;
