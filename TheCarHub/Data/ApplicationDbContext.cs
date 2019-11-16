@@ -19,6 +19,7 @@ namespace TheCarHub.Data
         public DbSet<Car> Car { get; set; }
         public DbSet<Listing> Listing { get; set; }
         public DbSet<Media> Media { get; set; }
+        public DbSet<Status> Status { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -52,41 +53,6 @@ namespace TheCarHub.Data
 
             builder.Entity<ListingTag>()
                 .HasKey(lt => new { ListingId = lt.ListingId, TagId = lt.TagId });
-//
-//            builder.Entity<MediaTag>()
-//                .HasOne<Tag>()
-//                .WithMany()
-//                .HasForeignKey(mt => mt.TagId);
-//
-//            builder.Entity<MediaTag>()
-//                .HasOne<Media>()
-//                .WithMany()
-//                .HasForeignKey(mt => mt.MediaId);
-//
-//            builder.Entity<ListingTag>()
-//                .HasOne<Listing>()
-//                .WithMany()
-//                .HasForeignKey(lt => lt.ListingId);
-//
-//            builder.Entity<ListingTag>()
-//                .HasOne<Tag>()
-//                .WithMany()
-//                .HasForeignKey(lt => lt.TagId);
-//
-//            builder.Entity<Listing>()
-//                .HasOne<RepairJob>()
-//                .WithOne()
-//                .HasForeignKey<RepairJob>(rj => rj.ListingId);
-//
-//            builder.Entity<Car>()
-//                .HasMany<Listing>()
-//                .WithOne()
-//                .HasForeignKey(c => c.CarId);
-//
-//            builder.Entity<Listing>()
-//                .HasMany<Media>()
-//                .WithOne()
-//                .HasForeignKey(m => m.ListingId);
 
             builder.Entity<Car>()
                 .HasData(
@@ -143,30 +109,49 @@ namespace TheCarHub.Data
                 .HasData(
                     new Listing {
                         Id = 1,
-                        CarId = 1
+                        CarId = 1,
+                        StatusId = 2
                     },
                     new Listing {
                         Id = 2,
-                        CarId = 2
+                        CarId = 2,
+                        StatusId = 2
                     },
                     new Listing {
                         Id = 3,
-                        CarId = 3
+                        CarId = 3,
+                        StatusId = 1
                     },
                     new Listing {
                         Id = 4,
-                        CarId = 4
+                        CarId = 4,
+                        StatusId = 1
                     },
                     new Listing {
                         Id = 5,
-                        CarId = 5
+                        CarId = 5,
+                        StatusId = 2
                     },
                     new Listing {
                         Id = 6,
-                        CarId = 6
+                        CarId = 6,
+                        StatusId = 2
                     }
                 );
 
+            builder.Entity<Status>()
+                .HasData(
+                    new Status
+                    {
+                        Id = 1,
+                        Name = "Available"
+                    },
+                    new Status
+                    {
+                        Id = 2,
+                        Name = "Sold"
+                    }
+                );
         }
     }
 }
