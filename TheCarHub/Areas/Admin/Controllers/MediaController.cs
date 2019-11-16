@@ -229,7 +229,7 @@ namespace TheCarHub.Controllers
         // POST: Media/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             _mediaService.DeleteMedia(id);
             

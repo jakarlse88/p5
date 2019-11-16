@@ -133,7 +133,11 @@ namespace TheCarHub.Controllers
 
             var viewModel = _mapper.Map<ListingViewModel>(listing);
 
-            ViewData["CarId"] = new SelectList(await _carService.GetAllCars(), "Id", "Id", viewModel.CarId);
+            ViewData["CarId"] = new SelectList(
+                await _carService.GetAllCars(), 
+                "Id",
+                "Id",
+                viewModel.CarId);
 
             return View(viewModel);
         }
@@ -145,7 +149,7 @@ namespace TheCarHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
             [Bind(
-                "Title,CarId,Description,Status,DateCreated," +
+                "Id, Title,CarId,Description,Status,DateCreated," +
                 "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
                 "SaleDate")]
             ListingViewModel viewModel)
@@ -190,7 +194,12 @@ namespace TheCarHub.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CarId"] = new SelectList(await _carService.GetAllCars(), "Id", "Id", viewModel.CarId);
+            ViewData["CarId"] = new SelectList(
+                await _carService.GetAllCars(), 
+                "Id", 
+                "Id", 
+                viewModel.CarId);
+            
             return View(viewModel);
         }
 

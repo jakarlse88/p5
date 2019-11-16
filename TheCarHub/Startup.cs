@@ -23,17 +23,13 @@ namespace TheCarHub
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
             
-            services.AddTransient<ICarRepository, CarRepository>();
-            services.AddTransient<IListingRepository, ListingRepository>();
-            services.AddTransient<IMediaRepository, MediaRepository>();
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AppReferential"))
             );
@@ -45,6 +41,10 @@ namespace TheCarHub
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
                 
+            services.AddTransient<ICarRepository, CarRepository>();
+            services.AddTransient<IListingRepository, ListingRepository>();
+            services.AddTransient<IMediaRepository, MediaRepository>();
+            
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IListingService, ListingService>();
             services.AddScoped<IMediaService, MediaService>();

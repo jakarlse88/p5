@@ -9981,7 +9981,7 @@ a, button, .btn {
 .app-header__logo .logo-src {
     height: 23px;
     width: 97px;
-    background: url(../media/logo-inverse.png)
+    background: url(../media-static/logo-inverse.png)
 }
 
 .app-header__menu, .app-header__mobile-menu {
@@ -10172,7 +10172,7 @@ a, button, .btn {
 }
 
 .app-header.header-text-dark .app-header__logo .logo-src {
-    background: url(../media/logo-inverse.png)
+    background: url(../media-static/logo-inverse.png)
 }
 
 .app-sidebar {
@@ -10450,7 +10450,7 @@ a, button, .btn {
 }
 
 .app-sidebar.sidebar-text-light .app-header__logo .logo-src {
-    background: url(../media/logo.png)
+    background: url(../media-static/logo.png)
 }
 
 .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner, .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner::before, .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner::after {

@@ -1,5 +1,12 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TheCarHub.Models.Entities;
+using TheCarHub.Models.ViewModels;
+using TheCarHub.Services;
+using System.Linq;
 
 namespace TheCarHub.Areas.Admin
 {
@@ -7,10 +14,30 @@ namespace TheCarHub.Areas.Admin
     [Authorize]
     public class HomeController : Controller
     {
-        // GET
-        public IActionResult Index()
+        private readonly ICarService _carService;
+        private readonly IListingService _listingService;
+        private readonly IMapper _mapper;
+
+        public HomeController(ICarService carService,
+            IListingService listingService,
+            IMapper mapper)
         {
-            return View();
+            _carService = carService;
+            _listingService = listingService;
+            _mapper = mapper;
+        }
+        
+        // GET
+        public async Task<IActionResult> Index()
+        {
+            var listings =
+                await _listingService
+                    .GetAllListings();
+
+            var viewModels = 
+                _mapper.Map<List<Listing>, List<ListingViewModel>>(listings.ToList());
+
+            return View(viewModels);
         }
     }
 }

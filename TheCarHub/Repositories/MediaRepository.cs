@@ -42,7 +42,7 @@ namespace TheCarHub.Repositories
             return result;
         }
 
-        public async void EditMedia(Media media)
+        public void EditMedia(Media media)
         {
             if (media != null)
             {

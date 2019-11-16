@@ -32,7 +32,11 @@ namespace TheCarHub.Repositories
 
         public async Task<IList<Listing>> GetAllListings()
         {
-            var results = await _context.Listing.ToListAsync();
+            var results = 
+                await _context
+                    .Listing
+                    .Include(l => l.Car)
+                    .ToListAsync();
 
             return results;
         }
@@ -42,6 +46,7 @@ namespace TheCarHub.Repositories
             var result =
                 await _context
                 .Listing
+                .Include(l => l.Car)
                 .SingleOrDefaultAsync(l => l.Id == id);
 
             return result;
