@@ -36,6 +36,7 @@ namespace TheCarHub.Repositories
                 await _context
                     .Listing
                     .Include(l => l.Car)
+                    .Include(l => l.Status)
                     .ToListAsync();
 
             return results;
@@ -47,6 +48,8 @@ namespace TheCarHub.Repositories
                 await _context
                 .Listing
                 .Include(l => l.Car)
+                .Include(l => l.Status)
+                .Include(l => l.Media)
                 .SingleOrDefaultAsync(l => l.Id == id);
 
             return result;

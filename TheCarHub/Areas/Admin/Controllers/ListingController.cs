@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using TheCarHub.Models;
 using TheCarHub.Models.Entities;
+using TheCarHub.Models.InputModels;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
 
@@ -17,17 +23,29 @@ namespace TheCarHub.Controllers
     [Area("Admin")]
     public class ListingController : Controller
     {
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IListingService _listingService;
         private readonly ICarService _carService;
+        private readonly IStatusService _statusService;
+        private readonly IMediaService _mediaService;
         private readonly IMapper _mapper;
 
         public ListingController(
+            IConfiguration configuration,
+            IWebHostEnvironment webHostEnvironment,
             IListingService listingService,
             ICarService carService,
+            IStatusService statusService,
+            IMediaService mediaService,
             IMapper mapper)
         {
+            _configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
             _listingService = listingService;
             _carService = carService;
+            _statusService = statusService;
+            _mediaService = mediaService;
             _mapper = mapper;
         }
 
@@ -70,51 +88,210 @@ namespace TheCarHub.Controllers
         }
 
         // GET: Listing/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var cars = await _carService.GetAllCars();
+//            var listings =
+//                await _listingService.GetAllListings();
+//
+//            var filteredListings =
+//                listings
+//                    .Where(i => i.Status.Id == 1)
+//                    .Select(i => i.Car);
+//
+//            var carSelect =
+//                filteredListings
+//                    .Select(i =>
+//                        new
+//                        {
+//                            Id = i.Id,
+//                            Description = $"{i.Year.Year} {i.Make} {i.Model} {i.Trim} ({i.VIN})"
+//                        }
+//                    );
+//
+//            ViewData["NewCars"] =
+//                new SelectList(carSelect,
+//                    "Id",
+//                    "Description");
+            
+            var years = new List<int>();
 
-            ViewData["CarId"] =
-                new SelectList(cars, "Id", "Id");
+            for (int i = 1990; i <= (DateTime.Today.Year + 1); i++)
+            {
+                years.Add(i);
+            }
+
+            var yearSelect =
+                years
+                    .Select(i =>
+                        new
+                        {
+                            Value = i,
+                            Text = i.ToString()
+                        });
+
+            ViewData["YearSelect"] =
+                new SelectList(yearSelect,
+                    "Value",
+                    "Text");
 
             return View();
         }
-
+        
         // POST: Listing/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind(
-                "Title,CarId,Description,Status," +
-                "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
-                "SaleDate")]
-            ListingViewModel viewModel)
+        public async Task<IActionResult> Create(ListingInputModel inputModel)
         {
             if (ModelState.IsValid)
             {
+                var car = new Car
+                {
+                    VIN = inputModel.Car.VIN,
+                    Year = new DateTime(inputModel.CarYear, 1, 1),
+                    Make = inputModel.Car.Make,
+                    Model = inputModel.Car.Model,
+                    Trim = inputModel.Car.Trim
+                };
+                
                 var listing = new Listing
                 {
-                    Title = viewModel.Title,
-                    CarId = viewModel.CarId,
-                    Description = viewModel.Description,
-                    Status = viewModel.Status,
+                    Title = inputModel.Title,
+                    Car = car,
+                    Description = inputModel.Description,
+                    Status = await _statusService.GetStatusByName("available"),
                     DateCreated = DateTime.Today,
                     DateLastUpdated = DateTime.Today,
-                    PurchaseDate = viewModel.PurchaseDate,
-                    SellingPrice = viewModel.SellingPrice,
-                    SaleDate = viewModel.SaleDate
+                    PurchaseDate = inputModel.PurchaseDate,
+                    SellingPrice = inputModel.PurchasePrice 
                 };
 
-                _listingService.AddListing(listing);
+//                car.Listings.Add(listing);
+//                var listing = await _listingService.GetById(viewModel.Id);
+//
+//                if (listing == null)
+//                {
+//                    return NotFound();
+//                }
 
+                var mediaList = new List<Media>();
+
+                // Image upload
+                if (inputModel.Files != null && inputModel.Files.Count > 0)
+                {
+                    foreach (var file in inputModel.Files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            var fileName =
+                                Path.GetRandomFileName() + Path.GetExtension(file.FileName);
+
+                            var path =
+                                Path.Combine(_webHostEnvironment.WebRootPath,
+                                    _configuration["Media:Directory"], $"{fileName}");
+
+                            var media = new Media
+                            {
+                                FileName = fileName,
+                                Listing = listing,
+                                Caption = "",
+//                              MediaTags = new List<MediaTag>()
+                                // TODO: Tags
+                            };
+                            
+                            listing.Media.Add(media);
+
+                            using (var stream = System.IO.File.Create(path))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+                            
+//                            _mediaService.AddMedia(media);
+                        }
+                    }
+                }
+                
+                _listingService.AddListing(listing);
+//                _carService.AddCar(car);
+                
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CarId"] = new SelectList(await _carService.GetAllCars(), "Id", "Id", viewModel.CarId);
-            return View(viewModel);
+            var years = new List<int>();
+
+            for (int i = 1990; i <= (DateTime.Today.Year + 1); i++)
+            {
+                years.Add(i);
+            }
+
+            var yearSelect =
+                years
+                    .Select(i =>
+                        new
+                        {
+                            Value = i,
+                            Text = i.ToString()
+                        });
+
+            ViewData["YearSelect"] =
+                new SelectList(yearSelect,
+                    "Value",
+                    "Text");
+            
+            return View(inputModel);
         }
+        
+        // POST: Listing/Create/MediaUpload
+//        [HttpPost]
+//        [ValidateAntiForgeryToken]
+//        public async Task<IActionResult> MediaUpload([Bind("Files")] MediaInputModel model)
+//        {
+//            if (ModelState.IsValid)
+//            {
+//                var listing = await _listingService.GetById(viewModel.Id);
+//
+//                if (listing == null)
+//                {
+//                    return NotFound();
+//                }
+//
+//                // Image upload
+//                if (model.Files != null && model.Files.Count > 0)
+//                {
+//                    foreach (var file in model.Files)
+//                    {
+//                        if (file.Length > 0)
+//                        {
+//                            var fileName =
+//                                Path.GetRandomFileName() + Path.GetExtension(file.FileName);
+//
+//                            var path =
+//                                Path.Combine(_webHostEnvironment.WebRootPath,
+//                                    _configuration["Media:Directory"], $"{fileName}");
+//
+//                            if (listing.Media == null)
+//                            {
+//                                listing.Media = new List<Media>();
+//                            }
+//
+//                            listing.Media.Add(new Media
+//                            {
+//                                FileName = fileName,
+//                                ListingId = listing.Id,
+//                                Listing = listing,
+//                                Caption = "",
+//                                MediaTags = new List<MediaTag>()
+//                            });
+//
+//                            using (var stream = System.IO.File.Create(path))
+//                            {
+//                                await file.CopyToAsync(stream);
+//                            }
+//                        }
+//                    }
+//                }
+//        }
 
         // GET: Listing/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -124,7 +301,8 @@ namespace TheCarHub.Controllers
                 return NotFound();
             }
 
-            var listing = await _listingService.GetListingById(id.GetValueOrDefault());
+            var listing = 
+                await _listingService.GetListingById(id.GetValueOrDefault());
 
             if (listing == null)
             {
@@ -134,7 +312,7 @@ namespace TheCarHub.Controllers
             var viewModel = _mapper.Map<ListingViewModel>(listing);
 
             ViewData["CarId"] = new SelectList(
-                await _carService.GetAllCars(), 
+                await _carService.GetAllCars(),
                 "Id",
                 "Id",
                 viewModel.CarId);
@@ -166,7 +344,7 @@ namespace TheCarHub.Controllers
                 listing.Title = viewModel.Title;
                 listing.CarId = viewModel.CarId;
                 listing.Description = viewModel.Description;
-                listing.Status = viewModel.Status;
+//                listing.Status = viewModel.Status;
                 listing.DateCreated = viewModel.DateCreated;
                 listing.DateLastUpdated = DateTime.Today;
                 listing.PurchaseDate = viewModel.PurchaseDate;
@@ -195,11 +373,11 @@ namespace TheCarHub.Controllers
             }
 
             ViewData["CarId"] = new SelectList(
-                await _carService.GetAllCars(), 
-                "Id", 
-                "Id", 
+                await _carService.GetAllCars(),
+                "Id",
+                "Id",
                 viewModel.CarId);
-            
+
             return View(viewModel);
         }
 

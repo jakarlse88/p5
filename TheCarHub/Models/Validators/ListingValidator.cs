@@ -1,3 +1,4 @@
+using System.Data;
 using FluentValidation;
 using TheCarHub.Models.ViewModels;
 
@@ -9,8 +10,12 @@ namespace TheCarHub.Models.Validators
         {
             RuleFor(l => l.Title)
                 .NotEmpty()
-                .MinimumLength(5)
-                .MaximumLength(255);
+                .MaximumLength(100);
+
+            RuleFor(l => l.Description)
+                .NotEmpty()
+                .MaximumLength(1000);
+            
         }
     }
 }

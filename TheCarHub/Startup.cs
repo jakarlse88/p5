@@ -44,10 +44,12 @@ namespace TheCarHub
             services.AddTransient<ICarRepository, CarRepository>();
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IMediaRepository, MediaRepository>();
+            services.AddTransient<IStatusRepository, StatusRepository>();
             
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IListingService, ListingService>();
             services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IStatusService, StatusService>();
 
             services.AddControllersWithViews().AddFluentValidation(fv =>
                 fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false);

@@ -71,6 +71,11 @@
             @Html.DisplayFor(model => model.SaleDate)
         </dd>
     </dl>
+    @foreach (var item in Model.Media)
+    {
+        var mediaPath = "/media/" + item.FileName;
+        <img class="img-fluid" src="@mediaPath" alt="@item.Caption">
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

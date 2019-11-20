@@ -11,7 +11,6 @@ namespace TheCarHub.Models.Entities
         }
         
         public int Id { get; set; }
-        public List<Listing> Listings { get; set; }
         public string VIN { get; set; }
         public DateTime Year { get; set; }
         public string Make { get; set; }

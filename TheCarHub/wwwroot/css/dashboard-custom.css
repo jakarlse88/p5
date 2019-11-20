@@ -1,0 +1,12 @@
+.form-heading {
+    color: black;
+}
+
+.form-heading:after {
+    content: "";
+    display: block;
+    margin: 0 0 2.7em;
+    width: 30%;
+    padding-top: 20px;
+    border-bottom: 2px solid #16aaff;
+}

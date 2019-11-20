@@ -349,11 +349,8 @@ namespace TheCarHub.Migrations
 
             modelBuilder.Entity("TheCarHub.Models.Entities.Media", b =>
                 {
-<<<<<<< HEAD
-                    b.HasOne("TheCarHub.Models.Entities.Listing", null)
-=======
                     b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
->>>>>>> data-model
+
                         .WithMany("Media")
                         .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
