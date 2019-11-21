@@ -86,96 +86,17 @@ namespace TheCarHub.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            // Image upload
-//            if (file == null || file.ToList().Count <= 0)
-            if (file == null)
+            if (file == null || file.Length == 0)
                 return BadRequest();
-                
-//            foreach (var _file in file)
-//            {
-//                if (_file.Length <= 0) continue;
-//                
-                var fileName =
-                    Path.GetRandomFileName() + Path.GetExtension(file.FileName);
 
-                var path =
-                    Path.Combine(_webHostEnvironment.WebRootPath,
-                        _configuration["Media:Directory"], $"{fileName}");
+            var fileName = await Utilities.FileUtility.UploadImage(
+                _webHostEnvironment, _configuration, file);
 
-                var media = new Media
-                {
-                    Listing = new Listing(),
-                    FileName = fileName,
-                    Caption = "",
-                };
-
-                using (var stream = System.IO.File.Create(path))
-                {
-                    await file.CopyToAsync(stream);
-                }
-                            
-//                _mediaService.AddMedia(media);
-//            }
+            if (string.IsNullOrEmpty(fileName))
+                return BadRequest();
             
-//            return Ok();
             return Json(fileName);
         }
-
-        // POST: Media/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Create(
-//            [Bind("Id,FileName,Caption")] MediaViewModel viewModel)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                // Image upload
-//                if (viewModel.FormFiles != null && viewModel.FormFiles.Count > 0)
-//                {
-//                    foreach (var file in viewModel.FormFiles)
-//                    {
-//                        if (file.Length > 0)
-//                        {
-//                            var fileName =
-//                                Path.GetRandomFileName() + Path.GetExtension(file.FileName);
-//
-//                            var path =
-//                                Path.Combine(_hostEnvironment.WebRootPath,
-//                                    _config["Media:Directory"], $"{fileName}");
-//
-////                            if (listing.Media == null)
-////                            {
-////                                listing.Media = new List<Media>();
-////                            }
-////
-////                            listing.Media.Add(new Media
-////                            {
-////                                FileName = fileName,
-////                                ListingId = listing.Id,
-////                                Listing = listing,
-////                                Caption = "",
-////                                MediaTags = new List<MediaTag>()
-////                            });
-//
-//                            _mediaService.AddMedia(new Media
-//                            {
-//                                FileName = fileName,
-//                                Caption = viewModel.Caption
-//                            });
-//
-//                            using (var stream = System.IO.File.Create(path))
-//                            {
-//                                await file.CopyToAsync(stream);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            return View(viewModel);
-//        }
 
         // GET: Media/Edit/5
         public async Task<IActionResult> Edit(int? id)

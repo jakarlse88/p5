@@ -129,6 +129,8 @@ namespace TheCarHub.Controllers
                     PurchaseDate = inputModel.PurchaseDate,
                     SellingPrice = inputModel.PurchasePrice 
                 };
+                
+                // TODO: create and save Media entity
 
 //                car.Listings.Add(listing);
 //                var listing = await _listingService.GetById(viewModel.Id);
@@ -178,24 +180,10 @@ namespace TheCarHub.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var years = new List<int>();
-
-            for (int i = 1990; i <= (DateTime.Today.Year + 1); i++)
-            {
-                years.Add(i);
-            }
-
-            var yearSelect =
-                years
-                    .Select(i =>
-                        new
-                        {
-                            Value = i,
-                            Text = i.ToString()
-                        });
+            var carYearSelect = PopulateCarYearSelect();
 
             ViewData["YearSelect"] =
-                new SelectList(yearSelect,
+                new SelectList(carYearSelect,
                     "Value",
                     "Text");
             
