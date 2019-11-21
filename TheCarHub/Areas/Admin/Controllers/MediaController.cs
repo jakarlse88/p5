@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,19 +24,19 @@ namespace TheCarHub.Controllers
     public class MediaController : Controller
     {
         private readonly IMediaService _mediaService;
-        private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IMapper _mapper;
 
         public MediaController(
             IMediaService mediaService,
             IWebHostEnvironment hostEnvironment,
-            IConfiguration config,
+            IConfiguration configuration,
             IMapper mapper)
         {
             _mediaService = mediaService;
-            _hostEnvironment = hostEnvironment;
-            _config = config;
+            _webHostEnvironment = hostEnvironment;
+            _configuration = configuration;
             _mapper = mapper;
         }
 
@@ -80,62 +81,101 @@ namespace TheCarHub.Controllers
         {
             return View();
         }
+        
+        // POST: Media/Upload
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            // Image upload
+//            if (file == null || file.ToList().Count <= 0)
+            if (file == null)
+                return BadRequest();
+                
+//            foreach (var _file in file)
+//            {
+//                if (_file.Length <= 0) continue;
+//                
+                var fileName =
+                    Path.GetRandomFileName() + Path.GetExtension(file.FileName);
+
+                var path =
+                    Path.Combine(_webHostEnvironment.WebRootPath,
+                        _configuration["Media:Directory"], $"{fileName}");
+
+                var media = new Media
+                {
+                    Listing = new Listing(),
+                    FileName = fileName,
+                    Caption = "",
+                };
+
+                using (var stream = System.IO.File.Create(path))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                            
+//                _mediaService.AddMedia(media);
+//            }
+            
+//            return Ok();
+            return Json(fileName);
+        }
 
         // POST: Media/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("Id,FileName,Caption")] MediaViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                // Image upload
-                if (viewModel.FormFiles != null && viewModel.FormFiles.Count > 0)
-                {
-                    foreach (var file in viewModel.FormFiles)
-                    {
-                        if (file.Length > 0)
-                        {
-                            var fileName =
-                                Path.GetRandomFileName() + Path.GetExtension(file.FileName);
-
-                            var path =
-                                Path.Combine(_hostEnvironment.WebRootPath,
-                                    _config["Media:Directory"], $"{fileName}");
-
-//                            if (listing.Media == null)
-//                            {
-//                                listing.Media = new List<Media>();
-//                            }
+//        [HttpPost]
+//        [ValidateAntiForgeryToken]
+//        public async Task<IActionResult> Create(
+//            [Bind("Id,FileName,Caption")] MediaViewModel viewModel)
+//        {
+//            if (ModelState.IsValid)
+//            {
+//                // Image upload
+//                if (viewModel.FormFiles != null && viewModel.FormFiles.Count > 0)
+//                {
+//                    foreach (var file in viewModel.FormFiles)
+//                    {
+//                        if (file.Length > 0)
+//                        {
+//                            var fileName =
+//                                Path.GetRandomFileName() + Path.GetExtension(file.FileName);
 //
-//                            listing.Media.Add(new Media
+//                            var path =
+//                                Path.Combine(_hostEnvironment.WebRootPath,
+//                                    _config["Media:Directory"], $"{fileName}");
+//
+////                            if (listing.Media == null)
+////                            {
+////                                listing.Media = new List<Media>();
+////                            }
+////
+////                            listing.Media.Add(new Media
+////                            {
+////                                FileName = fileName,
+////                                ListingId = listing.Id,
+////                                Listing = listing,
+////                                Caption = "",
+////                                MediaTags = new List<MediaTag>()
+////                            });
+//
+//                            _mediaService.AddMedia(new Media
 //                            {
 //                                FileName = fileName,
-//                                ListingId = listing.Id,
-//                                Listing = listing,
-//                                Caption = "",
-//                                MediaTags = new List<MediaTag>()
+//                                Caption = viewModel.Caption
 //                            });
-
-                            _mediaService.AddMedia(new Media
-                            {
-                                FileName = fileName,
-                                Caption = viewModel.Caption
-                            });
-
-                            using (var stream = System.IO.File.Create(path))
-                            {
-                                await file.CopyToAsync(stream);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return View(viewModel);
-        }
+//
+//                            using (var stream = System.IO.File.Create(path))
+//                            {
+//                                await file.CopyToAsync(stream);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            return View(viewModel);
+//        }
 
         // GET: Media/Edit/5
         public async Task<IActionResult> Edit(int? id)

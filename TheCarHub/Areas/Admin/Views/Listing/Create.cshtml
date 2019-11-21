@@ -30,7 +30,7 @@
     </div>
 
     <div class="container mx-auto">
-        <form asp-action="Create" enctype="multipart/form-data" method="POST">
+        <form asp-action="Create" enctype="multipart/form-data" method="POST" id="create-listing-form">
             <div class="form-row">
                 <div class="col-6">
                     <h4 class="form-heading">Car Information</h4>
@@ -147,33 +147,56 @@
             </div>
 
             <!-- MEDIA UPLOAD -->
-            <div class="form-row">
-                <div class="custom-file">
-                    <input asp-for="Files" class="custom-file-input" type="file">
-                    <label asp-for="Files" id="FileUploader" class="custom-file-label"></label>
-                    <span asp-validation-for="Files" class="text-danger"></span>
-                </div>
-            </div>
-            
+            <div id="drag-drop-area" asp-for="Files"></div>
+            @* <div class="form-row"> *@
+            @*     <div class="custom-file"> *@
+            @*         <input asp-for="Files" class="custom-file-input" type="file"> *@
+            @*         <label asp-for="Files" id="FileUploader" class="custom-file-label"></label> *@
+            @*         <span asp-validation-for="Files" class="text-danger"></span> *@
+            @*     </div> *@
+            @* </div> *@
+
+            <div class="img-select-hidden" hidden></div>
 
             <div class="form-row">
-                    <div class="form-group mx-auto">
-                        <button type="submit" class="btn btn-success btn-lg mt-4"><i class="fas fa-check"></i> Create</button>
-                    </div>
+                <div class="form-group mx-auto">
+                    <button type="submit" class="btn btn-success btn-lg mt-4"><i class="fas fa-check"></i> Create</button>
+                </div>
             </div>
         </form>
     </div>
-
 </div>
-
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     <script>
-        $(document).ready(function() {
-         
-             });
+        (function uppy() {
+            const uppy = Uppy.Core({
+            restrictions: { allowedFileTypes: ['image/*', '.jpg', '.jpeg', '.png',] }
+                })
+                .use(Uppy.Dashboard, {
+                    inline: true,
+                    hideUploadButton: false,
+                    target: '#drag-drop-area'
+                })
+                .use(Uppy.XHRUpload, {
+                    endpoint: "https://" + `${location.hostname}:${location.port}` + "/admin/media/upload",
+                    formData: true, 
+                    fieldName: "file",
+                    bundle: true 
+                });
+
+                uppy.on("upload-success", (file, response) => {
+                    const fileName = response.body;
+                    
+                    $(".img-select-hidden").append(`<input name="ImgNames" value=${fileName}>${fileName}</input>`);
+                });    
+            
+                uppy.on('complete', (result) => {
+                    console.log('Upload complete! We’ve uploaded these files:', result.successful)
+                });
+        })();
         
         (function priceCalculationHandler() {
             let repairCost = $(".__repair-cost");
@@ -187,8 +210,8 @@
             }
            
             $(repairCost).on("input", () => { 
-                        $(".__selling-price").attr("value", calculateSellingPrice()); 
-                    });
+                $(".__selling-price").attr("value", calculateSellingPrice()); 
+            });
                     
             $(purchasePrice).on("input", () => {
                 $(".__selling-price").attr("value", calculateSellingPrice());

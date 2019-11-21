@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Models.InputModels
@@ -12,6 +13,7 @@ namespace TheCarHub.Models.InputModels
             Car = new Car();
             RepairJob = new RepairJob();
             Files = new List<IFormFile>();
+            ImgNames = new List<string>();
         }
         
         public int Id { get; set; }
@@ -19,6 +21,7 @@ namespace TheCarHub.Models.InputModels
         public int CarId { get; set; }
         public Car Car { get; set; }
         public int CarYear { get; set; }
+        public List<string> ImgNames { get; set; }
         public string Description { get; set; }
         public int StatusId { get; set; }
         public Status Status { get; set; }
