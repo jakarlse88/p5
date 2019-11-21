@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Data;
@@ -28,8 +29,9 @@ namespace TheCarHub.Repositories
             var result =
                 await _context
                     .Status
-                    .FirstOrDefaultAsync(i => i.Name.ToLower() == statusName.ToLower());
-
+                    .Where(i => i.Name.Contains(statusName.ToLower()))
+                    .FirstAsync();
+            
             return result;
         }
     }

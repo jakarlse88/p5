@@ -109,74 +109,42 @@ namespace TheCarHub.Controllers
         {
             if (ModelState.IsValid)
             {
-                var car = new Car
-                {
-                    VIN = inputModel.Car.VIN,
-                    Year = new DateTime(inputModel.CarYear, 1, 1),
-                    Make = inputModel.Car.Make,
-                    Model = inputModel.Car.Model,
-                    Trim = inputModel.Car.Trim
-                };
-                
-                var listing = new Listing
-                {
-                    Title = inputModel.Title,
-                    Car = car,
-                    Description = inputModel.Description,
-                    Status = await _statusService.GetStatusByName("available"),
-                    DateCreated = DateTime.Today,
-                    DateLastUpdated = DateTime.Today,
-                    PurchaseDate = inputModel.PurchaseDate,
-                    SellingPrice = inputModel.PurchasePrice 
-                };
-                
-                // TODO: create and save Media entity
-
-//                car.Listings.Add(listing);
-//                var listing = await _listingService.GetById(viewModel.Id);
+//                var car = new Car
+//                {
+//                    VIN = inputModel.Car.VIN,
+//                    Year = new DateTime(inputModel.CarYear, 1, 1),
+//                    Make = inputModel.Car.Make,
+//                    Model = inputModel.Car.Model,
+//                    Trim = inputModel.Car.Trim
+//                };
 //
-//                if (listing == null)
+//                var listing = new Listing
 //                {
-//                    return NotFound();
-//                }
-
-//                // Image upload
-//                if (inputModel.Files != null && inputModel.Files.Count > 0)
+//                    Title = inputModel.Title,
+//                    Car = car,
+//                    Description = inputModel.Description,
+//                    Status = await _statusService.GetStatusByName("available"),
+//                    DateCreated = DateTime.Today,
+//                    DateLastUpdated = DateTime.Today,
+//                    PurchaseDate = inputModel.PurchaseDate,
+//                    SellingPrice = inputModel.PurchasePrice
+//                };
+//
+//
+//                foreach (var name in inputModel.ImgNames)
 //                {
-//                    foreach (var file in inputModel.Files)
+//                    listing.Media.Add(new Media
 //                    {
-//                        if (file.Length > 0)
-//                        {
-//                            var fileName =
-//                                Path.GetRandomFileName() + Path.GetExtension(file.FileName);
-//
-//                            var path =
-//                                Path.Combine(_webHostEnvironment.WebRootPath,
-//                                    _configuration["Media:Directory"], $"{fileName}");
-//
-//                            var media = new Media
-//                            {
-//                                FileName = fileName,
-//                                Listing = listing,
-//                                Caption = "",
-////                              MediaTags = new List<MediaTag>()
-//                                // TODO: Tags
-//                            };
-//                            
-//                            listing.Media.Add(media);
-//
-//                            using (var stream = System.IO.File.Create(path))
-//                            {
-//                                await file.CopyToAsync(stream);
-//                            }
-//                            
-////                            _mediaService.AddMedia(media);
-//                        }
-//                    }
+//                        FileName = name,
+//                        Listing = listing,
+//                        Caption = "",
+//                        Tags = new List<MediaTag>()
+//                    });
 //                }
-                
-                _listingService.AddListing(listing);
-                
+
+//                
+                await _listingService.AddListing(inputModel);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -186,10 +154,10 @@ namespace TheCarHub.Controllers
                 new SelectList(carYearSelect,
                     "Value",
                     "Text");
-            
+
             return View(inputModel);
         }
-        
+
         // GET: Listing/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -198,7 +166,7 @@ namespace TheCarHub.Controllers
                 return NotFound();
             }
 
-            var listing = 
+            var listing =
                 await _listingService.GetListingById(id.GetValueOrDefault());
 
             if (listing == null)
@@ -224,8 +192,8 @@ namespace TheCarHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
             [Bind("Id, Title,CarId,Description,Status,DateCreated," +
-                "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
-                "SaleDate")]
+                  "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
+                  "SaleDate")]
             ListingViewModel viewModel)
         {
             if (id != viewModel.Id)
@@ -315,7 +283,7 @@ namespace TheCarHub.Controllers
 
             return listings.Any(e => e.Id == id);
         }
-        
+
         /// <summary>
         /// Utility class for car year SelectList creation.
         /// </summary>
@@ -342,7 +310,7 @@ namespace TheCarHub.Controllers
                     Text = i.ToString()
                 });
             }
-            
+
             return years;
         }
     }

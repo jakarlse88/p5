@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheCarHub.Models.Entities;
+using TheCarHub.Models.InputModels;
 
 namespace TheCarHub.Services
 {
@@ -9,7 +10,7 @@ namespace TheCarHub.Services
         Task<IEnumerable<Listing>> GetAllListings();
         Task<Listing> GetListingById(int id);
         void EditListing(Listing listing);
-        void AddListing(Listing listing);
+        Task AddListing(ListingInputModel inputModel);
         void DeleteListing(int id);
     }
 }

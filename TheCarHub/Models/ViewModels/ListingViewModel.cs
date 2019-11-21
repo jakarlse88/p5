@@ -12,7 +12,9 @@ namespace TheCarHub.Models.ViewModels
         {
             Car = new Car();
             RepairJob = new RepairJob();
+            Media = new HashSet<Media>();
         }
+        
         public int Id { get; set; }
         public string Title { get; set; }
         public int CarId { get; set; }
@@ -28,8 +30,7 @@ namespace TheCarHub.Models.ViewModels
         public decimal PurchasePrice { get; set; }
         public DateTime? SaleDate { get; set; }
         
-        public HashSet<Media> Media { get; set; }
-        public List<IFormFile> FormFiles { get; set; }
-        public HashSet<ListingTag> ListingTags { get; set; }
+        public ICollection<Media> Media { get; set; }
+        public ICollection<ListingTag> ListingTags { get; set; }
     }
 }
