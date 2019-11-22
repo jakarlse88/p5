@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TheCarHub.Models;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
+using TheCarHub.Models.Validators;
 using TheCarHub.Repositories;
 
 namespace TheCarHub.Services
@@ -79,6 +82,15 @@ namespace TheCarHub.Services
                 
                 _listingRepository.AddListing(listing);
             }
+        }
+
+        public void ValidateListingInputModel(ModelStateDictionary modelState, 
+            ListingInputModel inputModel)
+        {
+            var validator = new ListingInputModelValidator();
+            var results = validator.Validate(inputModel);
+            
+            results.AddToModelState(modelState, null);    
         }
 
         public void DeleteListing(int id)

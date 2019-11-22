@@ -10,6 +10,7 @@ using TheCarHub.Repositories;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using TheCarHub.Models.InputModels;
 using TheCarHub.Models.Validators;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
@@ -51,11 +52,18 @@ namespace TheCarHub
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IStatusService, StatusService>();
 
-            services.AddControllersWithViews().AddFluentValidation(fv =>
-                fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false);
+            services.AddControllersWithViews()
+                .AddFluentValidation(fv =>
+                    {
+                        fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+                        fv.ImplicitlyValidateChildProperties = true;
+                        fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    }
+                );
 
-            services.AddTransient<IValidator<ListingViewModel>, ListingValidator>();
-            services.AddTransient<IValidator<CarViewModel>, CarViewModelValidator>();
+//            services.AddTransient<IValidator<ListingViewModel>, ListingValidator>();
+//            services.AddTransient<IValidator<CarViewModel>, CarViewModelValidator>();
+//            services.AddScoped<IValidator<ListingInputModel>, ListingInputModelValidator>();
             
             services.AddAutoMapper(typeof(Startup));
 

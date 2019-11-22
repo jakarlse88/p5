@@ -1,16 +1,16 @@
 using System.Text.RegularExpressions;
 using FluentValidation;
-using TheCarHub.Models.ViewModels;
+using TheCarHub.Models.InputModels;
 
 namespace TheCarHub.Models.Validators
 {
-    public class CarValidator : AbstractValidator<CarViewModel>
+    public class CarInputModelValidator : AbstractValidator<CarInputModel>
     {
-        public CarValidator()
+        public CarInputModelValidator()
         {
             RuleFor(c => c.VIN)
                 .NotEmpty()
-                .Matches(new Regex("[A-HJ-NPR-Z0-9]{17}"));
+                .Matches(new Regex("^(?=.*[0-9])(?=.*[A-z])[0-9A-z-]{17}$"));
 
             RuleFor(c => c.Year)
                 .NotNull();

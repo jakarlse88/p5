@@ -30,7 +30,7 @@
     </div>
 
     <div class="container mx-auto">
-        <form asp-action="Create" enctype="multipart/form-data" method="POST" id="create-listing-form">
+        <form asp-action="Create" enctype="multipart/form-data" method="POST" id="create-listing-form" novalidate> 
             <div class="form-row">
                 <div class="col-6">
                     <h4 class="form-heading">Car Information</h4>
@@ -70,7 +70,7 @@
                         </div>
                         <div class="form-group col-5">
                             <label asp-for="PurchaseDate" class="control-label">Purchase Date</label>
-                            <input asp-for="PurchaseDate" class="form-control" type="date" placeholder=" "/>
+                            <input asp-for="PurchaseDate" class="form-control" type="date"/>
                             <span asp-validation-for="PurchaseDate" class="text-danger"></span>
                         </div>
 
@@ -82,7 +82,8 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">$</div>
                                 </div>
-                                <input asp-for="PurchasePrice" class="form-control __purchase-price"/>
+                                <input asp-for="PurchasePrice" class="form-control __purchase-price" asp-format="{0:C}" type="number"/>
+                                <span asp-validation-for="PurchasePrice" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -106,7 +107,8 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">$</div>
                                 </div>
-                                <input asp-for="RepairJob.Cost" class="form-control __repair-cost"/>
+                                <input asp-for="RepairJob.Cost" class="form-control __repair-cost __numerical-input" asp-format="{0:C}" type="number"/>
+                                <span asp-validation-for="RepairJob.Cost" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -129,7 +131,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">$</div>
                                 </div>
-                                <input asp-for="SellingPrice" class="form-control __selling-price" readonly/>
+                                <input asp-for="SellingPrice" class="form-control __selling-price __numerical-input" asp-format="{0:C}" type="number" readonly/>
                             </div>
                         </div>
                     </div>

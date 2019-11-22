@@ -107,42 +107,10 @@ namespace TheCarHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ListingInputModel inputModel)
         {
+            _listingService.ValidateListingInputModel(ModelState, inputModel);
+            
             if (ModelState.IsValid)
             {
-//                var car = new Car
-//                {
-//                    VIN = inputModel.Car.VIN,
-//                    Year = new DateTime(inputModel.CarYear, 1, 1),
-//                    Make = inputModel.Car.Make,
-//                    Model = inputModel.Car.Model,
-//                    Trim = inputModel.Car.Trim
-//                };
-//
-//                var listing = new Listing
-//                {
-//                    Title = inputModel.Title,
-//                    Car = car,
-//                    Description = inputModel.Description,
-//                    Status = await _statusService.GetStatusByName("available"),
-//                    DateCreated = DateTime.Today,
-//                    DateLastUpdated = DateTime.Today,
-//                    PurchaseDate = inputModel.PurchaseDate,
-//                    SellingPrice = inputModel.PurchasePrice
-//                };
-//
-//
-//                foreach (var name in inputModel.ImgNames)
-//                {
-//                    listing.Media.Add(new Media
-//                    {
-//                        FileName = name,
-//                        Listing = listing,
-//                        Caption = "",
-//                        Tags = new List<MediaTag>()
-//                    });
-//                }
-
-//                
                 await _listingService.AddListing(inputModel);
 
                 return RedirectToAction(nameof(Index));
