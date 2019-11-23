@@ -1,3 +1,5 @@
+wwwroot/[Mm]edia/
+
 *.swp
 *.*~
 project.lock.json

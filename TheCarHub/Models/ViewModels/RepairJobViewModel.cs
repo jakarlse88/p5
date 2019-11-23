@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
+using TheCarHub.Models.Entities;
 
-namespace TheCarHub.Models.Entities
+namespace TheCarHub.Models.ViewModels
 {
-    public class RepairJob
+    public class RepairJobViewModel
     {
         public int Id { get; set; }
         public int ListingId { get; set; }
         public Listing Listing { get; set; }
-        public string Description { get; set; }
         public decimal Cost { get; set; }
         public decimal Tax { get; set; }
     }
