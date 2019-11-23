@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,16 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using TheCarHub.Data;
-using TheCarHub.Models;
-using TheCarHub.Models.Entities;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
 
-namespace TheCarHub.Controllers
+namespace TheCarHub.Areas.Admin.Controllers
 {
     [Authorize]
     [Area("Admin")]

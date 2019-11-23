@@ -9,6 +9,5 @@ namespace TheCarHub.Models.ViewModels
         public int ListingId { get; set; }
         public string FileName { get; set; }
         public string Caption { get; set; }
-        public List<FormFile> FormFiles { get; set; }
     }
 }

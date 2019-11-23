@@ -27,10 +27,7 @@
             </div>
         </div>
     </div>
-@* </div> *@
-
     
-@* <div> *@
     <table class="table table-striped table-hover" id="datatable">
         <thead>
         <tr>
@@ -58,17 +55,7 @@
                 <td>
                     <a asp-area="Admin" asp-controller="Listing" asp-action="Edit" asp-route-id="@item.Id">
                         <i class="fas fa-cog"></i>
-                        Edit
-                    </a>
-                    |
-                    <a asp-area="Admin" asp-controller="Listing" asp-action="Details" asp-route-id="@item.Id">
-                        <i class="fas fa-info"></i>
-                        Details
-                    </a>
-                    |
-                    <a asp-area="Admin" asp-controller="Listing" asp-action="Delete" asp-route-id="@item.Id">
-                        <i class="fas fa-trash-alt"></i>
-                        Delete
+                        View/Edit
                     </a>
                 </td>
             </tr>
@@ -76,4 +63,3 @@
         </tbody>
     </table>
 </div>
-@* </div> *@

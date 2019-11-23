@@ -13,6 +13,7 @@ namespace TheCarHub.Models.ViewModels
             Car = new Car();
             RepairJob = new RepairJob();
             Media = new HashSet<Media>();
+            Tags = new List<ListingTag>();
         }
         
         public int Id { get; set; }
@@ -31,6 +32,6 @@ namespace TheCarHub.Models.ViewModels
         public DateTime? SaleDate { get; set; }
         
         public ICollection<Media> Media { get; set; }
-        public ICollection<ListingTag> ListingTags { get; set; }
+        public ICollection<ListingTag> Tags { get; set; }
     }
 }

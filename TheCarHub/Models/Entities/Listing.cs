@@ -7,6 +7,8 @@ namespace TheCarHub.Models.Entities
     {
         public Listing()
         {
+            Car = new Car();
+            RepairJob = new RepairJob();
             Media = new HashSet<Media>();
             Tags = new HashSet<ListingTag>();
         }

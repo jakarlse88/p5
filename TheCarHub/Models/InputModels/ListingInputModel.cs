@@ -15,7 +15,8 @@ namespace TheCarHub.Models.InputModels
             Files = new List<IFormFile>();
             ImgNames = new List<string>();
         }
-        
+
+        public int Id { get; set; }
         public string Title { get; set; }
         public CarInputModel Car { get; set; }
         public int CarYear { get; set; }

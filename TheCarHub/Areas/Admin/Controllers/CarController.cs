@@ -9,7 +9,7 @@ using TheCarHub.Models.Entities;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
 
-namespace TheCarHub.Controllers
+namespace TheCarHub.Areas.Admin.Controllers
 {
     [Authorize]
     [Area("Admin")]

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -6,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
-using System.Linq;
 
-namespace TheCarHub.Areas.Admin
+namespace TheCarHub.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize]
