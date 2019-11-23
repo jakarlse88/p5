@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheCarHub.Data;
 
 namespace TheCarHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191123155256_unbork")]
+    partial class unbork
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,6 +114,9 @@ namespace TheCarHub.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CarId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -142,6 +147,8 @@ namespace TheCarHub.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("CarId1");
 
                     b.HasIndex("StatusId");
 
@@ -334,11 +341,15 @@ namespace TheCarHub.Migrations
 
             modelBuilder.Entity("TheCarHub.Models.Entities.Listing", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Entities.Car", "Car")
-                        .WithMany("Listings")
+                    b.HasOne("TheCarHub.Models.Entities.Car", null)
+                        .WithMany()
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TheCarHub.Models.Entities.Car", "Car")
+                        .WithMany("Listings")
+                        .HasForeignKey("CarId1");
 
                     b.HasOne("TheCarHub.Models.Entities.Status", "Status")
                         .WithMany("Listings")

@@ -10,8 +10,6 @@ namespace TheCarHub.Models.ViewModels
     {
         public ListingViewModel()
         {
-            Car = new Car();
-            RepairJob = new RepairJob();
             Media = new HashSet<Media>();
             Tags = new List<ListingTag>();
         }

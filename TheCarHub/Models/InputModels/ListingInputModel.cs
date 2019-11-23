@@ -10,8 +10,6 @@ namespace TheCarHub.Models.InputModels
     {
         public ListingInputModel()
         {
-            Car = new CarInputModel();
-            RepairJob = new RepairJobInputModel();
             Files = new List<IFormFile>();
             ImgNames = new List<string>();
         }
