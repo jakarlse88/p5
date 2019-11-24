@@ -13,7 +13,7 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-    [Collection("DB")]
+//    [Collection("DB")]
     public class CarServiceTests
     {
         private DbContextOptions<ApplicationDbContext> BuildDbContextOptions(SqliteConnection connection)

@@ -10,7 +10,7 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-    [Collection("DB")]
+//    [Collection("DB")]
     public class CarRepositoryTests
     {
         private readonly Car[] _testEntities = new Car[6]

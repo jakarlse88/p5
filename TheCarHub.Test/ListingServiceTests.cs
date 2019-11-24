@@ -13,50 +13,17 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-    [Collection("DB")]
+//    [Collection("DB")]
     public class ListingServiceTests
     {
         private DbContextOptions<ApplicationDbContext> BuildDbContextOptions()
         {
             var options =
                 new DbContextOptionsBuilder<ApplicationDbContext>()
-                    .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                    .UseSqlServer("Server=localhost,1433; Database=ListingServiceTestDB; User=sa; Password=reallyStrongPwd123;")
                     .Options;
+
             return options;
-        }
-
-        private void PrepareTestDb(DbContextOptions<ApplicationDbContext> contextOptions)
-        {
-            var testEntities = new List<Listing>
-            {
-                new Listing
-                {
-                    Id = 1,
-                    Title = "test one"
-                },
-                new Listing
-                {
-                    Id = 2,
-                    Title = "test two"
-                },
-                new Listing
-                {
-                    Id = 3,
-                    Title = "test three"
-                }
-            };
-
-            using (var context = new ApplicationDbContext(contextOptions))
-            {
-                context.Database.EnsureCreated();
-                
-                foreach (var item in testEntities)
-                {
-                    context.Listing.Add(item);
-                }
-
-                context.SaveChanges();
-            }
         }
 
         [Fact]
@@ -64,19 +31,22 @@ namespace TheCarHub.Test
         {
             // Arrange
             var options = BuildDbContextOptions();
-            PrepareTestDb(options);
             IEnumerable<Listing> result;
 
             // Act
-            using (var context = new ApplicationDbContext(options))
+            await using (var context = new ApplicationDbContext(options))
             {
+                context.Database.EnsureCreated();
+                
                 var listingRepository = new ListingRepository(context);
-                var service = new ListingService(listingRepository, new StatusRepository(context));
+                
+                var service = new ListingService(listingRepository, null);
+                
                 result = await service.GetAllListings();
             }
 
             // Assert
-            using (var context = new ApplicationDbContext(options))
+            await using (var context = new ApplicationDbContext(options))
             {
                 Assert.Equal(
                     context.Listing.ToList().Count, result.Count());
@@ -90,12 +60,13 @@ namespace TheCarHub.Test
         {
             // Arrange
             var options = BuildDbContextOptions();
-            PrepareTestDb(options);
             Listing result;
 
             // Act
-            using (var context = new ApplicationDbContext(options))
+            await using (var context = new ApplicationDbContext(options))
             {
+                context.Database.EnsureCreated();
+                
                 var listingRepository = new ListingRepository(context);
                 var service = new ListingService(listingRepository, new StatusRepository(context));
 
@@ -103,7 +74,7 @@ namespace TheCarHub.Test
             }
 
             // Assert
-            using (var context = new ApplicationDbContext(options))
+            await using (var context = new ApplicationDbContext(options))
             {
                 Assert.Equal(1, result.Id);
                 
@@ -116,13 +87,15 @@ namespace TheCarHub.Test
         {
             // Arrange
             var options = BuildDbContextOptions();
-            PrepareTestDb(options);
 
             // Act
-            using (var context = new ApplicationDbContext(options))
+            await using (var context = new ApplicationDbContext(options))
             {
+                context.Database.EnsureCreated();
+                
                 var listingRepository = new ListingRepository(context);
-                var service = new ListingService(listingRepository, new StatusRepository(context));
+                
+                var service = new ListingService(listingRepository, null);
 
                 var listing = await service.GetListingById(1);
 
@@ -132,13 +105,10 @@ namespace TheCarHub.Test
             }
 
             // Assert
-            using (var context = new ApplicationDbContext(options))
+            await using (var context = new ApplicationDbContext(options))
             {
-                var listingRepository = new ListingRepository(context);
-                var service = new ListingService(listingRepository, new StatusRepository(context));
-
-                var result = await service.GetListingById(1);
-
+                var result = context.Listing.FirstOrDefault(l => l.Id == 1);
+                
                 Assert.Equal("edited", result.Title);
                 
                 context.Database.EnsureDeleted();
@@ -146,24 +116,20 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public async void TestEditNullObject()
+        public void TestEditNullObject()
         {
             // Arrange
-            var options = BuildDbContextOptions();
-            PrepareTestDb(options);
             Listing testObject = null;
 
-            // Act
             var mockRepository = new Mock<IListingRepository>();
             
             mockRepository
                 .Setup(mr => mr.EditListing(It.IsAny<Listing>()))
                 .Verifiable();
             
-            var mockStatusRepository = new Mock<IStatusRepository>();
+            var service = new ListingService(mockRepository.Object, null);
 
-            var service = new ListingService(mockRepository.Object, mockStatusRepository.Object);
-
+            // Act
             service.EditListing(testObject);
 
             // Assert
@@ -181,6 +147,8 @@ namespace TheCarHub.Test
             // Act
             using (var context = new ApplicationDbContext(options))
             {
+                context.Database.EnsureCreated();
+                
                 var listingRepository = new ListingRepository(context);
                 var service = new ListingService(listingRepository, new StatusRepository(context));
 
@@ -192,7 +160,8 @@ namespace TheCarHub.Test
             {
                 var result = context.Listing.ToList();
 
-                Assert.Empty(result);
+                Assert.Equal(6, result.Count);
+                
                 context.Database.EnsureDeleted();
             }
         }
@@ -202,13 +171,15 @@ namespace TheCarHub.Test
         {
             // Arrange
             var options = BuildDbContextOptions();
-            PrepareTestDb(options);
 
             // Act
             using (var context = new ApplicationDbContext(options))
             {
+                context.Database.EnsureCreated();
+                
                 var listingRepository = new ListingRepository(context);
-                var service = new ListingService(listingRepository, new StatusRepository(context));
+                
+                var service = new ListingService(listingRepository, null);
 
                 service.DeleteListing(1);
             }
@@ -219,6 +190,7 @@ namespace TheCarHub.Test
                 var result = context.Listing.ToList();
 
                 Assert.DoesNotContain(result, l => l.Id == 1);
+                Assert.Equal(5, result.Count);
                 
                 context.Database.EnsureDeleted();
             }
@@ -229,15 +201,17 @@ namespace TheCarHub.Test
         {
             // Arrange
             var options = BuildDbContextOptions();
-            PrepareTestDb(options);
 
             // Act
             using (var context = new ApplicationDbContext(options))
             {
+                context.Database.EnsureCreated();
+                
                 var listingRepository = new ListingRepository(context);
-                var service = new ListingService(listingRepository, new StatusRepository(context));
+                
+                var service = new ListingService(listingRepository, null);
 
-                service.DeleteListing(4);
+                service.DeleteListing(666);
             }
 
             // Assert
@@ -245,7 +219,7 @@ namespace TheCarHub.Test
             {
                 var result = context.Listing.ToList();
 
-                Assert.Equal(3, result.Count);
+                Assert.Equal(6, result.Count);
                 
                 context.Database.EnsureDeleted();
             }
