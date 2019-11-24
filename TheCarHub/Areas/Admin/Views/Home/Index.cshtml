@@ -1,3 +1,4 @@
+@using System.Globalization
 @model List<TheCarHub.Models.ViewModels.ListingViewModel>
 
 <div class="app-main__inner">
@@ -51,7 +52,7 @@
                 <td>@($"{item.Car.Model}")</td>
                 <td>@item.Title</td>
                 <td>@item.Status.Name</td>
-                <td>@item.SellingPrice</td>
+                <td>@item.SellingPrice.ToString("C0", new CultureInfo("en-US"))</td>
                 <td>
                     <a asp-area="Admin" asp-controller="Listing" asp-action="Edit" asp-route-id="@item.Id">
                         <i class="fas fa-cog"></i>

@@ -9,6 +9,7 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
+    [Collection("DB")]
     public class MediaRepositoryTests
     {
         private readonly Media[] _testEntities = new Media[]

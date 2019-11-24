@@ -66,7 +66,13 @@ namespace TheCarHub.Services
                     DateCreated = DateTime.Today,
                     DateLastUpdated = DateTime.Today,
                     PurchaseDate = inputModel.PurchaseDate,
-                    SellingPrice = inputModel.PurchasePrice
+                    PurchasePrice = inputModel.PurchasePrice,
+                    SellingPrice = inputModel.SellingPrice,
+                    RepairJob = new RepairJob
+                    {
+                        Cost = inputModel.RepairJob.Cost, 
+                        Description = inputModel.RepairJob.Description
+                    }
                 };
 
                 foreach (var name in inputModel.ImgNames)

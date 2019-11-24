@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using TheCarHub.Data;
@@ -12,6 +11,7 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
+    [Collection("DB")]
     public class CarServiceTests
     {
         private DbContextOptions<ApplicationDbContext> BuildDbContextOptions()

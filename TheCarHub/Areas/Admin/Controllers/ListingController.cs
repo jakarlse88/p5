@@ -139,12 +139,6 @@ namespace TheCarHub.Areas.Admin.Controllers
             }
 
             var inputModel = _mapper.Map<ListingInputModel>(listing);
-
-//            ViewData["CarId"] = new SelectList(
-//                await _carService.GetAllCars(),
-//                "Id",
-//                "Id",
-//                viewModel.CarId);
             
             var carYearSelect = PopulateCarYearSelect();
 
@@ -159,62 +153,64 @@ namespace TheCarHub.Areas.Admin.Controllers
         // POST: Listing/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public async Task<IActionResult> Edit(int id,
-//            [Bind("Id, Title,CarId,Description,Status,DateCreated," +
-//                  "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
-//                  "SaleDate")]
-//            ListingViewModel viewModel)
-//        {
-//            if (id != viewModel.Id)
-//            {
-//                return NotFound();
-//            }
-//
-//            if (ModelState.IsValid)
-//            {
-//                var listing = await _listingService.GetListingById(id);
-//
-//                listing.Title = viewModel.Title;
-//                listing.CarId = viewModel.CarId;
-//                listing.Description = viewModel.Description;
-////                listing.Status = viewModel.Status;
-//                listing.DateCreated = viewModel.DateCreated;
-//                listing.DateLastUpdated = DateTime.Today;
-//                listing.PurchaseDate = viewModel.PurchaseDate;
-//                listing.SellingPrice = viewModel.SellingPrice;
-//                listing.SaleDate = viewModel.SaleDate;
-//
-//                try
-//                {
-//                    _listingService.EditListing(listing);
-//                }
-//                catch (DbUpdateConcurrencyException)
-//                {
-//                    var listingExists = await ListingExists(viewModel.Id);
-//
-//                    if (!listingExists)
-//                    {
-//                        return NotFound();
-//                    }
-//                    else
-//                    {
-//                        throw;
-//                    }
-//                }
-//
-//                return RedirectToAction(nameof(Index));
-//            }
-//
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Id, Title,CarId,Description,Status,DateCreated," +
+                  "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
+                  "SaleDate")]
+            ListingInputModel inputModel)
+        {
+            if (id != inputModel.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var listing = await _listingService.GetListingById(id);
+                
+                // TODO: sort out this stuff. Should probably be in the service.
+                // TODO: commented-out don't exist on InputModel
+                listing.Title = inputModel.Title;
+//                listing.CarId = inputModel.CarId; 
+                listing.Description = inputModel.Description;
+//                listing.Status = viewModel.Status;
+//                listing.DateCreated = inputModel.DateCreated;
+                listing.DateLastUpdated = DateTime.Today;
+                listing.PurchaseDate = inputModel.PurchaseDate;
+                listing.SellingPrice = inputModel.SellingPrice;
+//                listing.SaleDate = inputModel.SaleDate;
+
+                try
+                {
+                    _listingService.EditListing(listing);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    var listingExists = await ListingExists(inputModel.Id);
+
+                    if (!listingExists)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+
 //            ViewData["CarId"] = new SelectList(
 //                await _carService.GetAllCars(),
 //                "Id",
 //                "Id",
-//                viewModel.CarId);
-//
-//            return View(viewModel);
-//        }
+//                inputModel.CarId);
+
+            return View(inputModel);
+        }
 
         // GET: Listing/Delete/5
         public async Task<IActionResult> Delete(int? id)

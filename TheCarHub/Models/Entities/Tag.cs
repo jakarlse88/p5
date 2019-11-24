@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace TheCarHub.Models.Entities 
 {
     public class Tag

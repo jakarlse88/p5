@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
 using TheCarHub.Repositories;
@@ -9,6 +10,7 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
+    [Collection("DB")]
     public class ListingRepositoryTests
     {
         private readonly Listing[] _testEntities = new Listing[]
@@ -60,7 +62,8 @@ namespace TheCarHub.Test
         private DbContextOptions<ApplicationDbContext> BuildTestDbOptions() 
         {
             return new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+//                .UseInMemoryDatabase(Guid.NewGuid().ToString(), new InMemoryDatabaseRoot())
+                .UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EFProviders.InMemory;Trusted_Connection=True;ConnectRetryCount=0")
                 .Options;
         }
 
@@ -68,9 +71,9 @@ namespace TheCarHub.Test
         {
             using (var context = new ApplicationDbContext(contextOptions))
             {
-                foreach (var listingEntity in _testEntities)
+                foreach (var item in _testEntities)
                 {
-                    context.Listing.Add(listingEntity);
+                    context.Listing.Add(item);
                 }
 
                 context.SaveChanges();
@@ -78,7 +81,7 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public async void TestGetAllListingsValidId()
+        public async void TestGetAllListings()
         {
             // Arrange
             var options = BuildTestDbOptions();
@@ -117,7 +120,6 @@ namespace TheCarHub.Test
             {
                 var repository = new ListingRepository(context);
                 result = await repository.GetListingById(testId);
-
                 context.Database.EnsureDeleted();
             }
 

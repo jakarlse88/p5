@@ -46,11 +46,12 @@ namespace TheCarHub.Repositories
         {
             var result =
                 await _context
-                .Listing
-                .Include(l => l.Car)
-                .Include(l => l.Status)
-                .Include(l => l.Media)
-                .SingleOrDefaultAsync(l => l.Id == id);
+                    .Listing
+                    .Include(l => l.Car)
+                    .Include(l => l.Status)
+                    .Include(l => l.Media)
+                    .Include(l => l.RepairJob)
+                    .SingleOrDefaultAsync(l => l.Id == id);
 
             return result;
         }

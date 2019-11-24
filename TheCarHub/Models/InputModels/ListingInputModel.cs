@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Models.InputModels
 {

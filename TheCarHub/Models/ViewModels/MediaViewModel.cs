@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-
 namespace TheCarHub.Models.ViewModels
 {
     public class MediaViewModel

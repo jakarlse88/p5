@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Models;
 using TheCarHub.Models.Entities;
@@ -51,11 +50,6 @@ namespace TheCarHub.Data
             builder.Entity<ListingTag>()
                 .HasKey(lt => new { ListingId = lt.ListingId, TagId = lt.TagId });
 
-//            builder.Entity<Car>()
-//                .HasMany<Listing>()
-//                .WithOne()
-//                .HasForeignKey(l => l.CarId);
-//            
             builder.Entity<Car>()
                 .HasData(
                     new Car {
