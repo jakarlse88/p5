@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using TheCarHub.Data;
@@ -13,91 +13,65 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-//    [Collection("DB")]
     public class CarServiceTests
     {
-        private DbContextOptions<ApplicationDbContext> BuildDbContextOptions(SqliteConnection connection)
+        private DbContextOptions<ApplicationDbContext> BuildDbContextOptions()
         {
-            return new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite(connection)
-                .Options;
+            var options =
+                new DbContextOptionsBuilder<ApplicationDbContext>()
+                    .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                    .Options;
+            return options;
         }
 
         [Fact]
         public async void TestGetAllCars()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildDbContextOptions();
+            IEnumerable<Car> results;
 
-            try
+            // Act
+            await using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildDbContextOptions(connection);
-                IEnumerable<Car> results;
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                var service = new CarService(repository);
 
-                // Act
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
-
-                    results = await service.GetAllCars();
-                }
-
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    // Assert
-                    Assert.Equal(6, results.Count());
-
-                    context.Database.EnsureDeleted();
-                }
+                results = await service.GetAllCars();
             }
-            finally
-            {
-                connection.Close();
-            }
+
+            // Assert
+            Assert.Equal(6, results.Count());
         }
 
         [Theory]
         [InlineData(1, "Mazda")]
         [InlineData(2, "Jeep")]
         [InlineData(3, "Ford")]
-        public async void TestGetCarByIdValidId(int testId, string expectedModel)
+        public async void TestGetCarByIdValidId(int testId, string expectedMake)
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildDbContextOptions();
+            Car result;
 
-            try
+            // Act
+            await using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildDbContextOptions(connection);
-                Car result;
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                
+                var service = new CarService(repository);
 
-                // Act
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
+                result = await service.GetCarById(testId);
 
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
-
-                    result = await service.GetCarById(testId);
-                }
-
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    // Assert
-                    Assert.Equal(expectedModel, result.Make);
-
-                    context.Database.EnsureDeleted();
-                }
+                context.Database.EnsureDeleted();
             }
-            finally
-            {
-                connection.Close();
-            }
+
+            // Assert
+            Assert.Equal(expectedMake, result.Make);
         }
 
         [Theory]
@@ -107,221 +81,167 @@ namespace TheCarHub.Test
         public async void TestGetCarByIdInvalidId(int testId)
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildDbContextOptions();
+            Car result;
 
-            try
+            // Act
+            await using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildDbContextOptions(connection);
-                Car result;
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                
+                var service = new CarService(repository);
 
-                // Act
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
-
-                    result = await service.GetCarById(testId);
-                }
-
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    // Assert
-                    Assert.Null(result);
-
-                    context.Database.EnsureDeleted();
-                }
+                result = await service.GetCarById(testId);
             }
-            finally
-            {
-                connection.Close();
-            }
+
+            // Assert
+            Assert.Null(result);
         }
 
         [Fact]
         public void TestAddCarNonNullObject()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
-
-            try
+            var options = BuildDbContextOptions();
+            var testEntity = new Car
             {
-                var options = BuildDbContextOptions(connection);
+                Model = "Test"
+            };
 
-                var testEntity = new Car
-                {
-                    Make = "Test"
-                };
+            // Act
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                
+                var service = new CarService(repository);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
-
-                    service.AddCar(testEntity);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var result = context.Car.ToList();
-
-                    Assert.Equal(7, result.Count);
-                    Assert.Contains(result, c => c.Make == "Test");
-
-                    context.Database.EnsureDeleted();
-                }
+                service.AddCar(testEntity);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var result = context.Car.ToList();
+
+                Assert.Equal(7, result.Count);
+                Assert.Equal("Test", result.Last().Model);
+
+                context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
         public void TestAddNullObject()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildDbContextOptions();
+            Car testObject = null;
 
-            try
+            // Act
+            using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildDbContextOptions(connection);
-                Car testObject = null;
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                
+                var service = new CarService(repository);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
-
-                    service.AddCar(testObject);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var result = context.Car.ToList();
-
-                    Assert.Equal(6, result.Count);
-
-                    context.Database.EnsureDeleted();
-                }
+                service.AddCar(testObject);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var result = context.Car.ToList();
+
+                Assert.Equal(6, result.Count);
             }
         }
 
         [Fact]
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public void TestEditNonNullObject()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildDbContextOptions();
 
-            try
+            // Act
+            using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildDbContextOptions(connection);
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                
+                var service = new CarService(repository);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
+                var car = context.Car.ToList().FirstOrDefault(i => i.Id == 1);
 
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
+                car.Model = "VW";
 
-                    var car = context.Car.ToList().FirstOrDefault(i => i.Id == 1);
-
-                    car.Model = "VW";
-
-                    service.EditCar(car);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var result = context.Car.ToList().FirstOrDefault(i => i.Id == 1);
-
-                    Assert.Equal("VW", result.Model);
-
-                    context.Database.EnsureDeleted();
-                }
+                service.EditCar(car);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var result = context.Car.ToList().FirstOrDefault(i => i.Id == 1);
+
+                Assert.Equal("VW", result.Model);
+
+                context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public async Task TestEditNullObject()
+        public void TestEditNullObject()
         {
             // Arrange
             var mockRepository = new Mock<ICarRepository>();
             mockRepository
-                .Setup(x => x.EditCar(It.IsAny<Car>()))
+                .Setup(x => x.DeleteCar(It.IsAny<int>()))
                 .Verifiable();
 
             var service = new CarService(mockRepository.Object);
 
             // Act
-            var testEntity = await service.GetCarById(10);
-
-            service.EditCar(testEntity);
+            service.DeleteCar(10);
 
             // Assert
             mockRepository
-                .Verify(x => x.EditCar(It.IsAny<Car>()), Times.Never);
+                .Verify(x => x.DeleteCar(It.IsAny<int>()), Times.Once);
         }
-
+        
         [Fact]
         public void TestDeleteCarValidId()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildDbContextOptions();
 
-            try
+            // Act
+            using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildDbContextOptions(connection);
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                
+                var service = new CarService(repository);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-                    
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
-
-                    service.DeleteCar(1);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var result = context.Car.ToList();
-
-                    Assert.DoesNotContain(result, l => l.Id == 1);
-                    Assert.Equal(5, result.Count);
-
-                    context.Database.EnsureDeleted();
-                }
+                service.DeleteCar(1);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var result = context.Car.ToList();
+
+                Assert.DoesNotContain(result, l => l.Id == 1);
+
+                context.Database.EnsureDeleted();
             }
         }
 
@@ -329,37 +249,28 @@ namespace TheCarHub.Test
         public void TestDeleteCarInvalidId()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildDbContextOptions();
 
-            try
+            // Act
+            using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildDbContextOptions(connection);
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                
+                var service = new CarService(repository);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-                    
-                    var repository = new CarRepository(context);
-                    var service = new CarService(repository);
-
-                    service.DeleteCar(666);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var result = context.Car.ToList();
-
-                    Assert.Equal(6, result.Count);
-
-                    context.Database.EnsureDeleted();
-                }
+                service.DeleteCar(7);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var result = context.Car.ToList();
+
+                Assert.Equal(6, result.Count);
+
+                context.Database.EnsureDeleted();
             }
         }
     }

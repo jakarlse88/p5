@@ -11,24 +11,20 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-//    [Collection("DB")]
     public class MediaRepositoryTests
     {
-        private DbContextOptions<ApplicationDbContext> BuildDbContextOptions()
+        private DbContextOptions<ApplicationDbContext> BuildTestDbOptions() 
         {
-            var options =
-                new DbContextOptionsBuilder<ApplicationDbContext>()
-                    .UseSqlServer("Server=localhost,1433; Database=MediaRepositoryTestDB; User=sa; Password=reallyStrongPwd123;")
-                    .Options;
-
-            return options;
+            return new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
         }
 
         [Fact]
         public async void TestGetAllMedia()
         {
             // Arrange
-            var options = BuildDbContextOptions();
+            var options = BuildTestDbOptions();
             IEnumerable<Media> result;
 
             // Act
@@ -39,16 +35,12 @@ namespace TheCarHub.Test
                 var repository = new MediaRepository(context);
                 
                 result = await repository.GetAllMedia();
-            }
-
-            await using (var context = new ApplicationDbContext(options))
-            {
-                // Assert
-                var expected = context.Media.ToList();
-                Assert.Equal(expected.Count, result.ToList().Count);
 
                 context.Database.EnsureDeleted();
             }
+
+            // Assert
+            Assert.Equal(6, result.ToList().Count);
         }
 
         [Theory]
@@ -59,7 +51,7 @@ namespace TheCarHub.Test
             int testId, string expectedFileName)
         {
             // Arrange
-            var options = BuildDbContextOptions();
+            var options = BuildTestDbOptions();
             Media result;
 
             // Act
@@ -70,15 +62,12 @@ namespace TheCarHub.Test
                 var repository = new MediaRepository(context);
                 
                 result = await repository.GetMediaById(testId);
-            }
-
-            await using (var context = new ApplicationDbContext(options))
-            {
-                // Assert
-                Assert.Equal(expectedFileName, result.FileName);
 
                 context.Database.EnsureDeleted();
             }
+
+            // Assert
+            Assert.Equal(expectedFileName, result.FileName);
         }
 
         [Theory]
@@ -88,7 +77,7 @@ namespace TheCarHub.Test
         public async void TestGetMediaByIdInvalidId(int testId)
         {
             // Arrange
-            var options = BuildDbContextOptions();
+            var options = BuildTestDbOptions();
             Media result;
 
             // Act
@@ -100,11 +89,11 @@ namespace TheCarHub.Test
                 
                 result = await repository.GetMediaById(testId);
 
-                // Assert
-                Assert.Null(result);
-                
                 context.Database.EnsureDeleted();
             }
+
+            // Assert
+            Assert.Null(result);
         }
 
         [Theory]
@@ -114,7 +103,7 @@ namespace TheCarHub.Test
         public void TestDeleteMediaValidId(int testId)
         {
             // Arrange
-            var options = BuildDbContextOptions();
+            var options = BuildTestDbOptions();
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -129,10 +118,9 @@ namespace TheCarHub.Test
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var results = context.Listing.ToList();
-
-                Assert.DoesNotContain(results, l => l.Id == testId);
-                Assert.Equal(5, results.Count);
+                var results = context.Media.ToList();
+                
+                Assert.DoesNotContain(results, m => m.Id == testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -144,8 +132,8 @@ namespace TheCarHub.Test
         [InlineData(-1)]
         public void TestDeleteMediaInvalidId(int testId)
         {
-            // Arrange
-            var options = BuildDbContextOptions();
+             // Arrange
+            var options = BuildTestDbOptions();
             int expected;
 
             // Act
@@ -164,7 +152,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var actual = context.Media.ToList().Count;
-
+                
                 Assert.Equal(expected, actual);
 
                 context.Database.EnsureDeleted();
@@ -175,11 +163,8 @@ namespace TheCarHub.Test
         public void TestSaveMediaValidEntity()
         {
             // Arrange
-            var options = BuildDbContextOptions();
-            var testEntity = new Media
-            {
-                FileName = "file seven"
-            };
+            var options = BuildTestDbOptions();
+            var testEntity = new Media {FileName = "test file"};
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -187,7 +172,7 @@ namespace TheCarHub.Test
                 context.Database.EnsureCreated();
                 
                 var repository = new MediaRepository(context);
-
+                
                 repository.AddMedia(testEntity);
             }
 
@@ -196,8 +181,9 @@ namespace TheCarHub.Test
             {
                 var result = context.Media.ToList();
 
-                Assert.Equal("file seven", result.Last().FileName);
-
+                Assert.Contains(result, m => m.FileName == "test file");
+                Assert.Equal(7, result.Count);
+                
                 context.Database.EnsureDeleted();
             }
         }
@@ -207,7 +193,7 @@ namespace TheCarHub.Test
         public void TestSaveMediaNullEntity()
         {
             // Arrange
-            var options = BuildDbContextOptions();
+            var options = BuildTestDbOptions();
             Media testEntity = null;
 
             // Act
@@ -216,7 +202,7 @@ namespace TheCarHub.Test
                 context.Database.EnsureCreated();
                 
                 var repository = new MediaRepository(context);
-
+                
                 repository.AddMedia(testEntity);
             }
 
@@ -236,7 +222,7 @@ namespace TheCarHub.Test
         public void TestUpdateMediaValidEntity()
         {
             // Arrange
-            var options = BuildDbContextOptions();
+            var options = BuildTestDbOptions();
 
             // Act
             using (var context = new ApplicationDbContext(options))
@@ -244,11 +230,11 @@ namespace TheCarHub.Test
                 context.Database.EnsureCreated();
                 
                 var repository = new MediaRepository(context);
-
-                var testEntity =
+                
+                var testEntity = 
                     context
-                        .Media
-                        .FirstOrDefault(l => l.Id == 1);
+                    .Media
+                    .FirstOrDefault(l => l.Id == 1);
 
                 testEntity.FileName = "test file";
 
@@ -258,10 +244,10 @@ namespace TheCarHub.Test
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result =
+                var result = 
                     context
-                        .Media
-                        .FirstOrDefault(l => l.Id == 1);
+                    .Media
+                    .FirstOrDefault(l => l.Id == 1);
 
                 Assert.Equal("test file", result.FileName);
 
@@ -270,28 +256,22 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
         public void TestUpdateMediaNullEntity()
         {
             // Arrange
-            var options = BuildDbContextOptions();
-            var contextMock = new Mock<ApplicationDbContext>();
+            var mockContext = new Mock<ApplicationDbContext>();
             
-            contextMock
-                .Setup(x => 
-                    x.Update(It.IsAny<Media>()))
+            mockContext
+                .Setup(x => x.Update(It.IsAny<Media>()))
                 .Verifiable();
-
+            
+            var repository = new ListingRepository(mockContext.Object);
+            
             // Act
-                var repository = new MediaRepository(contextMock.Object);
-
-                Media testEntity = null;
-
-                repository.EditMedia(testEntity);
-
+            repository.EditListing(null);
+            
             // Assert
-            contextMock
-                .Verify(x => x.Update(It.IsAny<Media>()), Times.Never);
+            mockContext.Verify(x => x.Update(It.IsAny<Media>()), Times.Never);
         }
     }
 }

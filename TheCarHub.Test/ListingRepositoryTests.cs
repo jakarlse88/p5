@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
 using TheCarHub.Repositories;
@@ -11,52 +11,37 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-//    [Collection("DB")]
     public class ListingRepositoryTests
     {
-        private DbContextOptions<ApplicationDbContext> BuildTestDbOptions(SqliteConnection connection)
+
+        private DbContextOptions<ApplicationDbContext> BuildTestDbOptions() 
         {
             return new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
         }
 
         [Fact]
-        public async void TestGetAllListings()
+        public async void TestGetAllListingsValidId()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildTestDbOptions();
+            IList<Listing> result;
 
-            try
+            // Act
+            await using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildTestDbOptions(connection);
-                IList<Listing> result;
+                context.Database.EnsureCreated();
+                
+                var repository = new ListingRepository(context);
+                
+                result = await repository.GetAllListings();
 
-                // Act
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new ListingRepository(context);
-
-                    result = await repository.GetAllListings();
-
-                    context.Database.EnsureDeleted();
-                }
-
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    // Assert
-                    Assert.Equal(6, result.Count);
-
-                    context.Database.EnsureDeleted();
-                }
+                context.Database.EnsureDeleted();
             }
-            finally
-            {
-                connection.Close();
-            }
+
+            // Assert
+            Assert.Equal(6, result.Count);
         }
 
         [Theory]
@@ -69,38 +54,23 @@ namespace TheCarHub.Test
         public async void TestGetListingByIdValidId(int testId, string expectedMake)
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildTestDbOptions();
+            Listing result;
 
-            try
+            // Act
+            await using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildTestDbOptions(connection);
-                Listing result;
+                context.Database.EnsureCreated();
+                
+                var repository = new ListingRepository(context);
+                
+                result = await repository.GetListingById(testId);
 
-                // Act
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new ListingRepository(context);
-
-                    result = await repository.GetListingById(testId);
-
-                    context.Database.EnsureDeleted();
-                }
-
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    // Assert
-                    Assert.Equal(expectedMake, result.Description);
-
-                    context.Database.EnsureDeleted();
-                }
+                context.Database.EnsureDeleted();
             }
-            finally
-            {
-                connection.Close();
-            }
+
+            // Assert
+            Assert.Equal(expectedMake, result.Description);
         }
 
         [Theory]
@@ -110,36 +80,23 @@ namespace TheCarHub.Test
         public async void TestGetListingByIdInvalidId(int testId)
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildTestDbOptions();
+            Listing result;
 
-            try
+            // Act
+            await using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildTestDbOptions(connection);
-                Listing result;
+                context.Database.EnsureCreated();
+                
+                var repository = new ListingRepository(context);
+                
+                result = await repository.GetListingById(testId);
 
-                // Act
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new ListingRepository(context);
-
-                    result = await repository.GetListingById(testId);
-                }
-
-                await using (var context = new ApplicationDbContext(options))
-                {
-                    // Assert
-                    Assert.Null(result);
-
-                    context.Database.EnsureDeleted();
-                }
+                context.Database.EnsureDeleted();
             }
-            finally
-            {
-                connection.Close();
-            }
+
+            // Assert
+            Assert.Null(result);
         }
 
         [Theory]
@@ -152,36 +109,23 @@ namespace TheCarHub.Test
         public void TestDeleteListingValidId(int testId)
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildTestDbOptions();
 
-            try
+            // Act
+            using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildTestDbOptions(connection);
+                var repository = new ListingRepository(context);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-
-                    var repository = new ListingRepository(context);
-
-                    repository.DeleteListing(testId);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var results = context.Listing.ToList();
-
-                    Assert.DoesNotContain(results, l => l.Id == testId);
-
-                    context.Database.EnsureDeleted();
-                }
+                repository.DeleteListing(testId);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var results = context.Listing.ToList();
+                Assert.DoesNotContain(results, l => l.Id == testId);
+
+                context.Database.EnsureDeleted();
             }
         }
 
@@ -191,55 +135,40 @@ namespace TheCarHub.Test
         [InlineData(-1)]
         public void TestDeleteListingInvalidId(int testId)
         {
-            // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+             // Arrange
+            var options = BuildTestDbOptions();
+            int expected;
 
-            try
+            // Act
+            using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildTestDbOptions(connection);
-                int expected;
+                context.Database.EnsureCreated();
+                
+                var repository = new ListingRepository(context);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
+                expected = context.Listing.ToList().Count;
 
-                    var repository = new ListingRepository(context);
-
-                    expected = context.Listing.ToList().Count;
-
-                    repository.DeleteListing(testId);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var actual = context.Listing.ToList().Count;
-
-                    Assert.Equal(expected, actual);
-
-                    context.Database.EnsureDeleted();
-                }
+                repository.DeleteListing(testId);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var actual = context.Listing.ToList().Count;
+                
+                Assert.Equal(expected, actual);
+
+                context.Database.EnsureDeleted();
             }
         }
 
-        // Note: uses InMemory because of SQLite limitations
         [Fact]
         public void TestSaveListingValidListingEntity()
         {
             // Arrange
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString(), new InMemoryDatabaseRoot())
-                .Options;
-
+            var options = BuildTestDbOptions();
             var testEntity = new Listing
             {
-//                    Car = car,
                 Description = "test description"
             };
 
@@ -247,9 +176,39 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-
+                
                 var repository = new ListingRepository(context);
+                
+                repository.AddListing(testEntity);
+            }
 
+            // Assert
+            using (var context = new ApplicationDbContext(options))
+            {
+                var results = context.Listing.ToList();
+
+//                Assert.Equal(7, results.Last().Id);
+                Assert.Equal("test description", results.Last().Description);
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
+        [Fact]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+        public void TestSaveListingNullEntity()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+            Listing testEntity = null;
+
+            // Act
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                var repository = new ListingRepository(context);
+                
                 repository.AddListing(testEntity);
             }
 
@@ -258,140 +217,68 @@ namespace TheCarHub.Test
             {
                 var result = context.Listing.ToList();
 
-                Assert.Equal("test description", result.Last().Description);
+                Assert.Equal(6, result.Count);
 
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public void TestSaveListingNullEntity()
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+        public void TestUpdateListingValidEntity()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
+            var options = BuildTestDbOptions();
 
-            try
+            // Act
+            using (var context = new ApplicationDbContext(options))
             {
-                var options = BuildTestDbOptions(connection);
-                Listing testEntity = null;
+                context.Database.EnsureCreated();
+                
+                var repository = new ListingRepository(context);
+                
+                var testEntity = 
+                    context
+                    .Listing
+                    .FirstOrDefault(l => l.Id == 1);
 
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
+                testEntity.Description = "test description";
 
-                    var repository = new ListingRepository(context);
-
-                    repository.AddListing(testEntity);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var result = context.Listing.ToList();
-
-                    Assert.Equal(6, result.Count);
-
-                    context.Database.EnsureDeleted();
-                }
+                repository.EditListing(testEntity);
             }
-            finally
+
+            // Assert
+            using (var context = new ApplicationDbContext(options))
             {
-                connection.Close();
+                var result = 
+                    context
+                    .Listing
+                    .FirstOrDefault(l => l.Id == 1);
+
+                Assert.Equal("test description", result.Description);
+
+                context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
-        public void TestUpdateListingValidEntity()
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+        public void TestUpdateListingsNullEntity()
         {
             // Arrange
-            var connection = new SqliteConnection("Datasource=:memory:");
-            connection.Open();
-
-            try
-            {
-                var options = BuildTestDbOptions(connection);
-
-                // Act
-                using (var context = new ApplicationDbContext(options))
-                {
-                    context.Database.EnsureCreated();
-                    
-                    var repository = new ListingRepository(context);
-
-                    var testEntity =
-                        context
-                            .Listing
-                            .FirstOrDefault(l => l.Id == 1);
-
-                    testEntity.Description = "test description";
-
-                    repository.EditListing(testEntity);
-                }
-
-                // Assert
-                using (var context = new ApplicationDbContext(options))
-                {
-                    var result =
-                        context
-                            .Listing
-                            .FirstOrDefault(l => l.Id == 1);
-
-                    Assert.Equal("test description", result.Description);
-
-                    context.Database.EnsureDeleted();
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
+            var mockContext = new Mock<ApplicationDbContext>();
+            
+            mockContext
+                .Setup(x => x.Update(It.IsAny<Listing>()))
+                .Verifiable();
+            
+            var repository = new ListingRepository(mockContext.Object);
+            
+            // Act
+            repository.EditListing(null);
+            
+            // Assert
+            mockContext.Verify(x => x.Update(It.IsAny<Listing>()), Times.Never);
         }
-
-//        [Fact]
-//        public void TestUpdateListingsNullEntity()
-//        {
-//            // Arrange
-//            var connection = new SqliteConnection("Datasource=:memory:");
-//            connection.Open();
-//
-//            try
-//            {
-//                var options = BuildTestDbOptions(connection);
-//
-//                // Act
-//                using (var context = new ApplicationDbContext(options))
-//                {
-//                    context.Database.EnsureCreated();
-//                    
-//                    var repository = new ListingRepository(context);
-//                
-//                    var testEntity = 
-//                        context
-//                            .Listing
-//                            .FirstOrDefault(l => l.Id == 10);
-//
-//                    repository.EditListing(testEntity);
-//                }
-//
-//                // Assert
-//                using (var context = new ApplicationDbContext(options))
-//                {
-//                    var result = 
-//                        context
-//                            .Listing
-//                            .FirstOrDefault(l => l.Id == 10);
-//
-//                    Assert.Equal("One", result.Description);
-//
-//                    context.Database.EnsureDeleted();
-//                }
-//            }
-//            finally
-//            {
-//                connection.Close();
-//            }
-//        }
     }
 }

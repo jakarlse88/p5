@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,14 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-//    [Collection("DB")]
     public class ListingServiceTests
     {
         private DbContextOptions<ApplicationDbContext> BuildDbContextOptions()
         {
             var options =
                 new DbContextOptionsBuilder<ApplicationDbContext>()
-                    .UseSqlServer("Server=localhost,1433; Database=ListingServiceTestDB; User=sa; Password=reallyStrongPwd123;")
+                    .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
-
             return options;
         }
 
@@ -38,9 +37,9 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
                 
-                var listingRepository = new ListingRepository(context);
+                var repository = new ListingRepository(context);
                 
-                var service = new ListingService(listingRepository, null);
+                var service = new ListingService(repository, null);
                 
                 result = await service.GetAllListings();
             }
@@ -67,8 +66,9 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
                 
-                var listingRepository = new ListingRepository(context);
-                var service = new ListingService(listingRepository, new StatusRepository(context));
+                var repository = new ListingRepository(context);
+                
+                var service = new ListingService(repository, null);
 
                 result = await service.GetListingById(1);
             }
@@ -77,12 +77,13 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 Assert.Equal(1, result.Id);
-                
+
                 context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public async void TestEditNonNullObject()
         {
             // Arrange
@@ -93,9 +94,9 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
                 
-                var listingRepository = new ListingRepository(context);
+                var repository = new ListingRepository(context);
                 
-                var service = new ListingService(listingRepository, null);
+                var service = new ListingService(repository, null);
 
                 var listing = await service.GetListingById(1);
 
@@ -108,36 +109,71 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 var result = context.Listing.FirstOrDefault(l => l.Id == 1);
-                
+
                 Assert.Equal("edited", result.Title);
-                
-                context.Database.EnsureDeleted();
             }
         }
 
         [Fact]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
         public void TestEditNullObject()
         {
             // Arrange
             Listing testObject = null;
 
+            // Act
             var mockRepository = new Mock<IListingRepository>();
-            
+
             mockRepository
-                .Setup(mr => mr.EditListing(It.IsAny<Listing>()))
+                .Setup(lr => lr.EditListing(It.IsAny<Listing>()))
                 .Verifiable();
-            
+
             var service = new ListingService(mockRepository.Object, null);
 
-            // Act
             service.EditListing(testObject);
 
             // Assert
             mockRepository
-                .Verify(mr => mr.EditListing(It.IsAny<Listing>()), Times.Never);
+                .Verify(ml => ml.EditListing(It.IsAny<Listing>()), Times.Never);
         }
 
+        // TODO: this test is outdated as per validation in IListingService.AddListing.
+        // TODO: update & test thoroughly!
+//        [Fact]
+//        public void TestAddNonNullObject()
+//        {
+//            // Arrange
+//            var options = BuildDbContextOptions();
+//
+//            var testEntity = new ListingInputModel
+//            {
+//                Title = "test listing"
+//            };
+//
+//            // Act
+//            using (var context = new ApplicationDbContext(options))
+//            {
+//                context.Database.EnsureCreated();
+//                
+//                var repository = new ListingRepository(context);
+//                
+//                var service = new ListingService(repository, null);
+//
+//                service.AddListing(testEntity);
+//            }
+//
+//            // Assert
+//            using (var context = new ApplicationDbContext(options))
+//            {
+//                var results = context.Listing.ToList();
+//
+//                Assert.Equal(7, results.Count);
+//                Assert.Equal("test listing", results.Last().Title);
+//            }
+//        }
+
         [Fact]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
         public void TestAddNullObject()
         {
             // Arrange
@@ -149,8 +185,9 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
                 
-                var listingRepository = new ListingRepository(context);
-                var service = new ListingService(listingRepository, new StatusRepository(context));
+                var repository = new ListingRepository(context);
+                
+                var service = new ListingService(repository, null);
 
                 service.AddListing(testObject);
             }
@@ -161,7 +198,7 @@ namespace TheCarHub.Test
                 var result = context.Listing.ToList();
 
                 Assert.Equal(6, result.Count);
-                
+
                 context.Database.EnsureDeleted();
             }
         }
@@ -177,9 +214,9 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
                 
-                var listingRepository = new ListingRepository(context);
+                var repository = new ListingRepository(context);
                 
-                var service = new ListingService(listingRepository, null);
+                var service = new ListingService(repository, null);
 
                 service.DeleteListing(1);
             }
@@ -191,7 +228,7 @@ namespace TheCarHub.Test
 
                 Assert.DoesNotContain(result, l => l.Id == 1);
                 Assert.Equal(5, result.Count);
-                
+
                 context.Database.EnsureDeleted();
             }
         }
@@ -207,11 +244,11 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
                 
-                var listingRepository = new ListingRepository(context);
+                var repository = new ListingRepository(context);
                 
-                var service = new ListingService(listingRepository, null);
+                var service = new ListingService(repository, null);
 
-                service.DeleteListing(666);
+                service.DeleteListing(7);
             }
 
             // Assert
@@ -220,7 +257,7 @@ namespace TheCarHub.Test
                 var result = context.Listing.ToList();
 
                 Assert.Equal(6, result.Count);
-                
+
                 context.Database.EnsureDeleted();
             }
         }
