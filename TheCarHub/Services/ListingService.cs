@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Manage.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TheCarHub.Models;
 using TheCarHub.Models.Entities;
@@ -15,11 +17,18 @@ namespace TheCarHub.Services
     {
         private readonly IListingRepository _listingRepository;
         private readonly IStatusRepository _statusRepository;
+        private readonly IMappingService<ListingInputModel, Listing> _mappingService;
+        private readonly IMapper _mapper;
 
-        public ListingService(IListingRepository listingRepository, IStatusRepository statusRepository)
+        public ListingService(IListingRepository listingRepository, 
+            IStatusRepository statusRepository,
+            IMapper mapper,
+            IMappingService<ListingInputModel, Listing> mappingService)
         {
             _listingRepository = listingRepository;
             _statusRepository = statusRepository;
+            _mapper = mapper;
+            _mappingService = mappingService;
         }
 
         public async Task<IEnumerable<Listing>> GetAllListings()
@@ -36,55 +45,45 @@ namespace TheCarHub.Services
             return listing;
         }
 
-        public void EditListing(Listing listing)
+        public void EditListing(ListingInputModel inputModel, Listing listing)
         {
-            if (listing != null)
+            if (inputModel != null && listing != null)
             {
+//                // Car details
+//                listing.Car.VIN = inputModel.Car.VIN;
+//                listing.Car.Year = new DateTime(inputModel.CarYear, 1, 1);
+//                listing.Car.Make = inputModel.Car.Make;
+//                listing.Car.Model = inputModel.Car.Model;
+//                listing.Car.Trim = inputModel.Car.Trim;
+//                
+//                // Listing details
+//                listing.Title = inputModel.Title;
+//                listing.Description = inputModel.Description;
+//                listing.Status = await _statusRepository.GetStatusByIdAsync(int.Parse(inputModel.Status));
+//                listing.SaleDate = listing.Status.Id == 2 ? inputModel.SaleDate : listing.SaleDate; 
+//                listing.DateCreated = inputModel.DateCreated;
+//                listing.DateLastUpdated = DateTime.Today;
+//                listing.PurchaseDate = inputModel.PurchaseDate;
+//                listing.PurchasePrice = inputModel.PurchasePrice;
+//                listing.SellingPrice = inputModel.SellingPrice;
+//                
+//                // Media details
+//                
+//                // RepairJob details
+//                listing.RepairJob.Cost = inputModel.RepairJob.Cost;
+//                listing.RepairJob.Description = inputModel.RepairJob.Description;
+
+                _mappingService.Map(inputModel, listing);
+
                 _listingRepository.EditListing(listing);
             }
         }
 
-        public async Task AddListing(ListingInputModel inputModel)
+        public async Task AddListingAsync(ListingInputModel inputModel)
         {
             if (inputModel != null)
             {
-                var car = new Car
-                {
-                    VIN = inputModel.Car.VIN,
-                    Year = new DateTime(inputModel.CarYear, 1, 1),
-                    Make = inputModel.Car.Make,
-                    Model = inputModel.Car.Model,
-                    Trim = inputModel.Car.Trim
-                };
-
-                var listing = new Listing
-                {
-                    Title = inputModel.Title,
-                    Car = car,
-                    Description = inputModel.Description,
-                    Status = await _statusRepository.GetStatusByName("available"),
-                    DateCreated = DateTime.Today,
-                    DateLastUpdated = DateTime.Today,
-                    PurchaseDate = inputModel.PurchaseDate,
-                    PurchasePrice = inputModel.PurchasePrice,
-                    SellingPrice = inputModel.SellingPrice,
-                    RepairJob = new RepairJob
-                    {
-                        Cost = inputModel.RepairJob.Cost, 
-                        Description = inputModel.RepairJob.Description
-                    }
-                };
-
-                foreach (var name in inputModel.ImgNames)
-                {
-                    listing.Media.Add(new Media
-                    {
-                        FileName = name,
-                        Listing = listing,
-                        Caption = "",
-                        Tags = new List<MediaTag>()
-                    });
-                }
+                var listing = await _mappingService.Map(inputModel);
                 
                 _listingRepository.AddListing(listing);
             }
@@ -94,6 +93,7 @@ namespace TheCarHub.Services
             ListingInputModel inputModel)
         {
             var validator = new ListingInputModelValidator();
+            
             var results = validator.Validate(inputModel);
             
             results.AddToModelState(modelState, null);    

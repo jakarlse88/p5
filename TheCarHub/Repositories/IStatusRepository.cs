@@ -8,5 +8,7 @@ namespace TheCarHub.Repositories
     {
         Task<ICollection<Status>> GetAllStatuses();
         Task<Status> GetStatusByName(string statusName);
+        Task<Status> GetStatusByIdAsync(int id);
+        Status GetStatusById(int id);
     }
 }

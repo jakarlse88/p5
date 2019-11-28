@@ -189,7 +189,7 @@ namespace TheCarHub.Test
                 
                 var service = new ListingService(repository, null);
 
-                service.AddListing(testObject);
+                service.AddListingAsync(testObject);
             }
 
             // Assert

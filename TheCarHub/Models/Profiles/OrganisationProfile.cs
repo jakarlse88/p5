@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
@@ -9,7 +10,13 @@ namespace TheCarHub.Models.Profiles
     {
         public OrganisationProfile()
         {
+            // Entity to ViewModel
             CreateMap<Listing, ListingViewModel>();
+            CreateMap<Car, CarViewModel>();
+            CreateMap<Media, MediaViewModel>();
+            CreateMap<RepairJob, RepairJobViewModel>();
+            
+            // Entity to InputModel
             CreateMap<Listing, ListingInputModel>()
                 .ForMember(
                     dest => dest.Files,
@@ -19,16 +26,21 @@ namespace TheCarHub.Models.Profiles
                     option => option.Ignore())
                 .ForMember(
                     dest => dest.CarYear,
-                    opt => opt.MapFrom<int>(
-                        (source, dest) => source.Car.Year.Year));
-
-            CreateMap<Car, CarViewModel>();
+                    opt => opt.MapFrom(
+                        (source, dest) => source.Car.Year.Year))
+                .ForMember(
+                    dest => dest.Status,
+                    option => option.MapFrom(
+                        src => src.Status.Id));
+            
             CreateMap<Car, CarInputModel>();
-
-            CreateMap<Media, MediaViewModel>();
-
-            CreateMap<RepairJob, RepairJobViewModel>();
-            CreateMap<RepairJob, RepairJobInputModel>();
+            
+            CreateMap<Status, StatusInputModel>();
+            CreateMap<RepairJob, RepairJobInputModel>()
+                .ForMember(
+                    dest => dest.Listing,
+                    opt => opt.MapFrom(
+                        src => src.Listing));
         }
     }
 }

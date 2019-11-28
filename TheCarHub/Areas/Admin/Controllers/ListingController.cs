@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
@@ -104,12 +105,12 @@ namespace TheCarHub.Areas.Admin.Controllers
         public async Task<IActionResult> Create(ListingInputModel inputModel)
         {
             _listingService.ValidateListingInputModel(ModelState, inputModel);
-            
+
             if (ModelState.IsValid)
             {
-                await _listingService.AddListing(inputModel);
+                await _listingService.AddListingAsync(inputModel);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home");
             }
 
             var carYearSelect = PopulateCarYearSelect();
@@ -139,11 +140,14 @@ namespace TheCarHub.Areas.Admin.Controllers
             }
 
             var inputModel = _mapper.Map<ListingInputModel>(listing);
-            
-            var carYearSelect = PopulateCarYearSelect();
 
             ViewData["YearSelect"] =
-                new SelectList(carYearSelect,
+                new SelectList(PopulateCarYearSelect(),
+                    "Value",
+                    "Text");
+
+            ViewData["StatusSelect"] =
+                new SelectList(await PopulateStatusSelect(),
                     "Value",
                     "Text");
 
@@ -155,36 +159,22 @@ namespace TheCarHub.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,
-            [Bind("Id, Title,CarId,Description,Status,DateCreated," +
-                  "DateLastUpdated,PurchaseDate,PurchasePrice,SellingPrice," +
-                  "SaleDate")]
-            ListingInputModel inputModel)
+        public async Task<IActionResult> Edit(int id, ListingInputModel inputModel)
         {
             if (id != inputModel.Id)
             {
                 return NotFound();
             }
 
+            _listingService.ValidateListingInputModel(ModelState, inputModel);
+
             if (ModelState.IsValid)
             {
                 var listing = await _listingService.GetListingById(id);
-                
-                // TODO: sort out this stuff. Should probably be in the service.
-                // TODO: commented-out don't exist on InputModel
-                listing.Title = inputModel.Title;
-//                listing.CarId = inputModel.CarId; 
-                listing.Description = inputModel.Description;
-//                listing.Status = viewModel.Status;
-//                listing.DateCreated = inputModel.DateCreated;
-                listing.DateLastUpdated = DateTime.Today;
-                listing.PurchaseDate = inputModel.PurchaseDate;
-                listing.SellingPrice = inputModel.SellingPrice;
-//                listing.SaleDate = inputModel.SaleDate;
 
                 try
                 {
-                    _listingService.EditListing(listing);
+                    _listingService.EditListing(inputModel, listing);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -200,14 +190,18 @@ namespace TheCarHub.Areas.Admin.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home");
             }
 
-//            ViewData["CarId"] = new SelectList(
-//                await _carService.GetAllCars(),
-//                "Id",
-//                "Id",
-//                inputModel.CarId);
+            ViewData["YearSelect"] =
+                new SelectList(PopulateCarYearSelect(),
+                    "Value",
+                    "Text");
+
+            ViewData["StatusSelect"] =
+                new SelectList(await PopulateStatusSelect(),
+                    "Value",
+                    "Text");
 
             return View(inputModel);
         }
@@ -261,10 +255,19 @@ namespace TheCarHub.Areas.Admin.Controllers
         }
 
         /// <summary>
+        /// Utility class for Status SelectList creation.
+        /// </summary>
+        private class StatusSelectItem
+        {
+            public int Value { get; set; }
+            public string Text { get; set; }
+        }
+
+        /// <summary>
         /// Utility method that populates a list with YearSelectItems
         /// representing years ranging from 1990 to current year + 1.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A List of YearSelectItem containing entries from 1990 to current year +1, inclusive.</returns>
         private static IEnumerable<YearSelectItem> PopulateCarYearSelect()
         {
             var years = new List<YearSelectItem>();
@@ -279,6 +282,29 @@ namespace TheCarHub.Areas.Admin.Controllers
             }
 
             return years;
+        }
+
+        /// <summary>
+        /// Utility method that populates a list with StatusSelectItems representing
+        /// all status options present in database.
+        /// </summary>
+        /// <returns>A List of YearSelectItem containing entries of all current status options.</returns>
+        private async Task<IEnumerable<StatusSelectItem>> PopulateStatusSelect()
+        {
+            var statuses = await _statusService.GetAllStatuses();
+
+            var statusSelectItems = new List<StatusSelectItem>();
+
+            foreach (var item in statuses)
+            {
+                statusSelectItems.Add(new StatusSelectItem
+                {
+                    Value = item.Id,
+                    Text = item.Name
+                });
+            }
+
+            return statusSelectItems;
         }
     }
 }

@@ -9,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using TheCarHub.Repositories;
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using TheCarHub.Models.Entities;
+using TheCarHub.Models.InputModels;
 using TheCarHub.Services;
 
 namespace TheCarHub
@@ -47,6 +49,9 @@ namespace TheCarHub
             services.AddScoped<IListingService, ListingService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IStatusService, StatusService>();
+
+            services
+                .AddTransient<IMappingService<ListingInputModel, Listing>, ListingInputModelToListingMappingService>();
 
             services.AddControllersWithViews()
                 .AddFluentValidation(fv =>

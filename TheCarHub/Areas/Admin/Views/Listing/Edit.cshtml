@@ -30,7 +30,7 @@
     </div>
 
     <div class="container mx-auto">
-        <form asp-action="Create" enctype="multipart/form-data" method="POST" id="create-listing-form" novalidate> 
+        <form asp-action="Edit" enctype="multipart/form-data" method="POST" id="create-listing-form" novalidate>
             <div class="form-row">
                 <div class="col-6">
                     <h4 class="form-heading">Car Information</h4>
@@ -148,6 +148,23 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label">Sale date</label>
+                        <select asp-for="Status" class="form-control statusSelect" asp-items="ViewBag.StatusSelect"></select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div id="saleDatePicker" class="form-group">
+                        <label asp-for="SaleDate" class="control-label"></label>
+                        <input asp-for="SaleDate" class="form-control" type="Date"/>
+                        <span asp-validation-for="SaleDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
             <!-- MEDIA UPLOAD -->
             <div id="drag-drop-area" asp-for="Files"></div>
 
@@ -158,59 +175,15 @@
                     <button type="submit" class="btn btn-success btn-lg mt-4"><i class="fas fa-check"></i> Save</button>
                 </div>
             </div>
+            <input asp-for="DateCreated" hidden/>
+            <input asp-for="DateLastUpdated" hidden/>
+            <input asp-for="Media" hidden />
+            <input asp-for="CarId" hidden />
         </form>
     </div>
 </div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-
-    <script>
-        (function uppy() {
-            const uppy = Uppy.Core({
-            restrictions: { allowedFileTypes: ['image/*', '.jpg', '.jpeg', '.png',] }
-                })
-                .use(Uppy.Dashboard, {
-                    inline: true,
-                    hideUploadButton: false,
-                    target: '#drag-drop-area'
-                })
-                .use(Uppy.XHRUpload, {
-                    endpoint: "https://" + `${location.hostname}:${location.port}` + "/admin/media/upload",
-                    formData: true, 
-                    fieldName: "file",
-                    bundle: true 
-                });
-
-                uppy.on("upload-success", (file, response) => {
-                    const fileName = response.body;
-                    
-                    $(".img-select-hidden").append(`<input name="ImgNames" value=${fileName}>${fileName}</input>`);
-                });    
-            
-                uppy.on('complete', (result) => {
-                    console.log('Upload complete! We’ve uploaded these files:', result.successful)
-                });
-        })();
-        
-        (function priceCalculationHandler() {
-            let repairCost = $(".__repair-cost");
-            let purchasePrice = $(".__purchase-price");
-            
-            function calculateSellingPrice() {
-                let i = $(repairCost).val() !== "" ? parseInt($(repairCost).val()) : 0;
-                let j = $(purchasePrice).val() !== "" ? parseInt($(purchasePrice).val()) : 0;
-                
-                return i + j + 500;
-            }
-           
-            $(repairCost).on("input", () => { 
-                $(".__selling-price").attr("value", calculateSellingPrice()); 
-            });
-                    
-            $(purchasePrice).on("input", () => {
-                $(".__selling-price").attr("value", calculateSellingPrice());
-            });
-        })();
-    </script>
+    <script src="~/js/edit-listing.js"></script>
 }

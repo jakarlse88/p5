@@ -27,5 +27,12 @@ namespace TheCarHub.Services
 
             return result;
         }
+
+        public async Task<Status> GetStatusById(int id)
+        {
+            var result = await _statusRepository.GetStatusByIdAsync(id);
+
+            return result;
+        }
     }
 }

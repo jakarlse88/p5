@@ -33,5 +33,24 @@ namespace TheCarHub.Repositories
             
             return result;
         }
+
+        public async Task<Status> GetStatusByIdAsync(int id)
+        {
+            var result =
+                await _context
+                    .Status
+                    .Where(i => i.Id == id)
+                    .FirstAsync();
+            
+            return result;
+        }
+
+        public Status GetStatusById(int id)
+        {
+            var result =
+                _context.Status.FirstOrDefault(s => s.Id == id); 
+
+            return result;
+        }
     }
 }
