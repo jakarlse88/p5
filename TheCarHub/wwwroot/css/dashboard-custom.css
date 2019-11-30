@@ -26,3 +26,7 @@ input[type='number'] {
 #saleDatePicker {
     display: none;
 }
+
+#edit-media-list {
+    display: none;
+}

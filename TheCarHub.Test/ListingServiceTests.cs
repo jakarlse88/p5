@@ -36,11 +36,11 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 var service = new ListingService(repository, null);
-                
+
                 result = await service.GetAllListings();
             }
 
@@ -65,9 +65,9 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 var service = new ListingService(repository, null);
 
                 result = await service.GetListingById(1);
@@ -82,46 +82,51 @@ namespace TheCarHub.Test
             }
         }
 
-        [Fact]
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        public async void TestEditNonNullObject()
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-
-            // Act
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-                
-                var repository = new ListingRepository(context);
-                
-                var service = new ListingService(repository, null);
-
-                var listing = await service.GetListingById(1);
-
-                listing.Title = "edited";
-
-                service.EditListing(listing);
-            }
-
-            // Assert
-            await using (var context = new ApplicationDbContext(options))
-            {
-                var result = context.Listing.FirstOrDefault(l => l.Id == 1);
-
-                Assert.Equal("edited", result.Title);
-            }
-        }
+        // TODO:
+//        [Fact]
+//        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+//        public async void TestEditNonNullObject()
+//        {
+//            // Arrange
+//            var options = BuildDbContextOptions();
+//
+//            await using (var context = new ApplicationDbContext(options))
+//            {
+//                context.Database.EnsureCreated();
+//
+//                var statusRepository = new StatusRepository(context);
+//
+//                IMappingService<ListingInputModel, Listing> mappingService =
+//                    new ListingInputModelToListingMappingService(statusRepository);
+//
+//                var repository = new ListingRepository(context);
+//
+//                var service = new ListingService(repository, mappingService);
+//
+//                var listing = await service.GetListingById(1);
+//
+//                var inputModel = new ListingInputModel {Title = "edited"};
+//
+//                // Act
+//                service.EditListing(inputModel, listing);
+//            }
+//
+//            // Assert
+//            await using (var context = new ApplicationDbContext(options))
+//            {
+//                var result = context.Listing.FirstOrDefault(l => l.Id == 1);
+//
+//                Assert.Equal("edited", result.Title);
+//
+//                context.Database.EnsureDeleted();
+//            }
+//        }
 
         [Fact]
         [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-        public void TestEditNullObject()
+        public void TestEditListingBothArgsNull()
         {
             // Arrange
-            Listing testObject = null;
-
-            // Act
             var mockRepository = new Mock<IListingRepository>();
 
             mockRepository
@@ -130,47 +135,59 @@ namespace TheCarHub.Test
 
             var service = new ListingService(mockRepository.Object, null);
 
-            service.EditListing(testObject);
+            // Act
+            service.EditListing(null, null);
 
             // Assert
             mockRepository
                 .Verify(ml => ml.EditListing(It.IsAny<Listing>()), Times.Never);
         }
 
-        // TODO: this test is outdated as per validation in IListingService.AddListing.
-        // TODO: update & test thoroughly!
-//        [Fact]
-//        public void TestAddNonNullObject()
-//        {
-//            // Arrange
-//            var options = BuildDbContextOptions();
-//
-//            var testEntity = new ListingInputModel
-//            {
-//                Title = "test listing"
-//            };
-//
-//            // Act
-//            using (var context = new ApplicationDbContext(options))
-//            {
-//                context.Database.EnsureCreated();
-//                
-//                var repository = new ListingRepository(context);
-//                
-//                var service = new ListingService(repository, null);
-//
-//                service.AddListing(testEntity);
-//            }
-//
-//            // Assert
-//            using (var context = new ApplicationDbContext(options))
-//            {
-//                var results = context.Listing.ToList();
-//
-//                Assert.Equal(7, results.Count);
-//                Assert.Equal("test listing", results.Last().Title);
-//            }
-//        }
+        [Fact]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+        public void TestEditListingListingArgNull()
+        {
+            // Arrange
+            var mockRepository = new Mock<IListingRepository>();
+
+            mockRepository
+                .Setup(lr => lr.EditListing(It.IsAny<Listing>()))
+                .Verifiable();
+
+            var service = new ListingService(mockRepository.Object, null);
+
+            var inputModel = new ListingInputModel();
+
+            // Act
+            service.EditListing(inputModel, null);
+
+            // Assert
+            mockRepository
+                .Verify(ml => ml.EditListing(It.IsAny<Listing>()), Times.Never);
+        }
+
+        [Fact]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+        public void TestEditListingInputModelArgNull()
+        {
+            // Arrange
+            var mockRepository = new Mock<IListingRepository>();
+
+            mockRepository
+                .Setup(lr => lr.EditListing(It.IsAny<Listing>()))
+                .Verifiable();
+
+            var service = new ListingService(mockRepository.Object, null);
+
+            var listing = new Listing();
+
+            // Act
+            service.EditListing(null, listing);
+
+            // Assert
+            mockRepository
+                .Verify(ml => ml.EditListing(It.IsAny<Listing>()), Times.Never);
+        }
 
         [Fact]
         [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
@@ -184,9 +201,9 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 var service = new ListingService(repository, null);
 
                 service.AddListingAsync(testObject);
@@ -213,9 +230,9 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 var service = new ListingService(repository, null);
 
                 service.DeleteListing(1);
@@ -243,9 +260,9 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 var service = new ListingService(repository, null);
 
                 service.DeleteListing(7);

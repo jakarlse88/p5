@@ -178,7 +178,12 @@
             <input asp-for="DateCreated" hidden/>
             <input asp-for="DateLastUpdated" hidden/>
             <input asp-for="Media" hidden />
-            <input asp-for="CarId" hidden />
+            <ul id="edit-media-list">
+                @foreach (var item in Model.Media)
+                {
+                    <li>@item.FileName</li>
+                }
+            </ul>
         </form>
     </div>
 </div>

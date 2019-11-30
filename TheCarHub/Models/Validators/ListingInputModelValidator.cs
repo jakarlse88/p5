@@ -11,26 +11,28 @@ namespace TheCarHub.Models.Validators
             RuleFor(l => l.Car)
                 .SetValidator(new CarInputModelValidator());
 
+            // RepairJob details
             RuleFor(l => l.RepairJob)
                 .SetValidator(new RepairJobInputModelValidator());
             
-            // Repairjob details
-            RuleFor(l => l.RepairJob.Description)
-                .MaximumLength(100);
-
             // Listing details
             RuleFor(l => l.Title)
                 .NotEmpty()
-                .MaximumLength(75);
+                .WithMessage("Listing must have a title.")
+                .MaximumLength(75)
+                .WithMessage("Listing title cannot exceed 75 characters");
 
             RuleFor(l => l.Description)
-                .MaximumLength(1000);
+                .MaximumLength(1000)
+                .WithMessage("Description cannot exceed 1000 characters.");
 
             RuleFor(l => l.PurchasePrice)
-                .GreaterThan(0m);
+                .GreaterThan(0m)
+                .WithMessage("Purchase price must be greater than $0.");
 
             RuleFor(l => l.PurchaseDate)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("A purchase date must be selected.");
         }
     }
 }

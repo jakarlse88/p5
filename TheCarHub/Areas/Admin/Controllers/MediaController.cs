@@ -78,18 +78,25 @@ namespace TheCarHub.Areas.Admin.Controllers
         
         // POST: Media/Upload
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload(IList<IFormFile> files)
         {
-            if (file == null || file.Length == 0)
+            if (files == null || files.Count == 0)
                 return BadRequest();
 
-            var fileName = await Utilities.FileUtility.UploadImage(
-                _webHostEnvironment, _configuration, file);
-
-            if (string.IsNullOrEmpty(fileName))
-                return BadRequest();
+            var fileNames = new List<string>();
             
-            return Json(fileName);
+            foreach (var item in files)
+            {
+                var fileName = await Utilities.FileUtility.UploadImage(
+                    _webHostEnvironment, _configuration, item);
+
+                if (string.IsNullOrEmpty(fileName))
+                    return BadRequest();
+                
+                fileNames.Add(fileName);
+            }
+            
+            return Ok(fileNames);
         }
 
         // GET: Media/Edit/5

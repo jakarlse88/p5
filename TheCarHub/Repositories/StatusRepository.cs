@@ -23,13 +23,13 @@ namespace TheCarHub.Repositories
             return result;
         }
 
-        public async Task<Status> GetStatusByName(string statusName = "")
+        public async Task<Status> GetStatusByNameAsync(string statusName = "")
         {
             var result =
                 await _context
                     .Status
-                    .Where(i => i.Name.Contains(statusName.ToLower()))
-                    .FirstAsync();
+                    .Where(s => s.Name.ToLower() == statusName.ToLower())
+                    .FirstOrDefaultAsync();
             
             return result;
         }
@@ -40,7 +40,7 @@ namespace TheCarHub.Repositories
                 await _context
                     .Status
                     .Where(i => i.Id == id)
-                    .FirstAsync();
+                    .FirstOrDefaultAsync();
             
             return result;
         }

@@ -120,6 +120,7 @@ namespace TheCarHub.Services
             var car = MapCarInputModelToCar(source.Car, source.CarYear, destination.Car);
             var repairJob = MapRepairJobInPutModelToRepairJob(source.RepairJob, destination.RepairJob);
 //            var media = 
+            // TODO:
 
             if (car == null || repairJob == null)
                 return null;

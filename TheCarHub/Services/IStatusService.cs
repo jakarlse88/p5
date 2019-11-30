@@ -7,7 +7,8 @@ namespace TheCarHub.Services
     public interface IStatusService
     {
         Task<ICollection<Status>> GetAllStatuses();
-        Task<Status> GetStatusByName(string statusName);
-        Task<Status> GetStatusById(int id);
+        Task<Status> GetStatusByNameAsync(string statusName);
+        Task<Status> GetStatusByIdAsync(int id);
+        Status GetStatusById(int id);
     }
 }

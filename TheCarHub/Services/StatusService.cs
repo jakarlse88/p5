@@ -21,16 +21,23 @@ namespace TheCarHub.Services
             return result;
         }
 
-        public async Task<Status> GetStatusByName(string statusName = "")
+        public async Task<Status> GetStatusByNameAsync(string statusName = "")
         {
-            var result = await _statusRepository.GetStatusByName(statusName);
+            var result = await _statusRepository.GetStatusByNameAsync(statusName);
 
             return result;
         }
 
-        public async Task<Status> GetStatusById(int id)
+        public async Task<Status> GetStatusByIdAsync(int id)
         {
             var result = await _statusRepository.GetStatusByIdAsync(id);
+
+            return result;
+        }
+
+        public Status GetStatusById(int id)
+        {
+            var result = _statusRepository.GetStatusById(id);
 
             return result;
         }

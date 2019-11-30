@@ -8,10 +8,12 @@ namespace TheCarHub.Models.Validators
         public RepairJobInputModelValidator()
         {
             RuleFor(rj => rj.Cost)
-                .GreaterThan(-1);
+                .GreaterThan(-1)
+                .WithMessage("Cost must be 0 or higher.");
 
             RuleFor(rj => rj.Description)
-                .MaximumLength(100);
+                .MaximumLength(100)
+                .WithMessage("Description cannot exceed 100 characters.");
         }
     }
 }

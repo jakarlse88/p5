@@ -7,7 +7,7 @@ namespace TheCarHub.Repositories
     public interface IStatusRepository
     {
         Task<ICollection<Status>> GetAllStatuses();
-        Task<Status> GetStatusByName(string statusName);
+        Task<Status> GetStatusByNameAsync(string statusName);
         Task<Status> GetStatusByIdAsync(int id);
         Status GetStatusById(int id);
     }
