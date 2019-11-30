@@ -46,44 +46,6 @@ namespace TheCarHub.Areas.Admin.Controllers
             _mapper = mapper;
         }
 
-        // GET: Listing
-        public async Task<IActionResult> Index()
-        {
-            var listings = await _listingService.GetAllListings();
-
-            var viewModels = new List<ListingViewModel>();
-
-            foreach (var item in listings)
-            {
-                viewModels
-                    .Add(_mapper.Map<ListingViewModel>(item));
-            }
-
-            return View(viewModels);
-        }
-
-        // GET: Listing/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var listing =
-                await _listingService.GetListingById(id.GetValueOrDefault());
-
-            var viewModel = _mapper.Map<ListingViewModel>(listing);
-
-
-            if (listing == null || viewModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(viewModel);
-        }
-
         // GET: Listing/Create
         public IActionResult Create()
         {
@@ -204,38 +166,6 @@ namespace TheCarHub.Areas.Admin.Controllers
                     "Text");
 
             return View(inputModel);
-        }
-
-        // GET: Listing/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var listing = await _listingService.GetListingById(id.GetValueOrDefault());
-
-            if (listing == null)
-            {
-                return NotFound();
-            }
-
-            var viewModel = _mapper.Map<ListingViewModel>(listing);
-
-            return View(viewModel);
-        }
-
-        // POST: Listing/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var listing = await _listingService.GetListingById(id);
-
-            _listingService.DeleteListing(id);
-
-            return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ListingExists(int id)
