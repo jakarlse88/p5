@@ -14,14 +14,32 @@
             bundle: true
         });
 
-    uppy.on("upload-success", (file, response) => {
-        response.body.forEach((item, index) => {
-            $(".img-select-hidden").append(`<input name="ImgNames" value=${item}>${item}</input>`);
-        });
+    uppy.on('file-removed', file => {
+        console.log('Removed file', file);
+        let antiForgeryToken =
+            $("input[name='__RequestVerificationToken']").val();
+
+        uppy.removeFile(file.id);
+
+        return fetch("https://" +
+            `${location.hostname}:${location.port}`
+            + "/admin/media/delete/" +
+            `${file.name}`,
+            {
+                method: "POST",
+                headers: {
+                    RequestVerificationToken: antiForgeryToken,
+                    'Content-Type': "application/json"
+                },
+                mode: "same-origin",
+                body: JSON.stringify(file.name)
+            });
     });
 
     uppy.on('complete', (result) => {
-        console.log('Upload complete! We’ve uploaded these files:', result.successful)
+        result.successful[0].response.body.forEach((item, index) => {
+            $(".img-select-hidden").append(`<input name="ImgNames" value=${item}>${item}</input>`);
+        });
     });
 })();
 

@@ -100,7 +100,7 @@ namespace TheCarHub.Test
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
-        public void TestDeleteMediaValidId(int testId)
+        public void TestDeleteMediaNonNullObject(int testId)
         {
             // Arrange
             var options = BuildTestDbOptions();
@@ -112,7 +112,9 @@ namespace TheCarHub.Test
                 
                 var repository = new MediaRepository(context);
 
-                repository.DeleteMedia(testId);
+                var testObject = context.Media.FirstOrDefault(m => m.Id == testId);
+                
+                repository.DeleteMedia(testObject);
             }
 
             // Assert
@@ -130,7 +132,7 @@ namespace TheCarHub.Test
         [InlineData(0)]
         [InlineData(7)]
         [InlineData(-1)]
-        public void TestDeleteMediaInvalidId(int testId)
+        public void TestDeleteMediaNull(int testId)
         {
              // Arrange
             var options = BuildTestDbOptions();
@@ -144,8 +146,10 @@ namespace TheCarHub.Test
                 var repository = new MediaRepository(context);
 
                 expected = context.Media.ToList().Count;
+                
+                var testObject = context.Media.FirstOrDefault(m => m.Id == testId);
 
-                repository.DeleteMedia(testId);
+                repository.DeleteMedia(testObject);
             }
 
             // Assert

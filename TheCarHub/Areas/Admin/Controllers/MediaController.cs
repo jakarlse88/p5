@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,8 +9,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
+using ILogger = Microsoft.VisualStudio.Web.CodeGeneration.ILogger;
 
 namespace TheCarHub.Areas.Admin.Controllers
 {
@@ -20,18 +23,15 @@ namespace TheCarHub.Areas.Admin.Controllers
         private readonly IMediaService _mediaService;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IMapper _mapper;
 
         public MediaController(
             IMediaService mediaService,
             IWebHostEnvironment hostEnvironment,
-            IConfiguration configuration,
-            IMapper mapper)
+            IConfiguration configuration)
         {
             _mediaService = mediaService;
             _webHostEnvironment = hostEnvironment;
             _configuration = configuration;
-            _mapper = mapper;
         }
 
         // POST: Media/Upload
@@ -42,38 +42,58 @@ namespace TheCarHub.Areas.Admin.Controllers
                 return BadRequest();
 
             var fileNames = new List<string>();
-            
+
             foreach (var item in files)
             {
-                var fileName = await Utilities.FileUtility.UploadImage(
-                    _webHostEnvironment, _configuration, item);
+                var fileName =
+                    await Utilities.FileUtility.UploadImageToDiskAsync(
+                        _webHostEnvironment,
+                        _configuration, item);
 
                 if (string.IsNullOrEmpty(fileName))
                     return BadRequest();
-                
+
                 fileNames.Add(fileName);
             }
-            
-            return Ok(fileNames);
+
+            return Json(fileNames);
         }
 
-//        // POST: Media/Delete/5
-//        [HttpPost, ActionName("Delete")]
-//        [ValidateAntiForgeryToken]
-//        public IActionResult DeleteConfirmed(int id)
-//        {
-//            _mediaService.DeleteMedia(id);
-//            
-//            return RedirectToAction(nameof(Index));
-//        }
-//
-//        private async Task<bool> MediaExists(int id)
-//        {
-//            var media = await _mediaService.GetAllMedia();
-//
-//            return media
-//                .ToList()
-//                .Any(e => e.Id == id);
-//        }
+        // POST: Media/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed([FromBody] string fileName)
+        {
+            var media = 
+                await _mediaService.GetMediaByFileNameAsync(fileName);
+
+            if (media == null) return NotFound();
+            
+            try
+            {
+                Utilities.FileUtility.DeleteImageFromDisk(
+                    _webHostEnvironment,
+                    _configuration,
+                    media.FileName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            _mediaService.DeleteMedia(media);
+            
+            return Ok();
+        }
+
+        private async Task<bool> MediaExists(int id)
+        {
+            var media = await _mediaService.GetAllMedia();
+
+            return media
+                .ToList()
+                .Any(e => e.Id == id);
+        }
     }
 }

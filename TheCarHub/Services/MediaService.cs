@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheCarHub.Models.Entities;
 using TheCarHub.Repositories;
+using System.Linq;
 
 namespace TheCarHub.Services
 {
@@ -29,9 +30,19 @@ namespace TheCarHub.Services
             return results;
         }
 
-        public async Task<Media> GetMediaById(int id)
+        public async Task<Media> GetMediaByIdAsync(int id)
         {
             var result = await _mediaRepository.GetMediaById(id);
+
+            return result;
+        }
+
+        public async Task<Media> GetMediaByFileNameAsync(string fileName)
+        {
+            var media = 
+                await _mediaRepository.GetAllMedia();
+
+            var result = media.FirstOrDefault(m => m.FileName == fileName);
 
             return result;
         }
@@ -44,9 +55,19 @@ namespace TheCarHub.Services
             }
         }
 
-        public void DeleteMedia(int id)
+        public void DeleteMedia(Media media)
         {
-            _mediaRepository.DeleteMedia(id);
+            UnregisterMediaFromListing(media);
+            _mediaRepository.DeleteMedia(media);
+        }
+
+        private void UnregisterMediaFromListing(Media media)
+        {
+            if (media == null) return;
+
+            var listing = media.Listing;
+
+            listing.Media.Remove(media);
         }
     }
 }

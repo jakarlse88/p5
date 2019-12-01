@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
@@ -68,7 +69,7 @@ namespace TheCarHub.Test
                 
                 var service = new MediaService(repository);
 
-                result = await service.GetMediaById(testId);
+                result = await service.GetMediaByIdAsync(testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -96,7 +97,7 @@ namespace TheCarHub.Test
                 
                 var service = new MediaService(repository);
 
-                result = await service.GetMediaById(testId);
+                result = await service.GetMediaByIdAsync(testId);
             }
 
             // Assert
@@ -213,8 +214,10 @@ namespace TheCarHub.Test
 
             var service = new MediaService(mockRepository.Object);
 
+//            Media testObject = null;
+            
             // Act
-            service.DeleteMedia(10);
+            service.DeleteMedia(null);
 
             // Assert
             mockRepository
@@ -222,7 +225,7 @@ namespace TheCarHub.Test
         }
         
         [Fact]
-        public void TestDeleteMediaValidId()
+        public void TestDeleteMediaValidEntity()
         {
             // Arrange
             var options = BuildDbContextOptions();
@@ -236,7 +239,9 @@ namespace TheCarHub.Test
                 
                 var service = new MediaService(repository);
 
-                service.DeleteMedia(1);
+                var testObject = context.Media.Include(m => m.Listing).FirstOrDefault(m => m.Id == 1);
+
+                service.DeleteMedia(testObject);
             }
 
             // Assert
@@ -250,7 +255,7 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public void TestDeleteMediaInvalidId()
+        public void TestDeleteMediaNull()
         {
             // Arrange
             var options = BuildDbContextOptions();
@@ -264,7 +269,7 @@ namespace TheCarHub.Test
                 
                 var service = new MediaService(repository);
 
-                service.DeleteMedia(7);
+                service.DeleteMedia(null);
             }
 
             // Assert

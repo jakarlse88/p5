@@ -151,14 +151,14 @@
             <div class="form-row">
                 <div class="col-4">
                     <div class="form-group">
-                        <label asp-for="Status" class="control-label">Sale date</label>
+                        <label asp-for="Status" class="control-label">Listing Status</label>
                         <select asp-for="Status" class="form-control statusSelect" asp-items="ViewBag.StatusSelect"></select>
                         <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-6">
                     <div id="saleDatePicker" class="form-group">
-                        <label asp-for="SaleDate" class="control-label"></label>
+                        <label asp-for="SaleDate" class="control-label">Sale Date</label>
                         <input asp-for="SaleDate" class="form-control" type="Date"/>
                         <span asp-validation-for="SaleDate" class="text-danger"></span>
                     </div>

@@ -8,8 +8,9 @@ namespace TheCarHub.Services
     {
         void AddMedia(Media media);
         Task<IEnumerable<Media>> GetAllMedia();
-        Task<Media> GetMediaById(int id);
+        Task<Media> GetMediaByIdAsync(int id);
+        Task<Media> GetMediaByFileNameAsync(string fileName);
         void EditMedia(Media media);
-        void DeleteMedia(int id);
+        void DeleteMedia(Media media);
     }
 }

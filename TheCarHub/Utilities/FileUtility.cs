@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -9,8 +10,10 @@ namespace TheCarHub.Utilities
 {
     public static class FileUtility 
     {
-        public static async Task<string> UploadImage(IWebHostEnvironment webHostEnvironment,
-            IConfiguration configuration,IFormFile file)
+        public static async Task<string> UploadImageToDiskAsync(
+            IWebHostEnvironment webHostEnvironment,
+            IConfiguration configuration,
+            IFormFile file)
         {
             var validExtensions = new List<string> {".jpg", ".jpeg", ".png"};
 
@@ -26,7 +29,7 @@ namespace TheCarHub.Utilities
                 Path.Combine(webHostEnvironment.WebRootPath,
                     configuration["Media:Directory"], $"{fileName}");
 
-            await using (var stream = System.IO.File.Create(path))
+            await using (var stream = File.Create(path))
             {
                 try
                 {
@@ -39,6 +42,28 @@ namespace TheCarHub.Utilities
             }
 
             return fileName;
+        }
+
+        public static void DeleteImageFromDisk(
+            IWebHostEnvironment webHostEnvironment,
+            IConfiguration configuration,
+            string fileName)
+        {
+            var path =
+                Path.Combine(webHostEnvironment.WebRootPath,
+                    configuration["Media:Directory"], $"{fileName}");
+
+            if (System.IO.File.Exists(path))
+            {
+                try
+                {
+                    System.IO.File.Delete(path);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }       
+            }
         }
     }
 }

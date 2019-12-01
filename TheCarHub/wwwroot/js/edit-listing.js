@@ -7,11 +7,12 @@ $(document).ready(() => {
     (function uppy() {
         const uppy = Uppy.Core({
             restrictions: {allowedFileTypes: ['image/*', '.jpg', '.jpeg', '.png',]}
-            })
+        })
             .use(Uppy.Dashboard, {
                 inline: true,
                 hideUploadButton: false,
-                target: '#drag-drop-area'
+                target: '#drag-drop-area',
+                height: "400px"
             })
             .use(Uppy.XHRUpload, {
                 endpoint: "https://" + `${location.hostname}:${location.port}` + "/admin/media/upload",
@@ -20,14 +21,10 @@ $(document).ready(() => {
                 bundle: true
             });
 
-        // uppy.reset();
-        
         $("#edit-media-list").children('li').each(function (i) {
-            // console.log($(this));
-            
             uppy.getFiles().forEach(file => {
                 uppy.setFileState(file.id, {
-                    progress: { uploadComplete: true, uploadStarted: true }
+                    progress: {uploadComplete: true, uploadStarted: true}
                 })
             });
 
@@ -43,21 +40,37 @@ $(document).ready(() => {
                     })
                 });
 
-            
+            uppy.reset();
         });
 
-        uppy.on('file-removed', (file) => {
-            console.log('Removed file', file)
-        });
+        uppy.on('file-removed', file => {
+            console.log('Removed file', file);
+            let antiForgeryToken =
+                $("input[name='__RequestVerificationToken']").val();
 
-        uppy.on("upload-success", (file, response) => {
-            response.body.forEach((item, index) => {
-                $(".img-select-hidden").append(`<input name="ImgNames" value=${item}>${item}</input>`);
-            });
+            fetch("https://" +
+                `${location.hostname}:${location.port}`
+                + "/admin/media/delete/" +
+                `${file.name}`,
+                {
+                    method: "POST",
+                    headers: {
+                        RequestVerificationToken: antiForgeryToken,
+                        'Content-Type': "application/json"
+                    },
+                    mode: "same-origin",
+                    body: JSON.stringify(file.name)
+                });
+
+            uppy.removeFile(file.id);
         });
 
         uppy.on('complete', (result) => {
-            console.log('Upload complete! We’ve uploaded these files:', result.successful)
+            uppy.on('complete', (result) => {
+                result.successful[0].response.body.forEach((item, index) => {
+                    $(".img-select-hidden").append(`<input name="ImgNames" value=${item}>${item}</input>`);
+                });
+            });
         });
     })()
 

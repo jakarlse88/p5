@@ -10,6 +10,6 @@ namespace TheCarHub.Repositories
         Task<IEnumerable<Media>> GetAllMedia();
         Task<Media> GetMediaById(int id);
         void EditMedia(Media media);
-        void DeleteMedia(int id);
+        void DeleteMedia(Media media);
     }
 }

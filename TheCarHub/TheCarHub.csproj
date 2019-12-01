@@ -54,6 +54,8 @@
     <_ContentIncludedByDefault Remove="wwwroot\media\avatars\5.jpg" />
     <_ContentIncludedByDefault Remove="wwwroot\media\avatars\8.jpg" />
     <_ContentIncludedByDefault Remove="wwwroot\media\avatars\9.jpg" />
+    <_ContentIncludedByDefault Remove="Views\__Admin\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\__Admin\Listing.cshtml" />
   </ItemGroup>
 
 </Project>

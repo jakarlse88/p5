@@ -27,7 +27,11 @@ namespace TheCarHub.Repositories
 
         public async Task<IEnumerable<Media>> GetAllMedia()
         {
-            var results = await _context.Media.ToListAsync();
+            var results = 
+                await _context
+                    .Media
+                    .Include(m => m.Listing)
+                    .ToListAsync();
 
             return results;
         }
@@ -37,6 +41,7 @@ namespace TheCarHub.Repositories
             var result = 
                 await _context
                 .Media
+                .Include(m => m.Listing)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             return result;
@@ -51,13 +56,8 @@ namespace TheCarHub.Repositories
             }
         }
 
-        public void DeleteMedia(int id)
+        public void DeleteMedia(Media media)
         {
-            var media =
-                _context
-                    .Media
-                    .FirstOrDefault(m => m.Id == id);
-
             if (media != null)
             {
                 _context.Remove(media);
