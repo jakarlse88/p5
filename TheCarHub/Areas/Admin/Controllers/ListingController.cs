@@ -136,7 +136,7 @@ namespace TheCarHub.Areas.Admin.Controllers
 
                 try
                 {
-                    _listingService.EditListing(inputModel, listing);
+                    await _listingService.EditListing(inputModel, listing);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

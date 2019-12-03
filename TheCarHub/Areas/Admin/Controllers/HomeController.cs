@@ -27,7 +27,7 @@ namespace TheCarHub.Areas.Admin.Controllers
             _mapper = mapper;
         }
         
-        // GET
+        // GET: Admin/
         public async Task<IActionResult> Index()
         {
             var listings =

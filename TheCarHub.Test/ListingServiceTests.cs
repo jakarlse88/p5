@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using TheCarHub.Areas.Admin.Controllers;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
+using TheCarHub.Models.Validators;
 using TheCarHub.Repositories;
 using TheCarHub.Services;
 using Xunit;
@@ -22,6 +25,7 @@ namespace TheCarHub.Test
                 new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
+            
             return options;
         }
 
@@ -278,5 +282,29 @@ namespace TheCarHub.Test
                 context.Database.EnsureDeleted();
             }
         }
+
+        [Fact]
+        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
+        public void TestValidateListingInputModelNull()
+        {
+            // Arrange
+            ListingInputModel testObject = null;
+            
+            var modelState = new ModelStateDictionary();
+
+            ListingRepository repository = null;
+            
+            var service = new ListingService(repository, null);
+            
+            // Act
+            service.ValidateListingInputModel(
+                modelState,
+                testObject);
+
+            // Assert
+            Assert.False(modelState.IsValid);
+            Assert.True(modelState.ContainsKey("InputModelNull"));
+        }
+
     }
 }

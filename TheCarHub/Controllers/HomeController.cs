@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TheCarHub.Models.ViewModels;
@@ -14,16 +17,18 @@ namespace TheCarHub.Controllers
             _logger = logger;
         }
 
+        // GET: /
         public IActionResult Index()
         {
             return View();
         }
 
+        // GET: Privacy/
         public IActionResult Privacy()
         {
             return View();
         }
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

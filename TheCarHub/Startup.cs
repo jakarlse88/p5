@@ -49,6 +49,7 @@ namespace TheCarHub
             services.AddScoped<IListingService, ListingService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IStatusService, StatusService>();
+            services.AddScoped<IMailService, MailService>();
 
             services
                 .AddTransient<IMappingService<ListingInputModel, Listing>, ListingInputModelToListingMappingService>();

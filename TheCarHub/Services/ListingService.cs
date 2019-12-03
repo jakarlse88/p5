@@ -39,11 +39,11 @@ namespace TheCarHub.Services
             return listing;
         }
 
-        public void EditListing(ListingInputModel inputModel, Listing listing)
+        public async Task EditListing(ListingInputModel inputModel, Listing listing)
         {
             if (inputModel != null && listing != null)
             {
-                _mappingService.Map(inputModel, listing);
+                await _mappingService.Map(inputModel, listing);
 
                 _listingRepository.EditListing(listing);
             }
@@ -54,14 +54,32 @@ namespace TheCarHub.Services
             if (inputModel != null)
             {
                 var listing = await _mappingService.Map(inputModel);
+
+                if (listing == null)
+                    return;
                 
                 _listingRepository.AddListing(listing);
             }
         }
 
-        public void ValidateListingInputModel(ModelStateDictionary modelState, 
+        public void ValidateListingInputModel(
+            ModelStateDictionary modelState, 
             ListingInputModel inputModel)
         {
+            if (modelState == null)
+            {
+                return;
+            }
+            
+            if (inputModel == null)
+            {
+                modelState.AddModelError(
+                    "InputModelNull",
+                    "Input model cannot be null.");
+
+                return;
+            }
+            
             var validator = new ListingInputModelValidator();
             
             var results = validator.Validate(inputModel);

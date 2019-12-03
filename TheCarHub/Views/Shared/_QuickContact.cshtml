@@ -1,0 +1,20 @@
+@model TheCarHub.Models.InputModels.QuickContactInputModel
+
+<div class="widget quick-contact-widget form-widget noborder notoppadding clearfix">
+
+    <p>It always has been, and will always be, about quality. Let us know how we can help you!</p>
+    
+    <h4>Quick Contact</h4>
+    <div class="form-result"></div>
+    @* <form id="quick-contact-form" name="quick-contact-form" action="../../include/form.php" method="post" class="quick-contact-form nobottommargin"> *@
+    <form asp-controller="Contact" asp-action="SendEmail" method="POST" enctype="multipart/form-data" class="quick-contact-form nobottommargin">
+        <div class="form-process"></div>
+        <input asp-for="SenderName" class="required sm-form-control input-block-level" placeholder="Full Name"/>
+        <input asp-for="SenderEmail" class="required sm-form-control email input-block-level" placeholder="Email Address"/>
+        <textarea asp-for="Message" class="required sm-form-control input-block-level short-textarea" rows="4" cols="30" placeholder="Message"></textarea>
+        @* <input type="text" class="hidden" id="quick-contact-form-botcheck" name="quick-contact-form-botcheck" value=""/> *@
+        @* <input type="hidden" name="prefix" value="quick-contact-form-"> *@
+        <button type="submit" name="quick-contact-form-submit" class="button button-small button-3d nomargin" value="submit">Send Email</button>
+    </form>
+
+</div>

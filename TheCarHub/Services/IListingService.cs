@@ -10,7 +10,7 @@ namespace TheCarHub.Services
     {
         Task<IEnumerable<Listing>> GetAllListings();
         Task<Listing> GetListingById(int id);
-        void EditListing(ListingInputModel inputModel, Listing listing);
+        Task EditListing(ListingInputModel inputModel, Listing listing);
         Task AddListingAsync(ListingInputModel inputModel);
         void DeleteListing(int id);
         void ValidateListingInputModel(ModelStateDictionary modelState, ListingInputModel inputModel);

@@ -43,12 +43,12 @@ $(document).ready(() => {
             uppy.reset();
         });
 
-        uppy.on('file-removed', file => {
+        uppy.on('file-removed', async (file) => {
             console.log('Removed file', file);
             let antiForgeryToken =
                 $("input[name='__RequestVerificationToken']").val();
 
-            fetch("https://" +
+            await fetch("https://" +
                 `${location.hostname}:${location.port}`
                 + "/admin/media/delete/" +
                 `${file.name}`,
@@ -62,14 +62,13 @@ $(document).ready(() => {
                     body: JSON.stringify(file.name)
                 });
 
-            uppy.removeFile(file.id);
+            // uppy.removeFile(file.id);
         });
 
         uppy.on('complete', (result) => {
-            uppy.on('complete', (result) => {
-                result.successful[0].response.body.forEach((item, index) => {
-                    $(".img-select-hidden").append(`<input name="ImgNames" value=${item}>${item}</input>`);
-                });
+            console.log("complete");
+            result.successful[0].response.body.forEach((item, index) => {
+                $(".img-select-hidden").append(`<input name="ImgNames" value=${item}>${item}</input>`);
             });
         });
     })()

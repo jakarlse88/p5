@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 using TheCarHub.Models;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
@@ -22,8 +24,14 @@ namespace TheCarHub.Services
             if (source == null)
                 return null;
 
+//            var success = int.TryParse(.ToString(), out int carYearMax);
+//
+//            if (!success) return null;
+
+            carYear = (carYear >= 1990 && carYear <= DateTime.Now.AddYears(1).Year) ? carYear : 2019;
+
             destination ??= new Car();
-            
+
             destination.VIN = source.VIN;
             destination.Year = new DateTime(carYear, 1, 1);
             destination.Make = source.Make;
@@ -37,7 +45,7 @@ namespace TheCarHub.Services
         {
             if (source == null)
                 return null;
-            
+
             destination ??= new RepairJob();
 
             destination.Cost = source.Cost;
@@ -49,16 +57,22 @@ namespace TheCarHub.Services
         private ICollection<Media> MapImgNamesToMedia(IEnumerable<string> imgNames)
         {
             var media = new HashSet<Media>();
-            
-            foreach (var name in imgNames)
+
+            if (imgNames == null)
+                return media;
+
+            var enumerable = imgNames.ToList();
+
+            if (enumerable.Any())
             {
-                media.Add(new Media
+                foreach (var name in enumerable)
                 {
-                    FileName = name,
-//                    Listing = listing,
-                    Caption = "",
-                    Tags = new List<MediaTag>()
-                });
+                    media.Add(new Media
+                    {
+                        FileName = name,
+                        Tags = new List<MediaTag>()
+                    });
+                }
             }
 
             return media;
@@ -71,7 +85,7 @@ namespace TheCarHub.Services
                 item.Listing = listing;
             }
         }
-        
+
         /// <summary>
         /// Maps the properties of a ListingInputModel object onto a new
         /// Listing object.
@@ -80,14 +94,14 @@ namespace TheCarHub.Services
         /// <returns>A populated Listing object.</returns>
         public async Task<Listing> Map(ListingInputModel source)
         {
+            if (source?.Car == null || source.RepairJob == null)
+                return null;
+
             var destination = new Listing();
-            
+
             var car = MapCarInputModelToCar(source.Car, source.CarYear, destination.Car);
             var repairJob = MapRepairJobInPutModelToRepairJob(source.RepairJob, destination.RepairJob);
             var media = MapImgNamesToMedia(source.ImgNames);
-            
-            if (car == null || repairJob == null || media == null)
-                return null;
 
             destination.Title = source.Title;
             destination.Description = source.Description;
@@ -101,8 +115,12 @@ namespace TheCarHub.Services
             destination.Car = car;
             destination.RepairJob = repairJob;
             destination.Media = media;
-            
-            AddMediaEntitiesToListing(media, destination);
+
+            if (media.Count > 0)
+            {
+                AddMediaEntitiesToListing(media, destination);
+            }
+
             car.Listings.Add(destination);
 
             return destination;
@@ -119,28 +137,37 @@ namespace TheCarHub.Services
         {
             var car = MapCarInputModelToCar(source.Car, source.CarYear, destination.Car);
             var repairJob = MapRepairJobInPutModelToRepairJob(source.RepairJob, destination.RepairJob);
-//            var media = 
-            // TODO:
+
+            var filteredImgNames = source.ImgNames.Where(i => destination.Media.All(m => m.FileName != i));
+            
+            var media = MapImgNamesToMedia(filteredImgNames);
 
             if (car == null || repairJob == null)
                 return null;
-            
+
             // Listing details
             destination.Title = source.Title;
             destination.Description = source.Description;
             destination.Status = await _statusRepository.GetStatusByIdAsync(int.Parse(source.Status));
-            destination.SaleDate = destination.Status.Id == 2 ? source.SaleDate : destination.SaleDate; 
+            destination.SaleDate = destination.Status.Id == 2 ? source.SaleDate : destination.SaleDate;
             destination.DateCreated = source.DateCreated;
             destination.DateLastUpdated = DateTime.Today;
             destination.PurchaseDate = source.PurchaseDate;
             destination.PurchasePrice = source.PurchasePrice;
             destination.SellingPrice = source.SellingPrice;
-                
-            // Media details
-                
+
             // RepairJob details
             destination.RepairJob.Cost = source.RepairJob.Cost;
             destination.RepairJob.Description = source.RepairJob.Description;
+            
+            destination.Car = car;
+            destination.RepairJob = repairJob;
+            destination.Media = media;
+
+            if (media.Count > 0)
+            {
+                AddMediaEntitiesToListing(media, destination);
+            }
 
             return destination;
         }
