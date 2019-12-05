@@ -66,8 +66,6 @@ namespace TheCarHub.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ListingInputModel inputModel)
         {
-            _listingService.ValidateListingInputModel(ModelState, inputModel);
-
             if (ModelState.IsValid)
             {
                 await _listingService.AddListingAsync(inputModel);
@@ -127,8 +125,6 @@ namespace TheCarHub.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            _listingService.ValidateListingInputModel(ModelState, inputModel);
 
             if (ModelState.IsValid)
             {

@@ -14,9 +14,6 @@ namespace TheCarHub.Models.Validators
                 .Matches(new Regex("^(?=.*[0-9])(?=.*[A-z])[0-9A-z-]{17}$"))
                 .WithMessage("Invalid VIN format.");
 
-//            RuleFor(c => c.Year)
-//                .NotNull();
-
             RuleFor(c => c.Make)
                 .NotEmpty()
                 .MinimumLength(3)

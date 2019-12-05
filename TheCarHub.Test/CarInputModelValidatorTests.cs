@@ -24,14 +24,6 @@ namespace TheCarHub.Test
                 .WithErrorMessage("Invalid VIN format.");
         }
 
-//        [Fact]
-//        public void TestRuleForYear()
-//        {
-//            // Assert
-//            _validator
-//                .ShouldHaveValidationErrorFor(model => model.Year, null as object);
-//        }
-
         [Fact]
         public void TestRuleForMake()
         {

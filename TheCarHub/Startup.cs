@@ -8,9 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TheCarHub.Repositories;
 using AutoMapper;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
+using TheCarHub.Models.Validators;
 using TheCarHub.Services;
 
 namespace TheCarHub
@@ -49,7 +51,7 @@ namespace TheCarHub
             services.AddScoped<IListingService, ListingService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IStatusService, StatusService>();
-            services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IMessageService, MessageService>();
 
             services
                 .AddTransient<IMappingService<ListingInputModel, Listing>, ListingInputModelToListingMappingService>();
@@ -57,11 +59,13 @@ namespace TheCarHub
             services.AddControllersWithViews()
                 .AddFluentValidation(fv =>
                     {
-                        fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+                        fv.RegisterValidatorsFromAssemblyContaining<ListingInputModelValidator>();
                         fv.ImplicitlyValidateChildProperties = true;
                         fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                     }
                 );
+
+//            services.AddTransient<IValidator<ContactInputModel>, ContactInputModelValidator>();
             
             services.AddAutoMapper(typeof(Startup));
 

@@ -1,4 +1,5 @@
-@model TheCarHub.Models.InputModels.QuickContactInputModel
+@using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal
+@model TheCarHub.Models.InputModels.ContactInputModel
 
 <div class="widget quick-contact-widget form-widget noborder notoppadding clearfix">
 
@@ -7,7 +8,7 @@
     <h4>Quick Contact</h4>
     <div class="form-result"></div>
     @* <form id="quick-contact-form" name="quick-contact-form" action="../../include/form.php" method="post" class="quick-contact-form nobottommargin"> *@
-    <form asp-controller="Contact" asp-action="SendEmail" method="POST" enctype="multipart/form-data" class="quick-contact-form nobottommargin">
+    <form asp-controller="Contact" asp-action="SendMessage" method="POST" enctype="multipart/form-data" class="quick-contact-form nobottommargin">
         <div class="form-process"></div>
         <input asp-for="SenderName" class="required sm-form-control input-block-level" placeholder="Full Name"/>
         <input asp-for="SenderEmail" class="required sm-form-control email input-block-level" placeholder="Email Address"/>
