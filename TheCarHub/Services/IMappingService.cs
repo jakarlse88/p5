@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using TheCarHub.Models.Entities;
-using TheCarHub.Models.InputModels;
 
 namespace TheCarHub.Services
 {

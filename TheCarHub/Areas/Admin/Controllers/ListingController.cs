@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
-using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
 
 namespace TheCarHub.Areas.Admin.Controllers

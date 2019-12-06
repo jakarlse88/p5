@@ -36,7 +36,9 @@ namespace TheCarHub.Repositories
                 await _context
                     .Listing
                     .Include(l => l.Car)
-                    .Include(l => l.Status)
+                    .Include(l => l.Status)                    
+                    .Include(l => l.Media)
+                    .Include(l => l.RepairJob)
                     .ToListAsync();
 
             return results;

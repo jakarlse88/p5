@@ -1,32 +1,67 @@
-﻿using System;
+﻿﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
-using System.Net.Mail;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using TheCarHub.Models.Entities;
 using TheCarHub.Models.ViewModels;
+using TheCarHub.Services;
 
 namespace TheCarHub.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IListingService _listingService;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IListingService listingService, IMapper mapper)
         {
-            _logger = logger;
+            _listingService = listingService;
+            _mapper = mapper;
         }
 
         // GET: /
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View();
+            ViewData["SearchString"] = searchString;
+            
+            var listings = await _listingService.GetAllListings();
+            
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                listings = listings.Where(l => l.Status.Id == 1 && l.Car.Make.Contains(searchString));
+            }
+
+            listings = listings.Where(l => l.Status.Id == 1);
+
+            var models = _mapper.Map<IList<Listing>, IList<ListingViewModel>>(listings.ToList());
+            
+            return View(models);
         }
 
         // GET: Privacy/
         public IActionResult Privacy()
         {
             return View();
+        }
+        
+        // GET: Listing/5
+        public async Task<IActionResult> Listing(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var listing = await _listingService.GetListingById(id.GetValueOrDefault());
+
+            if (listing == null)
+                return NotFound();
+
+            var model = _mapper.Map<ListingViewModel>(listing);
+
+            return View(model);
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

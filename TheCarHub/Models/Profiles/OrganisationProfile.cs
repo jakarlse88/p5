@@ -1,4 +1,3 @@
-using System.Linq;
 using AutoMapper;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
@@ -11,7 +10,12 @@ namespace TheCarHub.Models.Profiles
         public OrganisationProfile()
         {
             // Entity to ViewModel
-            CreateMap<Listing, ListingViewModel>();
+            CreateMap<Listing, ListingViewModel>()
+                .ForMember(
+                    dest => dest.Media,
+                    opt => opt.MapFrom(
+                        (source, dest) => source.Media));
+            
             CreateMap<Car, CarViewModel>();
             CreateMap<Media, MediaViewModel>();
             CreateMap<RepairJob, RepairJobViewModel>();

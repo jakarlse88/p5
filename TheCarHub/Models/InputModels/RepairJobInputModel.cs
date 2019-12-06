@@ -1,5 +1,3 @@
-using TheCarHub.Models.Entities;
-
 namespace TheCarHub.Models.InputModels
 {
     public class RepairJobInputModel

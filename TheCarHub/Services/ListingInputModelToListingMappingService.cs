@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Internal;
 using TheCarHub.Models;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
@@ -138,7 +137,7 @@ namespace TheCarHub.Services
             var car = MapCarInputModelToCar(source.Car, source.CarYear, destination.Car);
             var repairJob = MapRepairJobInPutModelToRepairJob(source.RepairJob, destination.RepairJob);
 
-            var filteredImgNames = source.ImgNames.Where(i => destination.Media.All(m => m.FileName != i));
+            var filteredImgNames = source.ImgNames.Where(i => destination.Media.All(m => m.FileName != i)).ToList();
             
             var media = MapImgNamesToMedia(filteredImgNames);
 
@@ -157,6 +156,11 @@ namespace TheCarHub.Services
             destination.SellingPrice = source.SellingPrice;
 
             // RepairJob details
+            if (destination.RepairJob == null)
+            {
+                destination.RepairJob = new RepairJob();
+            }
+            
             destination.RepairJob.Cost = source.RepairJob.Cost;
             destination.RepairJob.Description = source.RepairJob.Description;
             

@@ -1,7 +1,5 @@
 using Xunit;
-using FluentValidation;
 using FluentValidation.TestHelper;
-using TheCarHub.Models.InputModels;
 using TheCarHub.Models.Validators;
 
 namespace TheCarHub.Test

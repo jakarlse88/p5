@@ -31,7 +31,10 @@
     <link rel="stylesheet" href="~/css/car/magnific-popup.css" type="text/css"/>
 
     <link rel="stylesheet" href="~/css/car/responsive.css" type="text/css"/>
-    <link rel="stylesheet" href="~/css/car-layout.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/car-layout.css" type="text/css"/>
+    
+    <link rel="stylesheet" href="~/lightgallery/css/lightgallery.css" type="text/css" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     @* <link rel="stylesheet" href="../../css/colors.php?color=c85e51" type="text/css" /> *@
@@ -45,7 +48,7 @@
 		.dropdown-toggle::after { margin-left: 0.255em; }
 
 	</style>
-
+    
 </head>
 
 <body class="stretched side-push-panel" data-loader-html="<div><img src='media-static/car/page-loader.gif' alt='Loader'></div>">
@@ -69,8 +72,6 @@
             <a asp-controller="Home" asp-action="Index">
                 <img src="media-static/car/logo@2x.png" alt="Canvas Logo" height="50">
             </a>
-
-            <partial name="_QuickContact"/>
 
         </div>
 
@@ -97,19 +98,14 @@
                 <!-- Logo
                 ============================================= -->
                 <div id="logo">
-                    @* <a asp-controller="Home" asp-action="Index" class="standard-logo"> *@
-                    @*     <img src="media-static/car/logo.png" alt="Canvas Logo"> *@
-                    @* </a> *@
-                    @* <a asp-controller="Home" asp-action="Index" class="retina-logo"> *@
-                    @*     <img src="media-static/car/logo@2x.png" alt="Canvas Logo"> *@
-                    @* </a> *@
                     <a asp-controller="Home" asp-action="Index" class="standard-logo">
                         <h2>The Car Hub</h2>
                     </a>
                     <a asp-controller="Home" asp-action="Index" class="retina-logo">
                         <h2>The Car Hub</h2>
                     </a>
-                </div><!-- #logo end -->
+                </div>
+                <!-- #logo end -->
 
                 <!-- Primary Navigation
                 ============================================= -->
@@ -127,7 +123,9 @@
                             </a>
                         </li>
                     </ul>
-                </nav><!-- #primary-menu end -->
+                </nav>
+                <!-- #primary-menu end -->
+                
             </div>
 
         </div>
@@ -136,7 +134,8 @@
             <i class="icon-line-menu"></i><i class="icon-line-cross"></i>
         </div>
 
-    </header><!-- #header end -->
+    </header>
+    <!-- #header end -->
 
     <!-- Page Title
     ============================================= -->
@@ -144,7 +143,8 @@
     <section id="page-title" class="page-title-parallax page-title-dark" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;">
 
         <div class="container clearfix">
-            <h1>Listings</h1>
+            @* <h1>Listings</h1> *@
+            @RenderSection("PageHeading", false)
         </div>
 
     </section>
@@ -169,67 +169,23 @@
 
                         <div class="col_one_fourth">
                             <div class="widget widget_links clearfix">
-                                <h4>Hire</h4>
+                                <h4>Site</h4>
                                 <ul>
                                     <li>
-                                        <a href="#">Documentation</a>
+                                        <a asp-controller="Home" asp-action="Index">Home</a>
                                     </li>
                                     <li>
-                                        <a href="#">Feedback</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Plugins</a>
+                                        <a asp-controller="Contact" asp-action="Index">Contact Us</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col_one_fourth">
                             <div class="widget widget_links clearfix">
-                                <h4>Community</h4>
+                                <h4>Admin</h4>
                                 <ul>
                                     <li>
-                                        <a href="#">Documentation</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Feedback</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Plugins</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Support Forums</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col_one_fourth">
-                            <div class="widget widget_links clearfix">
-                                <h4>Learn</h4>
-                                <ul>
-                                    <li>
-                                        <a href="#">Documentation</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Feedback</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Plugins</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col_one_fourth col_last">
-                            <div class="widget widget_links clearfix">
-                                <h4>About</h4>
-                                <ul>
-                                    <li>
-                                        <a href="#">Documentation</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Feedback</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Plugins</a>
+                                        <a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
                                     </li>
                                 </ul>
                             </div>
@@ -239,7 +195,7 @@
 
                     <div class="col-lg-5 fright tright col_last">
 
-                        <img src="media-static/car/logo-footer.png" alt="" height="50" style="margin-top:1em ">
+                        <img src="~/media-static/car/logo-footer.png" alt="" height="50" style="margin-top:1em ">
                         <br>
                         <div style="color: #444">
                             <span>Theme &copy; Canvas Automotive. All Rights Reserved.</span>
@@ -264,14 +220,6 @@
 ============================================= -->
 <div id="gotoTop" class="icon-angle-up"></div>
 
-<!-- Contact Button
-============================================= -->
-<div id="contact-me" class="icon-line-mail side-panel-trigger bgcolor"></div>
-
-<!-- Contact Form script
-============================================= -->
-@* <script src="~/js/ContactForm.js"></script> *@
-
 <!-- External JavaScripts
 ============================================= -->
 <script src="~/js/car/jquery.js"></script>
@@ -286,6 +234,11 @@
 <!-- Footer Scripts
 ============================================= -->
 <script src="~/js/car/functions.js"></script>
+
+<!-- Lightgallery 
+============================================= -->
+<script src="~/lightgallery/js/lightgallery.js"></script>
+
 
 <script>
 

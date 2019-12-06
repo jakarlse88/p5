@@ -304,13 +304,13 @@ img.wheel {
 
 .filter-p-pricing {
 	position: absolute;
-	bottom: 20px;
+	bottom: 0px !important;
 	right: 0;
 	background: #c85e51;
 	color: #FFF;
 	padding: 8px 15px;
 	z-index: 1;
-	font-family: 'Mukta Vaani';
+	font-family: 'Mukta Vaani', sans-serif;
 }
 
 .filter-p-pricing:before {

@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using MimeKit;
 using MailKit.Net.Smtp;
-using MailKit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using TheCarHub.Models.InputModels;

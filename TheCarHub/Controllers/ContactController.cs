@@ -1,13 +1,5 @@
-using System;
-using System.IO;
-using System.Net;
-using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using MailKit;
-using Microsoft.Extensions.Configuration;
-using MimeKit;
 using TheCarHub.Models.InputModels;
 using TheCarHub.Services;
 

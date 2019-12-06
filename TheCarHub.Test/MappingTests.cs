@@ -1,9 +1,5 @@
-using System;
 using AutoMapper;
-using TheCarHub.Models.Entities;
-using TheCarHub.Models.InputModels;
 using TheCarHub.Models.Profiles;
-using TheCarHub.Models.ViewModels;
 using Xunit;
 
 namespace TheCarHub.Test

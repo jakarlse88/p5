@@ -2,17 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
-using ILogger = Microsoft.VisualStudio.Web.CodeGeneration.ILogger;
 
 namespace TheCarHub.Areas.Admin.Controllers
 {

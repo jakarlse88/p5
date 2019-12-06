@@ -13,6 +13,5 @@ namespace TheCarHub.Services
         Task EditListing(ListingInputModel inputModel, Listing listing);
         Task AddListingAsync(ListingInputModel inputModel);
         void DeleteListing(int id);
-        void ValidateListingInputModel(ModelStateDictionary modelState, ListingInputModel inputModel);
     }
 }

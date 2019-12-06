@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
@@ -282,5 +281,66 @@ namespace TheCarHub.Test
                 context.Database.EnsureDeleted();
             }
         }
+
+        [Fact]
+        public async Task TestGetMediaByFileNameAsyncValidFileName()
+        {
+            // Arrange
+            var options = BuildDbContextOptions();
+            
+            Media result;
+            
+            // Act
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                var repository = new MediaRepository(context);
+                
+                var service = new MediaService(repository);
+
+                result = await service.GetMediaByFileNameAsync("file one");
+            }
+
+            // Assert
+            await using (var context = new ApplicationDbContext(options))
+            {
+                Assert.NotNull(result);
+                Assert.Equal("file one", result.FileName);
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
+        [Fact]
+        public async Task TestGetMediaByFileNameAsyncInvalidFileName()
+        {
+            // Arrange
+            var options = BuildDbContextOptions();
+            
+            Media result;
+            
+            // Act
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                var repository = new MediaRepository(context);
+                
+                var service = new MediaService(repository);
+
+                result = await service.GetMediaByFileNameAsync("file nope");
+            }
+
+            // Assert
+            await using (var context = new ApplicationDbContext(options))
+            {
+                Assert.Null(result);
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
+
     }
 }

@@ -2202,6 +2202,8 @@ var SEMICOLON = SEMICOLON || {};
 						direction: flexsDirection,
 						reverse: flexsReverse,
 						slideshow: flexsSlideshow,
+						itemWidth: 210,
+						itemMargin: 5,
 						slideshowSpeed: Number(flexsPause),
 						animationSpeed: Number(flexsSpeed),
 						pauseOnHover: flexsHover,
