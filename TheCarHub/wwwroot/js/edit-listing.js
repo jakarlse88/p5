@@ -71,7 +71,7 @@ $(document).ready(() => {
                 $(".img-select-hidden").append(`<input name="ImgNames" value=${item}>${item}</input>`);
             });
         });
-    })()
+    })();
 
     (function priceCalculationHandler() {
         let repairCost = $(".__repair-cost");

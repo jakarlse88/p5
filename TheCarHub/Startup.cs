@@ -39,14 +39,16 @@ namespace TheCarHub
                 services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("AppIdentity"))
                 );
+                
+                services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
+                services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
             }
             
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite("Data Source=localappref.db")
-            );
-
+                options.UseSqlServer(Configuration.GetConnectionString("AppReferentialLocal")));
+                
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlite("Data Source=localappidentity.db")
+                options.UseSqlServer(Configuration.GetConnectionString("AppIdentityLocal"))
             );
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -75,8 +77,6 @@ namespace TheCarHub
                     }
                 );
 
-//            services.AddTransient<IValidator<ContactInputModel>, ContactInputModelValidator>();
-            
             services.AddAutoMapper(typeof(Startup));
 
             services.AddRazorPages();
