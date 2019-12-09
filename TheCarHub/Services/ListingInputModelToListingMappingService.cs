@@ -18,21 +18,15 @@ namespace TheCarHub.Services
             _statusRepository = statusRepository;
         }
 
-        private Car MapCarInputModelToCar(in CarInputModel source, int carYear, Car destination)
+        private Car MapCarInputModelToCar(in CarInputModel source, Car destination)
         {
             if (source == null)
                 return null;
 
-//            var success = int.TryParse(.ToString(), out int carYearMax);
-//
-//            if (!success) return null;
-
-            carYear = (carYear >= 1990 && carYear <= DateTime.Now.AddYears(1).Year) ? carYear : 2019;
-
             destination ??= new Car();
 
             destination.VIN = source.VIN;
-            destination.Year = new DateTime(carYear, 1, 1);
+            destination.Year = source.Year;
             destination.Make = source.Make;
             destination.Model = source.Model;
             destination.Trim = source.Trim;
@@ -98,7 +92,7 @@ namespace TheCarHub.Services
 
             var destination = new Listing();
 
-            var car = MapCarInputModelToCar(source.Car, source.CarYear, destination.Car);
+            var car = MapCarInputModelToCar(source.Car, destination.Car);
             var repairJob = MapRepairJobInPutModelToRepairJob(source.RepairJob, destination.RepairJob);
             var media = MapImgNamesToMedia(source.ImgNames);
 
@@ -134,7 +128,7 @@ namespace TheCarHub.Services
         /// <returns></returns>
         public async Task<Listing> Map(ListingInputModel source, Listing destination)
         {
-            var car = MapCarInputModelToCar(source.Car, source.CarYear, destination.Car);
+            var car = MapCarInputModelToCar(source.Car, destination.Car);
             var repairJob = MapRepairJobInPutModelToRepairJob(source.RepairJob, destination.RepairJob);
 
             var filteredImgNames = source.ImgNames.Where(i => destination.Media.All(m => m.FileName != i)).ToList();

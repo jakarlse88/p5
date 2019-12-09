@@ -104,9 +104,11 @@ namespace TheCarHub.Test
 
             var source = new ListingInputModel
             {
-                Car = new CarInputModel(),
-                RepairJob = new RepairJobInputModel(),
-                CarYear = carYear
+                Car = new CarInputModel
+                {
+                    Year = carYear
+                },
+                RepairJob = new RepairJobInputModel()
             };
 
             source.Car.VIN = "VIN";
@@ -136,7 +138,7 @@ namespace TheCarHub.Test
             Assert.Equal("BMW", result.Car.Make);
             Assert.Equal("320i", result.Car.Model);
             Assert.Equal("", result.Car.Trim);
-            Assert.Equal(new DateTime(2019, 1, 1), result.Car.Year);
+            Assert.Equal(2019, result.Car.Year);
         }
 
         [Theory]
@@ -150,9 +152,11 @@ namespace TheCarHub.Test
 
             var source = new ListingInputModel
             {
-                Car = new CarInputModel(),
-                RepairJob = new RepairJobInputModel(),
-                CarYear = carYear
+                Car = new CarInputModel
+                {
+                    Year = carYear
+                },
+                RepairJob = new RepairJobInputModel()
             };
 
             source.Car.VIN = "VIN";
@@ -182,7 +186,7 @@ namespace TheCarHub.Test
             Assert.Equal("BMW", result.Car.Make);
             Assert.Equal("320i", result.Car.Model);
             Assert.Equal("", result.Car.Trim);
-            Assert.Equal(new DateTime(carYear, 1, 1), result.Car.Year);
+            Assert.Equal(2019, result.Car.Year);
         }
 
         [Fact]

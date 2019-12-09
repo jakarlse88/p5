@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
@@ -13,8 +14,7 @@ namespace TheCarHub.Test
 {
     public class ListingRepositoryTests
     {
-
-        private DbContextOptions<ApplicationDbContext> BuildTestDbOptions() 
+        private DbContextOptions<ApplicationDbContext> BuildTestDbOptions()
         {
             return new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -32,9 +32,9 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 result = await repository.GetAllListings();
 
                 context.Database.EnsureDeleted();
@@ -61,9 +61,9 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 result = await repository.GetListingById(testId);
 
                 context.Database.EnsureDeleted();
@@ -87,9 +87,9 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 result = await repository.GetListingById(testId);
 
                 context.Database.EnsureDeleted();
@@ -135,7 +135,7 @@ namespace TheCarHub.Test
         [InlineData(-1)]
         public void TestDeleteListingInvalidId(int testId)
         {
-             // Arrange
+            // Arrange
             var options = BuildTestDbOptions();
             int expected;
 
@@ -143,7 +143,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
 
                 expected = context.Listing.ToList().Count;
@@ -155,7 +155,7 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 var actual = context.Listing.ToList().Count;
-                
+
                 Assert.Equal(expected, actual);
 
                 context.Database.EnsureDeleted();
@@ -176,9 +176,9 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 repository.AddListing(testEntity);
             }
 
@@ -206,9 +206,9 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
+
                 repository.AddListing(testEntity);
             }
 
@@ -234,26 +234,26 @@ namespace TheCarHub.Test
             using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
-                
+
                 var repository = new ListingRepository(context);
-                
-                var testEntity = 
+
+                var testEntity =
                     context
-                    .Listing
-                    .FirstOrDefault(l => l.Id == 1);
+                        .Listing
+                        .FirstOrDefault(l => l.Id == 1);
 
                 testEntity.Description = "test description";
 
-                repository.EditListing(testEntity);
+                repository.UpdateListing(testEntity);
             }
 
             // Assert
             using (var context = new ApplicationDbContext(options))
             {
-                var result = 
+                var result =
                     context
-                    .Listing
-                    .FirstOrDefault(l => l.Id == 1);
+                        .Listing
+                        .FirstOrDefault(l => l.Id == 1);
 
                 Assert.Equal("test description", result.Description);
 
@@ -267,18 +267,69 @@ namespace TheCarHub.Test
         {
             // Arrange
             var mockContext = new Mock<ApplicationDbContext>();
-            
+
             mockContext
                 .Setup(x => x.Update(It.IsAny<Listing>()))
                 .Verifiable();
-            
+
             var repository = new ListingRepository(mockContext.Object);
-            
+
             // Act
-            repository.EditListing(null);
-            
+            repository.UpdateListing(null);
+
             // Assert
             mockContext.Verify(x => x.Update(It.IsAny<Listing>()), Times.Never);
+        }
+
+        [Fact]
+        public void TestGetListingEntityEntryValidEntity()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+
+            EntityEntry<Listing> result;
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                var repository = new ListingRepository(context);
+
+                var testEntity = context.Listing.FirstOrDefault();
+
+                // Act
+                result = repository.GetListingEntityEntry(testEntity);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<EntityEntry<Listing>>(result);
+        }
+
+        [Fact]
+        public void TestGetListingEntityEntryNull()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+
+            EntityEntry<Listing> result;
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                var repository = new ListingRepository(context);
+
+                // Act
+                result = repository.GetListingEntityEntry(null);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.Null(result);
         }
     }
 }

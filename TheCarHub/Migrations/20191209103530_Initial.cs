@@ -14,7 +14,7 @@ namespace TheCarHub.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VIN = table.Column<string>(nullable: true),
-                    Year = table.Column<DateTime>(nullable: false),
+                    Year = table.Column<int>(nullable: false),
                     Make = table.Column<string>(nullable: true),
                     Model = table.Column<string>(nullable: true),
                     Trim = table.Column<string>(nullable: true)
@@ -25,12 +25,25 @@ namespace TheCarHub.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Status",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Status", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tag",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TagName = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,8 +58,8 @@ namespace TheCarHub.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(nullable: true),
                     CarId = table.Column<int>(nullable: false),
+                    StatusId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateLastUpdated = table.Column<DateTime>(nullable: true),
                     PurchaseDate = table.Column<DateTime>(nullable: false),
@@ -61,6 +74,12 @@ namespace TheCarHub.Migrations
                         name: "FK_Listing_Car_CarId",
                         column: x => x.CarId,
                         principalTable: "Car",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Listing_Status_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Status",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -117,6 +136,7 @@ namespace TheCarHub.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ListingId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
                     Cost = table.Column<decimal>(type: "money", nullable: false),
                     Tax = table.Column<decimal>(type: "money", nullable: false)
                 },
@@ -160,31 +180,58 @@ namespace TheCarHub.Migrations
                 columns: new[] { "Id", "Make", "Model", "Trim", "VIN", "Year" },
                 values: new object[,]
                 {
-                    { 1, "Mazda", "Miata", "LE", "", new DateTime(1991, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, "Jeep", "Liberty", "Sport", "", new DateTime(2007, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, "Ford", "Explorer", "XLT", "", new DateTime(2017, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, "Honda", "Civic", "LX", "", new DateTime(2008, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 5, "Volkswagen", "GTI", "S", "", new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 6, "Ford", "Edge", "SEL", "", new DateTime(2013, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "Mazda", "Miata", "LE", "", 1991 },
+                    { 2, "Jeep", "Liberty", "Sport", "", 2007 },
+                    { 3, "Ford", "Explorer", "XLT", "", 2017 },
+                    { 4, "Honda", "Civic", "LX", "", 2008 },
+                    { 5, "Volkswagen", "GTI", "S", "", 2016 },
+                    { 6, "Ford", "Edge", "SEL", "", 2013 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Status",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Available" },
+                    { 2, "Sold" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Listing",
-                columns: new[] { "Id", "CarId", "DateCreated", "DateLastUpdated", "Description", "PurchaseDate", "PurchasePrice", "SaleDate", "SellingPrice", "Status", "Title" },
+                columns: new[] { "Id", "CarId", "DateCreated", "DateLastUpdated", "Description", "PurchaseDate", "PurchasePrice", "SaleDate", "SellingPrice", "StatusId", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, null, null },
-                    { 2, 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, null, null },
-                    { 3, 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, null, null },
-                    { 4, 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, null, null },
-                    { 5, 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, null, null },
-                    { 6, 6, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, null, null }
+                    { 3, 3, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "three description", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, 1, null },
+                    { 4, 4, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "four description", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, 1, null },
+                    { 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "one description", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, 2, null },
+                    { 2, 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "two description", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, 2, null },
+                    { 5, 5, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "five description", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, 2, null },
+                    { 6, 6, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "six description", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0m, null, 0m, 2, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Media",
+                columns: new[] { "Id", "Caption", "FileName", "ListingId" },
+                values: new object[,]
+                {
+                    { 3, null, "file three", 3 },
+                    { 4, null, "file four", 4 },
+                    { 1, null, "file one", 1 },
+                    { 2, null, "file two", 2 },
+                    { 5, null, "file five", 5 },
+                    { 6, null, "file six", 6 }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Listing_CarId",
                 table: "Listing",
                 column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Listing_StatusId",
+                table: "Listing",
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListingTag_TagId",
@@ -204,7 +251,8 @@ namespace TheCarHub.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_RepairJob_ListingId",
                 table: "RepairJob",
-                column: "ListingId");
+                column: "ListingId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -229,6 +277,9 @@ namespace TheCarHub.Migrations
 
             migrationBuilder.DropTable(
                 name: "Car");
+
+            migrationBuilder.DropTable(
+                name: "Status");
         }
     }
 }

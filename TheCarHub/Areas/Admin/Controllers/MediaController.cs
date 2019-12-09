@@ -78,7 +78,7 @@ namespace TheCarHub.Areas.Admin.Controllers
             }
 
             _mediaService.DeleteMedia(media);
-            
+
             return Ok();
         }
 

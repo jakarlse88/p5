@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using TheCarHub.Models.InputModels;
 using TheCarHub.Services;
 
@@ -18,42 +14,20 @@ namespace TheCarHub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ListingController : Controller
     {
-        private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IListingService _listingService;
-        private readonly ICarService _carService;
-        private readonly IStatusService _statusService;
-        private readonly IMediaService _mediaService;
         private readonly IMapper _mapper;
 
         public ListingController(
-            IConfiguration configuration,
-            IWebHostEnvironment webHostEnvironment,
             IListingService listingService,
-            ICarService carService,
-            IStatusService statusService,
-            IMediaService mediaService,
             IMapper mapper)
         {
-            _configuration = configuration;
-            _webHostEnvironment = webHostEnvironment;
             _listingService = listingService;
-            _carService = carService;
-            _statusService = statusService;
-            _mediaService = mediaService;
             _mapper = mapper;
         }
 
         // GET: Listing/Create
         public IActionResult Create()
         {
-            var carYearSelect = PopulateCarYearSelect();
-
-            ViewData["YearSelect"] =
-                new SelectList(carYearSelect,
-                    "Value",
-                    "Text");
-
             return View();
         }
 
@@ -64,21 +38,12 @@ namespace TheCarHub.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ListingInputModel inputModel)
         {
-            if (ModelState.IsValid)
-            {
-                await _listingService.AddListingAsync(inputModel);
+            if (!ModelState.IsValid) return View(inputModel);
+            
+            await _listingService.AddListingAsync(inputModel);
 
-                return RedirectToAction(nameof(Index), "Home");
-            }
+            return RedirectToAction(nameof(Index), "Home");
 
-            var carYearSelect = PopulateCarYearSelect();
-
-            ViewData["YearSelect"] =
-                new SelectList(carYearSelect,
-                    "Value",
-                    "Text");
-
-            return View(inputModel);
         }
 
         // GET: Listing/Edit/5
@@ -90,24 +55,15 @@ namespace TheCarHub.Areas.Admin.Controllers
             }
 
             var listing =
-                await _listingService.GetListingById(id.GetValueOrDefault());
+                await _listingService.GetListingByIdAsync(id.GetValueOrDefault());
 
             if (listing == null)
             {
                 return NotFound();
             }
 
+            // TODO: extract to service
             var inputModel = _mapper.Map<ListingInputModel>(listing);
-
-            ViewData["YearSelect"] =
-                new SelectList(PopulateCarYearSelect(),
-                    "Value",
-                    "Text");
-
-            ViewData["StatusSelect"] =
-                new SelectList(await PopulateStatusSelect(),
-                    "Value",
-                    "Text");
 
             return View(inputModel);
         }
@@ -126,7 +82,8 @@ namespace TheCarHub.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                var listing = await _listingService.GetListingById(id);
+                // TODO: extact all logic to service
+                var listing = await _listingService.GetListingByIdAsync(id);
 
                 try
                 {
@@ -149,16 +106,6 @@ namespace TheCarHub.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index), "Home");
             }
 
-            ViewData["YearSelect"] =
-                new SelectList(PopulateCarYearSelect(),
-                    "Value",
-                    "Text");
-
-            ViewData["StatusSelect"] =
-                new SelectList(await PopulateStatusSelect(),
-                    "Value",
-                    "Text");
-
             return View(inputModel);
         }
 
@@ -167,68 +114,6 @@ namespace TheCarHub.Areas.Admin.Controllers
             var listings = await _listingService.GetAllListings();
 
             return listings.Any(e => e.Id == id);
-        }
-
-        /// <summary>
-        /// Utility class for car year SelectList creation.
-        /// </summary>
-        private class YearSelectItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-        }
-
-        /// <summary>
-        /// Utility class for Status SelectList creation.
-        /// </summary>
-        private class StatusSelectItem
-        {
-            public int Value { get; set; }
-            public string Text { get; set; }
-        }
-
-        /// <summary>
-        /// Utility method that populates a list with YearSelectItems
-        /// representing years ranging from 1990 to current year + 1.
-        /// </summary>
-        /// <returns>A List of YearSelectItem containing entries from 1990 to current year +1, inclusive.</returns>
-        private static IEnumerable<YearSelectItem> PopulateCarYearSelect()
-        {
-            var years = new List<YearSelectItem>();
-
-            for (int i = 1990; i <= (DateTime.Today.Year + 1); i++)
-            {
-                years.Add(new YearSelectItem
-                {
-                    Value = i,
-                    Text = i.ToString()
-                });
-            }
-
-            return years;
-        }
-
-        /// <summary>
-        /// Utility method that populates a list with StatusSelectItems representing
-        /// all status options present in database.
-        /// </summary>
-        /// <returns>A List of YearSelectItem containing entries of all current status options.</returns>
-        private async Task<IEnumerable<StatusSelectItem>> PopulateStatusSelect()
-        {
-            var statuses = await _statusService.GetAllStatuses();
-
-            var statusSelectItems = new List<StatusSelectItem>();
-
-            foreach (var item in statuses)
-            {
-                statusSelectItems.Add(new StatusSelectItem
-                {
-                    Value = item.Id,
-                    Text = item.Name
-                });
-            }
-
-            return statusSelectItems;
         }
     }
 }

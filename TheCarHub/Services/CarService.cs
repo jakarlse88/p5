@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheCarHub.Repositories;
 using TheCarHub.Models.Entities;
+using TheCarHub.Models.InputModels;
 
 namespace TheCarHub.Services
 {
@@ -23,7 +24,7 @@ namespace TheCarHub.Services
 
         public async Task<Car> GetCarById(int id)
         {
-            var car = await _carRepository.GetCarById(id);
+            var car = await _carRepository.GetCarByIdAsync(id);
 
             return car;
         }
@@ -40,13 +41,27 @@ namespace TheCarHub.Services
         {
             if (car != null)
             {
-                _carRepository.EditCar(car);
+                _carRepository.UpdateCar(car);
             }
         }
 
         public void DeleteCar(int id)
         {
             _carRepository.DeleteCar(id);
+        }
+
+        public async Task UpdateCarExperimentalAsync(CarInputModel source)
+        {
+            var entity = await _carRepository.GetCarByIdAsync(source.Id);
+
+            if (entity != null)
+            {
+                var entry = _carRepository.GetCarEntityEntry(entity);
+                
+                entry.CurrentValues.SetValues(source);
+                
+//                _carRepository.UpdateCar(entity);    
+            }
         }
     }
 }

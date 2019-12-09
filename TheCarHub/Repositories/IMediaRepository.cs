@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories
@@ -9,7 +10,8 @@ namespace TheCarHub.Repositories
         void AddMedia(Media media);
         Task<IEnumerable<Media>> GetAllMedia();
         Task<Media> GetMediaById(int id);
-        void EditMedia(Media media);
+        void UpdateMedia(Media media);
         void DeleteMedia(Media media);
+        EntityEntry<Media> GetMediaEntityEntry(Media media);
     }
 }

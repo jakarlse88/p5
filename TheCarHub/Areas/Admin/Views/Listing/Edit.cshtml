@@ -1,3 +1,4 @@
+@using TheCarHub.Utilities
 @model TheCarHub.Models.InputModels.ListingInputModel
 
 @{
@@ -44,8 +45,11 @@
                             <span asp-validation-for="Car.VIN" class="text-danger"></span>
                         </div>
                         <div class="form-group col-3">
-                            <label asp-for="CarYear">Year</label>
-                            <select asp-for="CarYear" class="form-control" asp-items="ViewBag.YearSelect"></select>
+                            <label asp-for="Car.Year">Year</label>
+                            @{
+                                var yearSelectList = new SelectList(ListingControllerUtilities.PopulateCarYearSelect(), "Value", "Text");
+                                <select asp-for="Car.Year" class="form-control" asp-items="yearSelectList"></select>
+                            }
                         </div>
                     </div>
 
@@ -152,7 +156,10 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="Status" class="control-label">Listing Status</label>
-                        <select asp-for="Status" class="form-control statusSelect" asp-items="ViewBag.StatusSelect"></select>
+                        @{
+                            var statusSelectList = new SelectList(ListingControllerUtilities.PopulateStatusSelect(), "Value", "Text");
+                        }
+                        <select asp-for="Status" class="form-control statusSelect" asp-items="statusSelectList"></select>
                         <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
                 </div>
@@ -181,7 +188,7 @@
             <ul id="edit-media-list">
                 @foreach (var item in Model.Media)
                 {
-                    <li>@item.FileName</li>
+                    <li id="@item.FileName">@item.FileName</li>
                 }
             </ul>
         </form>

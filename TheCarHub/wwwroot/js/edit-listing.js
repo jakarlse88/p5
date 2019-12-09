@@ -44,7 +44,6 @@ $(document).ready(() => {
         });
 
         uppy.on('file-removed', async (file) => {
-            console.log('Removed file', file);
             let antiForgeryToken =
                 $("input[name='__RequestVerificationToken']").val();
 
@@ -56,13 +55,11 @@ $(document).ready(() => {
                     method: "POST",
                     headers: {
                         RequestVerificationToken: antiForgeryToken,
-                        'Content-Type': "application/json"
+                        'Content-Type': "application/json",
+                        'Accept-Type': "application/json"
                     },
                     mode: "same-origin",
-                    body: JSON.stringify(file.name)
-                });
-
-            // uppy.removeFile(file.id);
+                    body: JSON.stringify(file.name)});
         });
 
         uppy.on('complete', (result) => {

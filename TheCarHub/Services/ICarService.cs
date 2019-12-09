@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheCarHub.Models.Entities;
+using TheCarHub.Models.InputModels;
 
 namespace TheCarHub.Services
 {
@@ -11,5 +12,6 @@ namespace TheCarHub.Services
         void AddCar(Car car);
         void EditCar(Car car);
         void DeleteCar(int id);
+        Task UpdateCarExperimentalAsync(CarInputModel source);
     }
 }

@@ -28,10 +28,10 @@ namespace TheCarHub.Models.Profiles
                 .ForMember(
                     dest => dest.ImgNames,
                     option => option.Ignore())
-                .ForMember(
-                    dest => dest.CarYear,
-                    opt => opt.MapFrom(
-                        (source, dest) => source.Car.Year.Year))
+//                .ForMember(
+//                    dest => dest.CarYear,
+//                    opt => opt.MapFrom(
+//                        (source, dest) => source.Car.Year.Year))
                 .ForMember(
                     dest => dest.Status,
                     option => option.MapFrom(

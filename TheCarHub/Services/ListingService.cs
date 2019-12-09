@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore.Internal;
+using TheCarHub.Models;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
-using TheCarHub.Models.Validators;
 using TheCarHub.Repositories;
 
 namespace TheCarHub.Services
@@ -12,12 +12,24 @@ namespace TheCarHub.Services
     public class ListingService : IListingService
     {
         private readonly IListingRepository _listingRepository;
+        private readonly IRepairJobService _repairJobService;
+        private readonly ICarService _carService;
+        private readonly IStatusService _statusService;
+        private readonly IMediaService _mediaService;
         private readonly IMappingService<ListingInputModel, Listing> _mappingService;
 
-        public ListingService(IListingRepository listingRepository, 
+        public ListingService(IListingRepository listingRepository,
+            IRepairJobService repairJobService,
+            ICarService carService,
+            IStatusService statusService,
+            IMediaService mediaService,
             IMappingService<ListingInputModel, Listing> mappingService)
         {
             _listingRepository = listingRepository;
+            _repairJobService = repairJobService;
+            _carService = carService;
+            _statusService = statusService;
+            _mediaService = mediaService;
             _mappingService = mappingService;
         }
 
@@ -28,7 +40,7 @@ namespace TheCarHub.Services
             return results;
         }
 
-        public async Task<Listing> GetListingById(int id)
+        public async Task<Listing> GetListingByIdAsync(int id)
         {
             var listing = await _listingRepository.GetListingById(id);
 
@@ -41,7 +53,7 @@ namespace TheCarHub.Services
             {
                 await _mappingService.Map(inputModel, listing);
 
-                _listingRepository.EditListing(listing);
+                _listingRepository.UpdateListing(listing);
             }
         }
 
@@ -53,7 +65,7 @@ namespace TheCarHub.Services
 
                 if (listing == null)
                     return;
-                
+
                 _listingRepository.AddListing(listing);
             }
         }
@@ -61,6 +73,38 @@ namespace TheCarHub.Services
         public void DeleteListing(int id)
         {
             _listingRepository.DeleteListing(id);
+        }
+
+        public async Task<bool> UpdateListingExperimentalAsync(ListingInputModel source)
+        {
+            if (source == null)
+            {
+                return false;
+            }
+
+            var entity = await GetListingByIdAsync(source.Id);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            var entry = _listingRepository.GetListingEntityEntry(entity);
+
+            entry.CurrentValues.SetValues(source);
+
+            await _carService.UpdateCarExperimentalAsync(source.Car);
+
+            await _repairJobService.UpdateRepairJobAsync(source.RepairJob);
+
+            entity.Status =
+                await _statusService.GetStatusByNameAsync(source.Status);
+
+            _mediaService.UpdateMediaExperimental(source.ImgNames, entity);
+
+            _listingRepository.UpdateListing(entity);
+
+            return true;
         }
     }
 }

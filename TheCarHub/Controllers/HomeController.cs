@@ -54,7 +54,7 @@ namespace TheCarHub.Controllers
                 return BadRequest();
             }
 
-            var listing = await _listingService.GetListingById(id.GetValueOrDefault());
+            var listing = await _listingService.GetListingByIdAsync(id.GetValueOrDefault());
 
             if (listing == null)
                 return NotFound();

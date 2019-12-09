@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
@@ -242,7 +243,7 @@ namespace TheCarHub.Test
 
                 testEntity.FileName = "test file";
 
-                repository.EditMedia(testEntity);
+                repository.UpdateMedia(testEntity);
             }
 
             // Assert
@@ -272,10 +273,61 @@ namespace TheCarHub.Test
             var repository = new ListingRepository(mockContext.Object);
             
             // Act
-            repository.EditListing(null);
+            repository.UpdateListing(null);
             
             // Assert
             mockContext.Verify(x => x.Update(It.IsAny<Media>()), Times.Never);
+        }
+        
+        [Fact]
+        public void TestGetMediaEntityEntryValidEntity()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+
+            EntityEntry<Media> result;
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                var repository = new MediaRepository(context);
+
+                var testEntity = context.Media.FirstOrDefault();
+
+                // Act
+                result = repository.GetMediaEntityEntry(testEntity);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<EntityEntry<Media>>(result);
+        }
+
+        [Fact]
+        public void TestGetMediaEntityEntryNull()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+
+            EntityEntry<Media> result;
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                var repository = new MediaRepository(context);
+
+                // Act
+                result = repository.GetMediaEntityEntry(null);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.Null(result);
         }
     }
 }

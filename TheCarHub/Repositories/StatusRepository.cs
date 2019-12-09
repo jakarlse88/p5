@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace TheCarHub.Repositories
             var result =
                 await _context
                     .Status
-                    .Where(s => s.Name.ToLower() == statusName.ToLower())
+                    .Where(s => String.Equals(s.Name, statusName, StringComparison.InvariantCultureIgnoreCase))
                     .FirstOrDefaultAsync();
             
             return result;

@@ -10,7 +10,7 @@ using TheCarHub.Data;
 namespace TheCarHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191113110800_Initial")]
+    [Migration("20191209103530_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,8 +40,8 @@ namespace TheCarHub.Migrations
                     b.Property<string>("VIN")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -55,7 +55,7 @@ namespace TheCarHub.Migrations
                             Model = "Miata",
                             Trim = "LE",
                             VIN = "",
-                            Year = new DateTime(1991, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 1991
                         },
                         new
                         {
@@ -64,7 +64,7 @@ namespace TheCarHub.Migrations
                             Model = "Liberty",
                             Trim = "Sport",
                             VIN = "",
-                            Year = new DateTime(2007, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2007
                         },
                         new
                         {
@@ -73,7 +73,7 @@ namespace TheCarHub.Migrations
                             Model = "Explorer",
                             Trim = "XLT",
                             VIN = "",
-                            Year = new DateTime(2017, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2017
                         },
                         new
                         {
@@ -82,7 +82,7 @@ namespace TheCarHub.Migrations
                             Model = "Civic",
                             Trim = "LX",
                             VIN = "",
-                            Year = new DateTime(2008, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2008
                         },
                         new
                         {
@@ -91,7 +91,7 @@ namespace TheCarHub.Migrations
                             Model = "GTI",
                             Trim = "S",
                             VIN = "",
-                            Year = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2016
                         },
                         new
                         {
@@ -100,7 +100,7 @@ namespace TheCarHub.Migrations
                             Model = "Edge",
                             Trim = "SEL",
                             VIN = "",
-                            Year = new DateTime(2013, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2013
                         });
                 });
 
@@ -135,8 +135,8 @@ namespace TheCarHub.Migrations
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("money");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -144,6 +144,8 @@ namespace TheCarHub.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Listing");
 
@@ -153,54 +155,66 @@ namespace TheCarHub.Migrations
                             Id = 1,
                             CarId = 1,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "one description",
                             PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PurchasePrice = 0m,
-                            SellingPrice = 0m
+                            SellingPrice = 0m,
+                            StatusId = 2
                         },
                         new
                         {
                             Id = 2,
                             CarId = 2,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "two description",
                             PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PurchasePrice = 0m,
-                            SellingPrice = 0m
+                            SellingPrice = 0m,
+                            StatusId = 2
                         },
                         new
                         {
                             Id = 3,
                             CarId = 3,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "three description",
                             PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PurchasePrice = 0m,
-                            SellingPrice = 0m
+                            SellingPrice = 0m,
+                            StatusId = 1
                         },
                         new
                         {
                             Id = 4,
                             CarId = 4,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "four description",
                             PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PurchasePrice = 0m,
-                            SellingPrice = 0m
+                            SellingPrice = 0m,
+                            StatusId = 1
                         },
                         new
                         {
                             Id = 5,
                             CarId = 5,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "five description",
                             PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PurchasePrice = 0m,
-                            SellingPrice = 0m
+                            SellingPrice = 0m,
+                            StatusId = 2
                         },
                         new
                         {
                             Id = 6,
                             CarId = 6,
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "six description",
                             PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PurchasePrice = 0m,
-                            SellingPrice = 0m
+                            SellingPrice = 0m,
+                            StatusId = 2
                         });
                 });
 
@@ -225,6 +239,44 @@ namespace TheCarHub.Migrations
                     b.HasIndex("ListingId");
 
                     b.ToTable("Media");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FileName = "file one",
+                            ListingId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FileName = "file two",
+                            ListingId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FileName = "file three",
+                            ListingId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FileName = "file four",
+                            ListingId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FileName = "file five",
+                            ListingId = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FileName = "file six",
+                            ListingId = 6
+                        });
                 });
 
             modelBuilder.Entity("TheCarHub.Models.Entities.RepairJob", b =>
@@ -237,6 +289,9 @@ namespace TheCarHub.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("money");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ListingId")
                         .HasColumnType("int");
 
@@ -245,9 +300,37 @@ namespace TheCarHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ListingId");
+                    b.HasIndex("ListingId")
+                        .IsUnique();
 
                     b.ToTable("RepairJob");
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Status");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Available"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Sold"
+                        });
                 });
 
             modelBuilder.Entity("TheCarHub.Models.Entities.Tag", b =>
@@ -257,7 +340,7 @@ namespace TheCarHub.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("TagName")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -302,11 +385,17 @@ namespace TheCarHub.Migrations
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TheCarHub.Models.Entities.Status", "Status")
+                        .WithMany("Listings")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TheCarHub.Models.Entities.Media", b =>
                 {
-                    b.HasOne("TheCarHub.Models.Entities.Listing", null)
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
                         .WithMany("Media")
                         .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -316,8 +405,8 @@ namespace TheCarHub.Migrations
             modelBuilder.Entity("TheCarHub.Models.Entities.RepairJob", b =>
                 {
                     b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
-                        .WithMany()
-                        .HasForeignKey("ListingId")
+                        .WithOne("RepairJob")
+                        .HasForeignKey("TheCarHub.Models.Entities.RepairJob", "ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -346,7 +435,7 @@ namespace TheCarHub.Migrations
                         .IsRequired();
 
                     b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
-                        .WithMany()
+                        .WithMany("Tags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

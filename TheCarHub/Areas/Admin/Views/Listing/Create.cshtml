@@ -1,3 +1,4 @@
+@using TheCarHub.Utilities
 @model TheCarHub.Models.InputModels.ListingInputModel
 
 @{
@@ -30,7 +31,7 @@
     </div>
 
     <div class="container mx-auto">
-        <form asp-action="Create" enctype="multipart/form-data" method="POST" id="create-listing-form" novalidate> 
+        <form asp-action="Create" enctype="multipart/form-data" method="POST" id="create-listing-form" novalidate>
             <div class="form-row">
                 <div class="col-6">
                     <h4 class="form-heading">Car Information</h4>
@@ -44,8 +45,11 @@
                             <span asp-validation-for="Car.VIN" class="text-danger"></span>
                         </div>
                         <div class="form-group col-3">
-                            <label asp-for="CarYear">Year</label>
-                            <select asp-for="CarYear" class="form-control" asp-items="ViewBag.YearSelect"></select>
+                            <label asp-for="Car.Year">Year</label>
+                            @{
+                                var yearSelectList = new SelectList(ListingControllerUtilities.PopulateCarYearSelect(), "Value", "Text");
+                                <select asp-for="Car.Year" class="form-control" asp-items="yearSelectList"></select>
+                            }
                         </div>
                     </div>
 

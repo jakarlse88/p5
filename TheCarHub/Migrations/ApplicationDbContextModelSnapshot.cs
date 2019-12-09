@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheCarHub.Data;
 
 namespace TheCarHub.Migrations
@@ -37,8 +38,8 @@ namespace TheCarHub.Migrations
                     b.Property<string>("VIN")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -52,7 +53,7 @@ namespace TheCarHub.Migrations
                             Model = "Miata",
                             Trim = "LE",
                             VIN = "",
-                            Year = new DateTime(1991, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 1991
                         },
                         new
                         {
@@ -61,7 +62,7 @@ namespace TheCarHub.Migrations
                             Model = "Liberty",
                             Trim = "Sport",
                             VIN = "",
-                            Year = new DateTime(2007, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2007
                         },
                         new
                         {
@@ -70,7 +71,7 @@ namespace TheCarHub.Migrations
                             Model = "Explorer",
                             Trim = "XLT",
                             VIN = "",
-                            Year = new DateTime(2017, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2017
                         },
                         new
                         {
@@ -79,7 +80,7 @@ namespace TheCarHub.Migrations
                             Model = "Civic",
                             Trim = "LX",
                             VIN = "",
-                            Year = new DateTime(2008, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2008
                         },
                         new
                         {
@@ -88,7 +89,7 @@ namespace TheCarHub.Migrations
                             Model = "GTI",
                             Trim = "S",
                             VIN = "",
-                            Year = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2016
                         },
                         new
                         {
@@ -97,7 +98,7 @@ namespace TheCarHub.Migrations
                             Model = "Edge",
                             Trim = "SEL",
                             VIN = "",
-                            Year = new DateTime(2013, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            Year = 2013
                         });
                 });
 
@@ -259,19 +260,19 @@ namespace TheCarHub.Migrations
                         new
                         {
                             Id = 4,
-                            FileName = "file one",
+                            FileName = "file four",
                             ListingId = 4
                         },
                         new
                         {
                             Id = 5,
-                            FileName = "file two",
+                            FileName = "file five",
                             ListingId = 5
                         },
                         new
                         {
                             Id = 6,
-                            FileName = "file three",
+                            FileName = "file six",
                             ListingId = 6
                         });
                 });

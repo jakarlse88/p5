@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
 
@@ -46,7 +47,7 @@ namespace TheCarHub.Repositories
             return result;
         }
 
-        public void EditMedia(Media media)
+        public void UpdateMedia(Media media)
         {
             if (media != null)
             {
@@ -62,6 +63,15 @@ namespace TheCarHub.Repositories
                 _context.Remove(media);
                 _context.SaveChanges();
             }
+        }
+
+        public EntityEntry<Media> GetMediaEntityEntry(Media media)
+        {
+            if (media == null) return null;
+            
+            var entry = _context.Entry(media);
+
+            return entry;
         }
     }
 }

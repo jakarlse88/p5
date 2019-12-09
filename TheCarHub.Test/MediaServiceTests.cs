@@ -208,7 +208,7 @@ namespace TheCarHub.Test
             // Arrange
             var mockRepository = new Mock<IMediaRepository>();
             mockRepository
-                .Setup(x => x.EditMedia(It.IsAny<Media>()))
+                .Setup(x => x.UpdateMedia(It.IsAny<Media>()))
                 .Verifiable();
 
             var service = new MediaService(mockRepository.Object);
@@ -220,7 +220,7 @@ namespace TheCarHub.Test
 
             // Assert
             mockRepository
-                .Verify(x => x.EditMedia(It.IsAny<Media>()), Times.Never);
+                .Verify(x => x.UpdateMedia(It.IsAny<Media>()), Times.Never);
         }
         
         [Fact]
@@ -336,6 +336,115 @@ namespace TheCarHub.Test
             await using (var context = new ApplicationDbContext(options))
             {
                 Assert.Null(result);
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
+        [Fact]
+        public void TestUpdateMediaExperimentalFileNamesNull()
+        {
+            // Arrange
+            var mockRepository = new Mock<IMediaRepository>();
+            
+            mockRepository
+                .Setup(x => x.AddMedia(It.IsAny<Media>()))
+                .Verifiable();
+            
+            var service = new MediaService(mockRepository.Object);
+
+            // Act
+            service.UpdateMediaExperimental(null, null);
+
+            // Assert
+            mockRepository
+                .Verify(x => x.UpdateMedia(It.IsAny<Media>()), Times.Never);
+        }
+
+        [Fact]
+        public void TestUpdateMediaExperimentalFileNamesEmpty()
+        {
+            // Arrange
+            var mockRepository = new Mock<IMediaRepository>();
+            
+            mockRepository
+                .Setup(x => x.AddMedia(It.IsAny<Media>()))
+                .Verifiable();
+            
+            var service = new MediaService(mockRepository.Object);
+
+            // Act
+            service.UpdateMediaExperimental(new List<string>(), null);
+
+            // Assert
+            mockRepository
+                .Verify(x => x.UpdateMedia(It.IsAny<Media>()), Times.Never);
+        }
+
+        [Fact]
+        public void TestUpdateMediaExperimentalEntityNull()
+        {
+            // Arrange
+            var mockRepository = new Mock<IMediaRepository>();
+            
+            mockRepository
+                .Setup(x => x.AddMedia(It.IsAny<Media>()))
+                .Verifiable();
+            
+            var service = new MediaService(mockRepository.Object);
+
+            var fileNames = new List<string>
+            {
+                "asdads.jpg",
+                "løkølkø.jpg"
+            };
+
+            // Act
+            service.UpdateMediaExperimental(fileNames, null);
+
+            // Assert
+            mockRepository
+                .Verify(x => x.UpdateMedia(It.IsAny<Media>()), Times.Never);
+        }
+
+        [Fact]
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+        public void TestUpdateMediaExperimentalValidFileNamesAndEntity()
+        {
+            // Arrange
+            var options = BuildDbContextOptions();
+            
+            var fileNames = new List<string>
+            {
+                "asdads.jpg",
+                "løkølkø.jpg"
+            };
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                var repository = new MediaRepository(context);
+                
+                var service = new MediaService(repository);
+
+                var testEntity = context.Listing.FirstOrDefault(l => l.Id == 1);
+                
+                Assert.Equal(6, context.Media.ToList().Count);
+                
+                // Act
+                service.UpdateMediaExperimental(fileNames, testEntity);
+            }
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                var result = context.Media.ToList();
+                
+                // Assert
+                Assert.NotEmpty(result);    
+                Assert.Equal(8, result.Count);
+                Assert.Equal("asdads.jpg", result.First(m => m.Id == 7).FileName);
+                Assert.Equal("løkølkø.jpg", result.Last(m => m.Id == 8).FileName);
 
                 context.Database.EnsureDeleted();
             }

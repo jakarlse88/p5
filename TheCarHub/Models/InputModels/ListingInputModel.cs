@@ -19,7 +19,7 @@ namespace TheCarHub.Models.InputModels
         public string Title { get; set; }
         public int CarId { get; set; }
         public CarInputModel Car { get; set; }
-        public int CarYear { get; set; }
+//        public int CarYear { get; set; }
         public List<string> ImgNames { get; set; }
         public string Description { get; set; }
         public DateTime PurchaseDate { get; set; }

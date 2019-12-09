@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
+using TheCarHub.Models.InputModels;
 using TheCarHub.Repositories;
 using TheCarHub.Services;
 using Xunit;
@@ -271,6 +273,72 @@ namespace TheCarHub.Test
 
                 context.Database.EnsureDeleted();
             }
+        }
+
+        [Fact]
+        public async Task TestUpdateCarExperimentalAsyncValidSource()
+        {
+            // Arrange
+            var options = BuildDbContextOptions();
+            var inputModel = new CarInputModel
+            {
+                Id = 1,
+                Make = "Dacia",
+                Model = "Sandero",
+                Year = 1998,
+                Trim = "Sport XL",
+                VIN = "JH4KA4563LC001865"
+            };
+
+            await using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                var repository = new CarRepository(context);
+                var service = new CarService(repository);
+
+                // Act
+                await service.UpdateCarExperimentalAsync(inputModel);
+            }
+
+            // Assert
+            await using (var context = new ApplicationDbContext(options))
+            {
+                var entity = context.Car.FirstOrDefault(c => c.Id == 1);
+                
+                Assert.NotNull(entity);
+                Assert.Equal("Dacia", entity.Make);
+                Assert.Equal("Sandero", entity.Model);
+                Assert.Equal(1998, entity.Year);
+                Assert.Equal("Sport XL", entity.Trim);
+                Assert.Equal("JH4KA4563LC001865", entity.VIN);
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
+        [Fact]
+        public async Task TestUpdateCarExperimentalAsyncInvalidSource()
+        {
+            // Arrange
+            var options = BuildDbContextOptions();
+
+            var mockRepository = new Mock<ICarRepository>();
+            
+            mockRepository
+                .Setup(x => x.UpdateCar(It.IsAny<Car>()))
+                .Verifiable();
+
+            var service = new CarService(mockRepository.Object);
+
+            var testInputModel = new CarInputModel {Id = 666};
+
+            // Act
+            await service.UpdateCarExperimentalAsync(testInputModel);
+
+            // Assert
+            mockRepository
+                .Verify(x => x.UpdateCar(It.IsAny<Car>()), Times.Never);
         }
     }
 }

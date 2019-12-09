@@ -58,12 +58,14 @@ namespace TheCarHub
             services.AddTransient<IListingRepository, ListingRepository>();
             services.AddTransient<IMediaRepository, MediaRepository>();
             services.AddTransient<IStatusRepository, StatusRepository>();
+            services.AddTransient<IRepairJobRepository, RepairJobRepository>();
             
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IListingService, ListingService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IRepairJobService, RepairJobService>();
 
             services
                 .AddTransient<IMappingService<ListingInputModel, Listing>, ListingInputModelToListingMappingService>();

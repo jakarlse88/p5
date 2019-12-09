@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TheCarHub.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories
@@ -44,6 +45,15 @@ namespace TheCarHub.Repositories
             return results;
         }
 
+        public EntityEntry<Listing> GetListingEntityEntry(Listing entity)
+        {
+            if (entity == null) return null;
+            
+            var entry = _context.Entry(entity);
+
+            return entry;
+        }
+
         public async Task<Listing> GetListingById(int id)
         {
             var result =
@@ -66,7 +76,7 @@ namespace TheCarHub.Repositories
             _context.SaveChanges();
         }
 
-        public void EditListing(Listing listing)
+        public void UpdateListing(Listing listing)
         {
             if (listing == null) return;
             

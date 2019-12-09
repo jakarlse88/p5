@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
@@ -64,7 +65,7 @@ namespace TheCarHub.Test
                 
                 var repository = new CarRepository(context);
                 
-                result = await repository.GetCarById(testId);
+                result = await repository.GetCarByIdAsync(testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -90,7 +91,7 @@ namespace TheCarHub.Test
                 
                 var repository = new CarRepository(context);
                 
-                result = await repository.GetCarById(testId);
+                result = await repository.GetCarByIdAsync(testId);
 
                 context.Database.EnsureDeleted();
             }
@@ -246,7 +247,7 @@ namespace TheCarHub.Test
 
                 testEntity.Model = "Test";
 
-                repository.EditCar(testEntity);
+                repository.UpdateCar(testEntity);
             }
 
             // Assert
@@ -274,10 +275,61 @@ namespace TheCarHub.Test
             var repository = new CarRepository(mockContext.Object);
             
             // Act
-            repository.EditCar(null);
+            repository.UpdateCar(null);
             
             // Assert
             mockContext.Verify(x => x.Update(It.IsAny<Car>()), Times.Never);
+        }
+        
+        [Fact]
+        public void TestGetCarEntityEntryValidEntity()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+
+            EntityEntry<Car> result;
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                var repository = new CarRepository(context);
+
+                var testEntity = context.Car.FirstOrDefault();
+
+                // Act
+                result = repository.GetCarEntityEntry(testEntity);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<EntityEntry<Car>>(result);
+        }
+
+        [Fact]
+        public void TestGetListingEntityEntryNull()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+
+            EntityEntry<Car> result;
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+
+                var repository = new CarRepository(context);
+
+                // Act
+                result = repository.GetCarEntityEntry(null);
+
+                context.Database.EnsureDeleted();
+            }
+
+            // Assert
+            Assert.Null(result);
         }
     }
 }

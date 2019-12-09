@@ -9,9 +9,10 @@ namespace TheCarHub.Services
     public interface IListingService
     {
         Task<IEnumerable<Listing>> GetAllListings();
-        Task<Listing> GetListingById(int id);
+        Task<Listing> GetListingByIdAsync(int id);
         Task EditListing(ListingInputModel inputModel, Listing listing);
         Task AddListingAsync(ListingInputModel inputModel);
         void DeleteListing(int id);
+        Task<bool> UpdateListingExperimentalAsync(ListingInputModel source);
     }
 }
