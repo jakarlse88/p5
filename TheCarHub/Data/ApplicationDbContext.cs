@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TheCarHub.Models;
 using TheCarHub.Models.Entities;
 
@@ -60,7 +59,7 @@ namespace TheCarHub.Data
                     {
                         Id = 1,
                         VIN = "",
-                        Year = new DateTime(1991, 1, 1),
+                        Year = 1991,
                         Make = "Mazda",
                         Model = "Miata",
                         Trim = "LE",
@@ -69,7 +68,7 @@ namespace TheCarHub.Data
                     {
                         Id = 2,
                         VIN = "",
-                        Year = new DateTime(2007, 1, 1),
+                        Year = 2007,
                         Make = "Jeep",
                         Model = "Liberty",
                         Trim = "Sport",
@@ -78,7 +77,7 @@ namespace TheCarHub.Data
                     {
                         Id = 3,
                         VIN = "",
-                        Year = new DateTime(2017, 1, 1),
+                        Year = 2017,
                         Make = "Ford",
                         Model = "Explorer",
                         Trim = "XLT",
@@ -87,7 +86,7 @@ namespace TheCarHub.Data
                     {
                         Id = 4,
                         VIN = "",
-                        Year = new DateTime(2008, 1, 1),
+                        Year = 2008,
                         Make = "Honda",
                         Model = "Civic",
                         Trim = "LX",
@@ -96,7 +95,7 @@ namespace TheCarHub.Data
                     {
                         Id = 5,
                         VIN = "",
-                        Year = new DateTime(2016, 1, 1),
+                        Year = 2016,
                         Make = "Volkswagen",
                         Model = "GTI",
                         Trim = "S",
@@ -105,7 +104,7 @@ namespace TheCarHub.Data
                     {
                         Id = 6,
                         VIN = "",
-                        Year = new DateTime(2013, 1, 1),
+                        Year = 2013,
                         Make = "Ford",
                         Model = "Edge",
                         Trim = "SEL",
