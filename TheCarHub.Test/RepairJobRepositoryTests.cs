@@ -1,10 +1,7 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
 using TheCarHub.Repositories;
@@ -124,126 +121,5 @@ namespace TheCarHub.Test
             // Assert
             Assert.Null(result);
         }
-
-        [Fact]
-        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-        public void TestUpdateRepairJobNullArg()
-        {
-            // Arrange
-            var mockContext = new Mock<ApplicationDbContext>();
-            
-            mockContext
-                .Setup(x => x.Update(It.IsAny<RepairJob>()))
-                .Verifiable();
-            
-            var repository = new RepairJobRepository(mockContext.Object);
-
-            RepairJob testEntity = null;
-            
-            // Act
-            repository.UpdateRepairJob(testEntity);
-
-            // Assert
-            mockContext
-                .Verify(x => x.Update(It.IsAny<RepairJob>()),
-                    Times.Never);
-        }
-
-        [Fact]
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        public void TestUpdateRepairJobValidEntity()
-        {
-            // Arrange
-            var options = DbContextOptions;
-            
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                SeedRepairJobData(context);
-
-                var repository = new RepairJobRepository(context);
-                
-                var entity = context
-                    .RepairJob
-                    .FirstOrDefault(rj => rj.Id == 1);
-
-                entity.Description = "Altered description";
-                
-                // Act
-                repository.UpdateRepairJob(entity);
-            }
-
-            // Assert
-            using (var context = new ApplicationDbContext(options))
-            {
-                var result = context
-                    .RepairJob
-                    .FirstOrDefault(rj => rj.Id == 1);
-                
-                Assert.NotNull(result);
-                Assert.Equal("Altered description", result.Description);
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
-        [Theory]
-        [InlineData(1, "one description")]
-        [InlineData(2, "two description")]
-        [InlineData(3, "three description")]
-        [InlineData(4, "four description")]
-        [InlineData(5, "five description")]
-        [InlineData(6, "six description")]
-        public async Task TestGetRepairJobByIdAsyncValidId(int id, string expected)
-        {
-            // Arrange
-            var options = DbContextOptions;
-            RepairJob result;
-            
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                SeedRepairJobData(context);
-
-                var repository = new RepairJobRepository(context);
-                
-                // Act
-                result = await repository.GetRepairJobByIdAsync(id);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(expected, result.Description);
-        }
-
-        [Fact]
-        public async Task TestGetRepairJobByIdAsyncInvalidId()
-        {
-            // Arrange
-            var options = DbContextOptions;
-            RepairJob result;
-
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                SeedRepairJobData(context);
-
-                var repository = new RepairJobRepository(context);
-                
-                // Act
-                result = await repository.GetRepairJobByIdAsync(666);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Null(result);
-        }
-
     }
 }

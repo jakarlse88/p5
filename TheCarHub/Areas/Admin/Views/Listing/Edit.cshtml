@@ -5,6 +5,8 @@
     ViewData["Title"] = "Create Listing";
 }
 
+<!-- Page Heading
+================================================================ -->
 <div class="app-main__inner">
     <div class="app-page-title">
         <div class="page-title-wrapper">
@@ -31,13 +33,20 @@
     </div>
 
     <div class="container mx-auto">
+        @{
+            if (TempData["EditError"] != null)
+            {
+                <p class="text-danger center-text">@TempData["EditError"]</p>
+            }
+        }
         <form asp-action="Edit" enctype="multipart/form-data" method="POST" id="create-listing-form" novalidate>
             <div class="form-row">
                 <div class="col-6">
                     <h4 class="form-heading">Car Information</h4>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                    <!-- CAR INFORMATION -->
+                    <!-- CAR INFORMATION
+                    ================================================================ -->
                     <div class="form-row">
                         <div class="form-group col-7">
                             <label asp-for="Car.VIN" class="control-label">VIN</label>
@@ -74,7 +83,7 @@
                         </div>
                         <div class="form-group col-5">
                             <label asp-for="PurchaseDate" class="control-label">Purchase Date</label>
-                            <input asp-for="PurchaseDate" class="form-control" type="date"/>
+                            <input asp-for="PurchaseDate" class="form-control" type="date" min="2019-01-01"/>
                             <span asp-validation-for="PurchaseDate" class="text-danger"></span>
                         </div>
 
@@ -86,7 +95,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">$</div>
                                 </div>
-                                <input asp-for="PurchasePrice" class="form-control __purchase-price" type="number"/>
+                                <input asp-for="PurchasePrice" class="form-control __purchase-price" type="number" val="0"/>
                                 <span asp-validation-for="PurchasePrice" class="text-danger"></span>
                             </div>
                         </div>
@@ -94,7 +103,8 @@
                     </div>
                 </div>
 
-                <!-- REPAIRJOB INFORMATION -->
+                <!-- REPAIRJOB INFORMATION 
+                ================================================================ -->
                 <div class="col-6">
                     <h4 class="form-heading">Repair Information</h4>
                     <div class="form-row">
@@ -119,7 +129,8 @@
                 </div>
             </div>
 
-            <!--GENERAL INFORMATION -->
+            <!--GENERAL INFORMATION 
+            ================================================================ -->
             <div class="form-row">
                 <div class="col-12">
                     <h4 class="form-heading mt-3">General Listing Information</h4>
@@ -166,13 +177,14 @@
                 <div class="col-6">
                     <div id="saleDatePicker" class="form-group">
                         <label asp-for="SaleDate" class="control-label">Sale Date</label>
-                        <input asp-for="SaleDate" class="form-control" type="Date"/>
+                        <input asp-for="SaleDate" class="form-control" type="Date" value="2019-01-01" min="2019-01-01"/>
                         <span asp-validation-for="SaleDate" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            <!-- MEDIA UPLOAD -->
+            <!-- MEDIA UPLOAD 
+            ================================================================ -->
             <div id="drag-drop-area" asp-for="Files"></div>
 
             <div class="img-select-hidden" name="img-select-hidden" hidden></div>
@@ -184,7 +196,11 @@
             </div>
             <input asp-for="DateCreated" hidden/>
             <input asp-for="DateLastUpdated" hidden/>
-            <input asp-for="Media" hidden />
+            <input asp-for="Media" hidden/>
+            <input asp-for="Car.Id" type="hidden">
+            <input asp-for="CarId" type="hidden">
+            <input asp-for="RepairJob.Id" type="hidden">
+            <input asp-for="RepairJob.ListingId" type="hidden">
             <ul id="edit-media-list">
                 @foreach (var item in Model.Media)
                 {

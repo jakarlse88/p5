@@ -9,8 +9,6 @@ namespace TheCarHub.Repositories
     {
         void AddMedia(Media media);
         Task<IEnumerable<Media>> GetAllMedia();
-        Task<Media> GetMediaById(int id);
-        void UpdateMedia(Media media);
         void DeleteMedia(Media media);
         EntityEntry<Media> GetMediaEntityEntry(Media media);
     }

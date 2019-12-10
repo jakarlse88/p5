@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Data;
@@ -19,94 +18,11 @@ namespace TheCarHub.Test
                 new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
-            
+
             return options;
         }
 
-        [Fact]
-        public async Task TestGetAllStatuses()
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-            ICollection<Status> result;
 
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new StatusRepository(context);
-
-                var service = new StatusService(repository);
-
-                // Act
-                result = await service.GetAllStatuses();
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Equal(2, result.Count);
-            Assert.Contains(result, s => s.Name == "Available");
-            Assert.Contains(result, s => s.Name == "Sold");
-        }
-
-        [Theory]
-        [InlineData("Available", "Available")]
-        [InlineData("available", "Available")]
-        [InlineData("Sold", "Sold")]
-        [InlineData("sold", "Sold")]
-        public async Task TestGetStatusByNameAsyncValidArg(string statusName, string expected)
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-            Status result;
-
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new StatusRepository(context);
-
-                var service = new StatusService(repository);
-            
-                // Act
-                result = await service.GetStatusByNameAsync(statusName);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Equal(expected, result.Name);
-        }
-
-        [Theory]
-        [InlineData("Unavailable")]
-        [InlineData("Fresh")]
-        [InlineData("Repainted")]
-        public async Task TestGetStatusByNameAsyncInvalidArg(string statusName)
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-            Status result;
-
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new StatusRepository(context);
-
-                var service = new StatusService(repository);
-            
-                // Act
-                result = await service.GetStatusByNameAsync(statusName);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Null(result);
-        }
-        
         [Theory]
         [InlineData(1, "Available")]
         [InlineData(2, "Sold")]
@@ -123,7 +39,7 @@ namespace TheCarHub.Test
                 var repository = new StatusRepository(context);
 
                 var service = new StatusService(repository);
-            
+
                 // Act
                 result = await service.GetStatusByIdAsync(statusId);
 
@@ -133,7 +49,7 @@ namespace TheCarHub.Test
             // Assert
             Assert.Equal(expected, result.Name);
         }
-        
+
         [Theory]
         [InlineData(0)]
         [InlineData(3)]
@@ -151,64 +67,9 @@ namespace TheCarHub.Test
                 var repository = new StatusRepository(context);
 
                 var service = new StatusService(repository);
-            
+
                 // Act
                 result = await service.GetStatusByIdAsync(statusId);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Null(result);
-        }
-        
-        [Theory]
-        [InlineData(1, "Available")]
-        [InlineData(2, "Sold")]
-        public void TestGetStatusByIdValidArg(int statusId, string expected)
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-            Status result;
-
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new StatusRepository(context);
-
-                var service = new StatusService(repository);
-            
-                // Act
-                result = service.GetStatusById(statusId);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Equal(expected, result.Name);
-        }
-        
-        [Theory]
-        [InlineData(0)]
-        [InlineData(3)]
-        [InlineData(-1)]
-        public void TestGetStatusByIdInvalidArg(int statusId)
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-            Status result;
-
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new StatusRepository(context);
-
-                var service = new StatusService(repository);
-            
-                // Act
-                result = service.GetStatusById(statusId);
 
                 context.Database.EnsureDeleted();
             }

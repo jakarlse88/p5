@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using TheCarHub.Data;
@@ -23,7 +22,7 @@ namespace TheCarHub.Test
                 new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
-            
+
             return options;
         }
 
@@ -84,72 +83,6 @@ namespace TheCarHub.Test
             }
         }
 
-        [Fact]
-        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-        public void TestEditListingBothArgsNull()
-        {
-            // Arrange
-            var mockRepository = new Mock<IListingRepository>();
-
-            mockRepository
-                .Setup(lr => lr.UpdateListing(It.IsAny<Listing>()))
-                .Verifiable();
-
-            var service = new ListingService(mockRepository.Object, null,null, null, null, null);
-
-            // Act
-            service.EditListing(null, null);
-
-            // Assert
-            mockRepository
-                .Verify(ml => ml.UpdateListing(It.IsAny<Listing>()), Times.Never);
-        }
-
-        [Fact]
-        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-        public void TestEditListingListingArgNull()
-        {
-            // Arrange
-            var mockRepository = new Mock<IListingRepository>();
-
-            mockRepository
-                .Setup(lr => lr.UpdateListing(It.IsAny<Listing>()))
-                .Verifiable();
-
-            var service = new ListingService(mockRepository.Object, null, null, null, null, null);
-
-            var inputModel = new ListingInputModel();
-
-            // Act
-            service.EditListing(inputModel, null);
-
-            // Assert
-            mockRepository
-                .Verify(ml => ml.UpdateListing(It.IsAny<Listing>()), Times.Never);
-        }
-
-        [Fact]
-        [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
-        public void TestEditListingInputModelArgNull()
-        {
-            // Arrange
-            var mockRepository = new Mock<IListingRepository>();
-
-            mockRepository
-                .Setup(lr => lr.UpdateListing(It.IsAny<Listing>()))
-                .Verifiable();
-
-            var service = new ListingService(mockRepository.Object, null, null, null, null, null);
-
-            var listing = new Listing();
-
-            // Act
-            service.EditListing(null, listing);
-
-            // Assert
-            mockRepository
-                .Verify(ml => ml.UpdateListing(It.IsAny<Listing>()), Times.Never);
-        }
 
         [Fact]
         [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull")]
@@ -182,64 +115,6 @@ namespace TheCarHub.Test
             }
         }
 
-        [Fact]
-        public void TestDeleteValidId()
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-
-            // Act
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new ListingRepository(context);
-
-                var service = new ListingService(repository, null, null, null, null, null);
-
-                service.DeleteListing(1);
-            }
-
-            // Assert
-            using (var context = new ApplicationDbContext(options))
-            {
-                var result = context.Listing.ToList();
-
-                Assert.DoesNotContain(result, l => l.Id == 1);
-                Assert.Equal(5, result.Count);
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
-        [Fact]
-        public void TestDeleteInvalidId()
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-
-            // Act
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new ListingRepository(context);
-
-                var service = new ListingService(repository, null, null, null, null, null);
-
-                service.DeleteListing(7);
-            }
-
-            // Assert
-            using (var context = new ApplicationDbContext(options))
-            {
-                var result = context.Listing.ToList();
-
-                Assert.Equal(6, result.Count);
-
-                context.Database.EnsureDeleted();
-            }
-        }
 
         [Fact]
         public void TestUpdateListingExperimentalAsyncArgumentNull()
@@ -251,7 +126,7 @@ namespace TheCarHub.Test
             mockRepository
                 .Setup(x => x.GetListingById(It.IsAny<int>()))
                 .Verifiable();
-            
+
             var service = new ListingService(
                 mockRepository.Object,
                 null,
@@ -259,9 +134,9 @@ namespace TheCarHub.Test
                 null,
                 null,
                 null);
-            
+
             // Act
-            service.UpdateListingExperimentalAsync(null);
+            service.UpdateListingAsync(null);
 
             // Assert
             mockRepository
@@ -278,7 +153,7 @@ namespace TheCarHub.Test
             mockRepository
                 .Setup(x => x.GetListingById(It.IsAny<int>()))
                 .Verifiable();
-            
+
             var service = new ListingService(
                 mockRepository.Object,
                 null,
@@ -286,15 +161,13 @@ namespace TheCarHub.Test
                 null,
                 null,
                 null);
-            
+
             // Act
-            service.UpdateListingExperimentalAsync(null);
+            service.UpdateListingAsync(null);
 
             // Assert
             mockRepository
                 .Verify(x => x.GetListingById(It.IsAny<int>()), Times.Never);
         }
-
-
     }
 }

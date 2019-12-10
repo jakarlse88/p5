@@ -36,26 +36,6 @@ namespace TheCarHub.Repositories
             return results;
         }
 
-        public async Task<Media> GetMediaById(int id)
-        {
-            var result = 
-                await _context
-                .Media
-                .Include(m => m.Listing)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            return result;
-        }
-
-        public void UpdateMedia(Media media)
-        {
-            if (media != null)
-            {
-                _context.Media.Update(media);
-                _context.SaveChanges();
-            }
-        }
-
         public void DeleteMedia(Media media)
         {
             if (media != null)

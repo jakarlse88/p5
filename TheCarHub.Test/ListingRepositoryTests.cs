@@ -99,69 +99,6 @@ namespace TheCarHub.Test
             Assert.Null(result);
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        public void TestDeleteListingValidId(int testId)
-        {
-            // Arrange
-            var options = BuildTestDbOptions();
-
-            // Act
-            using (var context = new ApplicationDbContext(options))
-            {
-                var repository = new ListingRepository(context);
-
-                repository.DeleteListing(testId);
-            }
-
-            // Assert
-            using (var context = new ApplicationDbContext(options))
-            {
-                var results = context.Listing.ToList();
-                Assert.DoesNotContain(results, l => l.Id == testId);
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(7)]
-        [InlineData(-1)]
-        public void TestDeleteListingInvalidId(int testId)
-        {
-            // Arrange
-            var options = BuildTestDbOptions();
-            int expected;
-
-            // Act
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new ListingRepository(context);
-
-                expected = context.Listing.ToList().Count;
-
-                repository.DeleteListing(testId);
-            }
-
-            // Assert
-            using (var context = new ApplicationDbContext(options))
-            {
-                var actual = context.Listing.ToList().Count;
-
-                Assert.Equal(expected, actual);
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
         [Fact]
         public void TestSaveListingValidListingEntity()
         {

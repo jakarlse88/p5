@@ -19,14 +19,13 @@ namespace TheCarHub.Models.InputModels
         public string Title { get; set; }
         public int CarId { get; set; }
         public CarInputModel Car { get; set; }
-//        public int CarYear { get; set; }
         public List<string> ImgNames { get; set; }
         public string Description { get; set; }
         public DateTime PurchaseDate { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateLastUpdated { get; set; }
         public DateTime SaleDate { get; set; }
-        public string Status { get; set; }
+        public int Status { get; set; } = 1;
         public RepairJobInputModel RepairJob { get; set; }
         public decimal SellingPrice { get; set; }
         public decimal PurchasePrice { get; set; }

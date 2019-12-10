@@ -44,58 +44,6 @@ namespace TheCarHub.Test
             Assert.Equal(6, result.ToList().Count);
         }
 
-        [Theory]
-        [InlineData(1, "file one")]
-        [InlineData(2, "file two")]
-        [InlineData(3, "file three")]
-        public async void TestGetMediaByIdValidId(
-            int testId, string expectedFileName)
-        {
-            // Arrange
-            var options = BuildTestDbOptions();
-            Media result;
-
-            // Act
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-                
-                var repository = new MediaRepository(context);
-                
-                result = await repository.GetMediaById(testId);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Equal(expectedFileName, result.FileName);
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(-7)]
-        [InlineData(7)]
-        public async void TestGetMediaByIdInvalidId(int testId)
-        {
-            // Arrange
-            var options = BuildTestDbOptions();
-            Media result;
-
-            // Act
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-                
-                var repository = new MediaRepository(context);
-                
-                result = await repository.GetMediaById(testId);
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            Assert.Null(result);
-        }
 
         [Theory]
         [InlineData(1)]
@@ -217,44 +165,6 @@ namespace TheCarHub.Test
                 var result = context.Media.ToList();
 
                 Assert.Equal(6, result.Count);
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
-        [Fact]
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        public void TestUpdateMediaValidEntity()
-        {
-            // Arrange
-            var options = BuildTestDbOptions();
-
-            // Act
-            using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-                
-                var repository = new MediaRepository(context);
-                
-                var testEntity = 
-                    context
-                    .Media
-                    .FirstOrDefault(l => l.Id == 1);
-
-                testEntity.FileName = "test file";
-
-                repository.UpdateMedia(testEntity);
-            }
-
-            // Assert
-            using (var context = new ApplicationDbContext(options))
-            {
-                var result = 
-                    context
-                    .Media
-                    .FirstOrDefault(l => l.Id == 1);
-
-                Assert.Equal("test file", result.FileName);
 
                 context.Database.EnsureDeleted();
             }

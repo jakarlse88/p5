@@ -25,19 +25,18 @@ namespace TheCarHub.Controllers
         public async Task<IActionResult> Index(string searchString)
         {
             ViewData["SearchString"] = searchString;
-            
-            var listings = await _listingService.GetAllListings();
-            
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                listings = listings.Where(l => l.Status.Id == 1 && l.Car.Make.Contains(searchString));
-            }
 
-            listings = listings.Where(l => l.Status.Id == 1);
+//            if (string.IsNullOrEmpty(searchString))
+//            {
+//                listingViewModels = await _listingService.GetAllListingsAsViewModel();
+//            }
+//            else
+//            {
+                var listingViewModels = await _listingService
+                    .GetFilteredListingViewModels(1, searchString);
+//            }
 
-            var models = _mapper.Map<IList<Listing>, IList<ListingViewModel>>(listings.ToList());
-            
-            return View(models);
+            return View(listingViewModels);
         }
 
         // GET: Privacy/
@@ -54,14 +53,12 @@ namespace TheCarHub.Controllers
                 return BadRequest();
             }
 
-            var listing = await _listingService.GetListingByIdAsync(id.GetValueOrDefault());
+            var viewModel = await _listingService.GetListingViewModelByIdAsync(id.GetValueOrDefault());
 
-            if (listing == null)
+            if (viewModel == null)
                 return NotFound();
 
-            var model = _mapper.Map<ListingViewModel>(listing);
-
-            return View(model);
+            return View(viewModel);
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

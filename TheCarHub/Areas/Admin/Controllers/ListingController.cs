@@ -1,10 +1,7 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TheCarHub.Models.InputModels;
 using TheCarHub.Services;
 
@@ -15,14 +12,10 @@ namespace TheCarHub.Areas.Admin.Controllers
     public class ListingController : Controller
     {
         private readonly IListingService _listingService;
-        private readonly IMapper _mapper;
 
-        public ListingController(
-            IListingService listingService,
-            IMapper mapper)
+        public ListingController(IListingService listingService)
         {
             _listingService = listingService;
-            _mapper = mapper;
         }
 
         // GET: Listing/Create
@@ -38,12 +31,12 @@ namespace TheCarHub.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ListingInputModel inputModel)
         {
-            if (!ModelState.IsValid) return View(inputModel);
+            if (!ModelState.IsValid) 
+                return View(inputModel);
             
             await _listingService.AddListingAsync(inputModel);
 
             return RedirectToAction(nameof(Index), "Home");
-
         }
 
         // GET: Listing/Edit/5
@@ -54,16 +47,12 @@ namespace TheCarHub.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var listing =
-                await _listingService.GetListingByIdAsync(id.GetValueOrDefault());
+            var inputModel = await _listingService.GetListingInputModelByIdAsync(id.GetValueOrDefault());
 
-            if (listing == null)
+            if (inputModel == null)
             {
                 return NotFound();
             }
-
-            // TODO: extract to service
-            var inputModel = _mapper.Map<ListingInputModel>(listing);
 
             return View(inputModel);
         }
@@ -82,38 +71,19 @@ namespace TheCarHub.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                // TODO: extact all logic to service
-                var listing = await _listingService.GetListingByIdAsync(id);
+                var editSuccess = await _listingService.UpdateListingAsync(inputModel);
 
-                try
+                if (editSuccess)
                 {
-                    await _listingService.EditListing(inputModel, listing);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    var listingExists = await ListingExists(inputModel.Id);
-
-                    if (!listingExists)
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return RedirectToAction(nameof(Index), "Home");
                 }
 
-                return RedirectToAction(nameof(Index), "Home");
+                TempData["EditError"] =
+                    "There was a problem updating the information. Please ensure the data entered is valid, and try again.";
+                return View(inputModel);
             }
 
             return View(inputModel);
-        }
-
-        private async Task<bool> ListingExists(int id)
-        {
-            var listings = await _listingService.GetAllListings();
-
-            return listings.Any(e => e.Id == id);
         }
     }
 }

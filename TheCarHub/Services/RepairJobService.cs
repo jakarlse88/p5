@@ -1,4 +1,5 @@
-using System.Threading.Tasks;
+using System;
+using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
 using TheCarHub.Repositories;
 
@@ -13,19 +14,22 @@ namespace TheCarHub.Services
             _repairJobRepository = repairJobRepository;
         }
         
-        public async Task UpdateRepairJobAsync(RepairJobInputModel source)
+        public void MapRepairJobValues(RepairJobInputModel repairJobInputModel, RepairJob repairJobEntity)
         {
-            var entity = 
-                await _repairJobRepository.GetRepairJobByIdAsync(source.Id);
-
-            if (entity != null)
+            if (repairJobInputModel == null)
             {
-                var entry = _repairJobRepository.GetRepairJobEntityEntry(entity);
-                
-                entry.CurrentValues.SetValues(source);
-                
-//                _repairJobRepository.UpdateRepairJob(entity);
+                throw new Exception("InputModel cannot be null.");
             }
+            
+            if (repairJobEntity == null)
+            {
+                throw new Exception("RepairJob entity not found.");
+            }
+            
+            
+            var repairJobEntityEntry = _repairJobRepository.GetRepairJobEntityEntry(repairJobEntity);
+            
+            repairJobEntityEntry.CurrentValues.SetValues(repairJobInputModel);
         }
     }
 }

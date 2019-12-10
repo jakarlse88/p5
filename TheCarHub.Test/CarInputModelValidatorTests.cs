@@ -41,12 +41,12 @@ namespace TheCarHub.Test
         {
             // Assert
             _validator
-                .ShouldHaveValidationErrorFor(model => model.Model, "a")
-                .WithErrorMessage("Car model must be at least 3 characters long.");
+                .ShouldHaveValidationErrorFor(model => model.Model, "")
+                .WithErrorMessage("Car model must be specified.");
             
             _validator
-                .ShouldHaveValidationErrorFor(model => model.Model, "qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop1")
-                .WithErrorMessage("Car model cannot exceed 100 characters.");
+                .ShouldHaveValidationErrorFor(model => model.Model, "asdfghjkløæ")
+                .WithErrorMessage("Car model cannot exceed 10 characters.");
         }
 
         

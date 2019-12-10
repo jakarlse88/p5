@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TheCarHub.Models.Entities;
 using TheCarHub.Models.InputModels;
+using TheCarHub.Models.ViewModels;
 
 namespace TheCarHub.Services
 {
     public interface IListingService
     {
         Task<IEnumerable<Listing>> GetAllListings();
+        Task<IEnumerable<ListingViewModel>> GetAllListingsAsViewModel();
+        Task<IEnumerable<ListingViewModel>> GetFilteredListingViewModels(int status, string query);
         Task<Listing> GetListingByIdAsync(int id);
-        Task EditListing(ListingInputModel inputModel, Listing listing);
+        Task<ListingInputModel> GetListingInputModelByIdAsync(int id);
+        Task<ListingViewModel> GetListingViewModelByIdAsync(int id);
         Task AddListingAsync(ListingInputModel inputModel);
-        void DeleteListing(int id);
-        Task<bool> UpdateListingExperimentalAsync(ListingInputModel source);
+        Task<bool> UpdateListingAsync(ListingInputModel source);
     }
 }

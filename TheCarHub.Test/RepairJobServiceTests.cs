@@ -1,14 +1,7 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
-using TheCarHub.Models.InputModels;
-using TheCarHub.Repositories;
-using TheCarHub.Services;
-using Xunit;
 
 namespace TheCarHub.Test
 {
@@ -76,65 +69,6 @@ namespace TheCarHub.Test
             context.SaveChanges();
         }
 
-        [Fact]
-        public async Task TestUpdateRepairJobExperimentalAsyncValidSource()
-        {
-            // Arrange
-            var options = DbContextOptions;
-            
-            var inputModel = new RepairJobInputModel
-            {
-                Id = 1,
-                Description = "Altered description",
-                Cost = 666
-            };
-
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-                
-                SeedRepairJobData(context);
-
-                var repository = new RepairJobRepository(context);
-                var service = new RepairJobService(repository);
-
-                // Act
-                await service.UpdateRepairJobAsync(inputModel);
-            }
-
-            // Assert
-            await using (var context = new ApplicationDbContext(options))
-            {
-                var entity = context.RepairJob.FirstOrDefault(c => c.Id == 1);
-
-                Assert.NotNull(entity);
-                Assert.Equal("Altered description", entity.Description);
-                Assert.Equal(666, entity.Cost);
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
-        [Fact]
-        public async Task TestUpdateRepairJobExperimentalAsyncInvalidSource()
-        {
-            // Arrange
-            var mockRepository = new Mock<IRepairJobRepository>();
-
-            mockRepository
-                .Setup(x => x.UpdateRepairJob(It.IsAny<RepairJob>()))
-                .Verifiable();
-
-            var service = new RepairJobService(mockRepository.Object);
-
-            var testInputModel = new RepairJobInputModel {Id = 666};
-
-            // Act
-            await service.UpdateRepairJobAsync(testInputModel);
-
-            // Assert
-            mockRepository
-                .Verify(x => x.UpdateRepairJob(It.IsAny<RepairJob>()), Times.Never);
-        }
+        // TODO: test MapRepairJobValues()
     }
 }

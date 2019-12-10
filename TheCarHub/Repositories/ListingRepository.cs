@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TheCarHub.Data;
 using Microsoft.EntityFrameworkCore;
@@ -17,17 +16,11 @@ namespace TheCarHub.Repositories
             _context = context;
         }
 
-        public void DeleteListing(int id)
+        public void TrackListing(Listing listing)
         {
-            var listing =
-                _context
-                .Listing
-                .FirstOrDefault(l => l.Id == id);
-            
             if (listing != null)
             {
-                _context.Listing.Remove(listing);
-                _context.SaveChanges();
+                _context.Add(listing);
             }
         }
 

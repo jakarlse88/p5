@@ -7,7 +7,7 @@ namespace TheCarHub.Test
     public class MappingTests
     {
         [Fact]
-        public void TestMapListingToListingViewModel()
+        public void TestAutoMapperProfiles()
         {
             // Arrange
             var config = new MapperConfiguration(cfg => 

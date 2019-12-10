@@ -17,15 +17,14 @@ namespace TheCarHub.Models.Validators
                 .NotEmpty()
                 .MinimumLength(3)
                 .WithMessage("Car make must be at least 3 characters long.")
-                .MaximumLength(100)
+                .MaximumLength(20)
                 .WithMessage("Car make cannot exceed 100 characters.");
 
             RuleFor(c => c.Model)
                 .NotEmpty()
-                .MinimumLength(3)
-                .WithMessage("Car model must be at least 3 characters long.")
-                .MaximumLength(100)
-                .WithMessage("Car model cannot exceed 100 characters.");
+                .WithMessage("Car model must be specified.")
+                .MaximumLength(10)
+                .WithMessage("Car model cannot exceed 10 characters.");
 
             RuleFor(c => c.Trim)
                 .MaximumLength(10)
