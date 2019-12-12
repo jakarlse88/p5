@@ -268,5 +268,52 @@ namespace TheCarHub.Test
             // Assert
             Assert.Null(result);
         }
+
+        [Fact]
+        public void TestTrackListingNullEntity()
+        {
+            // Arrange
+            var mockContext = new Mock<ApplicationDbContext>();
+            
+            mockContext
+                .Setup(x => x.Add(It.IsAny<Listing>()))
+                .Verifiable();
+
+            var repository = new ListingRepository(mockContext.Object);
+            
+            // Act
+            repository.TrackListing(null);
+
+            // Assert
+            mockContext
+                .Verify(x => x.Add(It.IsAny<Listing>()), Times.Never);
+        }
+
+        [Fact]
+        public void TestTrackListingValidEntity()
+        {
+            // Arrange
+            var options = BuildTestDbOptions();
+
+            var testEntity = new Listing(); 
+                    
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                var repository = new ListingRepository(context);
+             
+                // Act
+                repository.TrackListing(testEntity);
+
+                // Assert
+                var entry = context.Entry(testEntity);
+                
+                Assert.NotNull(entry);
+                Assert.Equal(EntityState.Added, entry.State);
+                
+                context.Database.EnsureDeleted();
+            }
+        }
     }
 }

@@ -73,20 +73,21 @@ $(document).ready(() => {
     (function priceCalculationHandler() {
         let repairCost = $(".__repair-cost");
         let purchasePrice = $(".__purchase-price");
+        let sellingPrice = $(".__selling-price");
 
         function calculateSellingPrice() {
             let i = $(repairCost).val() !== "" ? parseInt($(repairCost).val()) : 0;
             let j = $(purchasePrice).val() !== "" ? parseInt($(purchasePrice).val()) : 0;
-
+            
             return i + j + 500;
         }
 
         $(repairCost).on("input", () => {
-            $(".__selling-price").attr("value", calculateSellingPrice());
+            $(sellingPrice).attr("value", calculateSellingPrice());
         });
 
         $(purchasePrice).on("input", () => {
-            $(".__selling-price").attr("value", calculateSellingPrice());
+            $(sellingPrice).attr("value", calculateSellingPrice());
         });
     })();
 });

@@ -46,6 +46,7 @@
 (function priceCalculationHandler() {
     let repairCost = $(".__repair-cost");
     let purchasePrice = $(".__purchase-price");
+    let sellingPrice = $(".__selling-price");
 
     function calculateSellingPrice() {
         let i = $(repairCost).val() !== "" ? parseInt($(repairCost).val()) : 0;
@@ -55,10 +56,10 @@
     }
 
     $(repairCost).on("input", () => {
-        $(".__selling-price").attr("value", calculateSellingPrice());
+        $(sellingPrice).attr("value", calculateSellingPrice());
     });
 
     $(purchasePrice).on("input", () => {
-        $(".__selling-price").attr("value", calculateSellingPrice());
+        $(sellingPrice).attr("value", calculateSellingPrice());
     });
 })();

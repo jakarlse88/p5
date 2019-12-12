@@ -31,8 +31,15 @@ namespace TheCarHub.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ListingInputModel inputModel)
         {
-            if (!ModelState.IsValid) 
+            if (inputModel == null)
+            {
+                return RedirectToAction(nameof(Create), "Listing");
+            }
+
+            if (!ModelState.IsValid)
+            {
                 return View(inputModel);
+            }
             
             await _listingService.AddListingAsync(inputModel);
 
@@ -64,6 +71,11 @@ namespace TheCarHub.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ListingInputModel inputModel)
         {
+            if (inputModel == null)
+            {
+                return BadRequest();
+            }
+            
             if (id != inputModel.Id)
             {
                 return NotFound();
@@ -80,6 +92,7 @@ namespace TheCarHub.Areas.Admin.Controllers
 
                 TempData["EditError"] =
                     "There was a problem updating the information. Please ensure the data entered is valid, and try again.";
+               
                 return View(inputModel);
             }
 

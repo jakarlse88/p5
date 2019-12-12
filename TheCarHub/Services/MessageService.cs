@@ -22,7 +22,11 @@ namespace TheCarHub.Services
         
         public Task<bool> SendEmail(ContactInputModel inputModel)
         {
-            if (inputModel == null)
+            if (inputModel == null || 
+                string.IsNullOrWhiteSpace(inputModel.SenderName) ||
+                string.IsNullOrWhiteSpace(inputModel.SenderEmail) ||
+                string.IsNullOrWhiteSpace(inputModel.Subject) ||
+                string.IsNullOrWhiteSpace(inputModel.Message))
             {
                 return Task.FromResult(false);
             }
@@ -46,7 +50,7 @@ namespace TheCarHub.Services
                     Text = FormatMessageBody(
                         inputModel.SenderName, 
                         inputModel.SenderEmail, 
-                        inputModel.SenderPhoneNumber,
+                        inputModel.SenderPhoneNumber ?? "",
                         inputModel.Subject,
                         inputModel.Message)
                 };

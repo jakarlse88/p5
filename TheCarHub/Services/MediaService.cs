@@ -8,22 +8,26 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using TheCarHub.Models;
+using TheCarHub.Utilities;
 
 namespace TheCarHub.Services
 {
     public class MediaService : IMediaService
     {
         private readonly IMediaRepository _mediaRepository;
-        private IWebHostEnvironment _webHostEnvironment;
-        private IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
+        private readonly IFileUtility _fileUtility;
 
-        public MediaService(IMediaRepository mediaRepository, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public MediaService(IMediaRepository mediaRepository,
+            IWebHostEnvironment webHostEnvironment,
+            IConfiguration configuration, IFileUtility fileUtility)
         {
             _mediaRepository = mediaRepository;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _fileUtility = fileUtility;
         }
-
         public async Task<Media> GetMediaByFileNameAsync(string fileName)
         {
             var media =
@@ -95,9 +99,14 @@ namespace TheCarHub.Services
         
         public bool RemoveMediaObject(Media media)
         {
+            if (media == null)
+            {
+                return false;
+            }
+            
             try
             {
-                Utilities.FileUtility.DeleteImageFromDisk(
+                _fileUtility.DeleteImageFromDisk(
                     _webHostEnvironment,
                     _configuration,
                     media.FileName);
@@ -125,9 +134,10 @@ namespace TheCarHub.Services
             foreach (var item in files)
             {
                 var fileName =
-                    await Utilities.FileUtility.UploadImageToDiskAsync(
+                    await _fileUtility.UploadImageToDiskAsync(
                         _webHostEnvironment,
-                        _configuration, item);
+                        _configuration, 
+                        item);
 
                 if (string.IsNullOrEmpty(fileName))
                     continue;

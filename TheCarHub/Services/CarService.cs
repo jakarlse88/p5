@@ -16,6 +16,11 @@ namespace TheCarHub.Services
 
         public void MapCarValues(CarInputModel carInputModel, Car carEntity)
         {
+            if (carInputModel == null)
+            {
+                throw new Exception("InputModel argument cannot be null.");
+            }
+            
             if (carEntity == null)
             {
                 throw new Exception("Car entity not found.");

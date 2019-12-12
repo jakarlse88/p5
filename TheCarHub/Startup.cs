@@ -12,6 +12,7 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using TheCarHub.Models.Validators;
 using TheCarHub.Services;
+using TheCarHub.Utilities;
 
 namespace TheCarHub
 {
@@ -28,6 +29,8 @@ namespace TheCarHub
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddSingleton<IFileUtility, FileUtility>();
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
@@ -94,6 +97,8 @@ namespace TheCarHub
                 // for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -116,6 +121,8 @@ namespace TheCarHub
                 
                 endpoints.MapRazorPages();
             });
+
+            
         }
     }
 }

@@ -25,6 +25,11 @@ namespace TheCarHub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendMessage(ContactInputModel inputModel)
         {
+            if (inputModel == null)
+            {
+                return BadRequest();
+            }
+            
             if (!ModelState.IsValid)
             {
                 return View("Index", inputModel);
@@ -34,7 +39,8 @@ namespace TheCarHub.Controllers
 
             if (!messageSuccess)
             {
-                TempData["MessageFail"] = "There was a problem sending the message. Please try again, or contact the webmaster if the problem persists";
+                TempData["MessageFail"] = 
+                    "There was a problem sending the message. Please try again, or contact the webmaster if the problem persists";
                 
                 return View("Index", inputModel);
             }

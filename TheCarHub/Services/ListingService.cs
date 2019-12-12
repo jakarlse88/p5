@@ -46,7 +46,8 @@ namespace TheCarHub.Services
             var listings = await GetAllListings();
 
             var viewModels = 
-                _mapper.Map<List<Listing>, List<ListingViewModel>>(listings.ToList());
+                _mapper.Map<List<Listing>, List<ListingViewModel>>
+                    (listings.ToList());
 
             return viewModels ?? new List<ListingViewModel>();
         }
@@ -55,6 +56,11 @@ namespace TheCarHub.Services
         {
             var listings = await _listingRepository.GetAllListings();
 
+            if (listings == null || !listings.Any())
+            {
+                return new List<ListingViewModel>();
+            }
+            
             IEnumerable<Listing> filteredListings;
 
             if (!string.IsNullOrEmpty(query))

@@ -26,7 +26,6 @@ namespace TheCarHub.Services
                 throw new Exception("RepairJob entity not found.");
             }
             
-            
             var repairJobEntityEntry = _repairJobRepository.GetRepairJobEntityEntry(repairJobEntity);
             
             repairJobEntityEntry.CurrentValues.SetValues(repairJobInputModel);

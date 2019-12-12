@@ -22,7 +22,6 @@ namespace TheCarHub.Test
             return options;
         }
 
-
         [Theory]
         [InlineData(1, "Available")]
         [InlineData(2, "Sold")]

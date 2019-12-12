@@ -1,7 +1,13 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Data;
 using TheCarHub.Models.Entities;
+using TheCarHub.Models.InputModels;
+using TheCarHub.Repositories;
+using TheCarHub.Services;
+using Xunit;
 
 namespace TheCarHub.Test
 {
@@ -69,6 +75,74 @@ namespace TheCarHub.Test
             context.SaveChanges();
         }
 
-        // TODO: test MapRepairJobValues()
+        [Fact]
+        public void TestMapRepairJobValuesNullRepairJobInputModel()
+        {
+            // Arrange
+            var service = new RepairJobService(null);
+            
+            // Act
+            void TestAction() => service.MapRepairJobValues(null, null);
+
+            // Assert
+            var ex = Assert.Throws<Exception>(TestAction);
+            Assert.Equal("InputModel cannot be null.", ex.Message);
+        }
+
+        [Fact]
+        public void TestMapRepairJobValuesNullEntity()
+        {
+            // Arrange
+            var service = new RepairJobService(null);
+
+            var inputModel = new RepairJobInputModel();
+            
+            // Act
+            void TestAction() => service.MapRepairJobValues(inputModel, null);
+
+            // Assert
+            var ex = Assert.Throws<Exception>(TestAction);
+            Assert.Equal("RepairJob entity not found.", ex.Message);
+        }
+
+        [Fact]
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+        public void TestMapRepairJobValidArguments()
+        {
+            // Arrange
+            var options = DbContextOptions;
+            
+            var inputModel = new RepairJobInputModel
+            {
+                Id = 2,
+                Cost = 666,
+                Description = "test description"
+            };
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                context.Database.EnsureCreated();
+                
+                SeedRepairJobData(context);
+                
+                var repository = new RepairJobRepository(context);
+                
+                var service = new RepairJobService(repository);
+
+                var entity =
+                    context.RepairJob.FirstOrDefault(rj => rj.Id == 2);
+                
+                // Act
+                service.MapRepairJobValues(inputModel, entity);
+                
+                // Assert
+                Assert.Equal(666, entity.Cost);
+                Assert.Equal("test description", entity.Description);
+
+                context.Database.EnsureDeleted();
+
+            }
+        }
+
     }
 }

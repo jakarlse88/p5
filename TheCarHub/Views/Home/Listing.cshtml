@@ -1,9 +1,15 @@
 @using System.Globalization
 @model TheCarHub.Models.ViewModels.ListingViewModel
 
-@section PageHeading
+@section PageTitle
 {
-    <h1>@Model.Car.Make @Model.Car.Model @Model.Car.Trim</h1>
+    <section id="page-title" style="background-image: url('/media-static/car/hero-slider/3.jpg') !important;" class="page-title-parallax page-title-dark" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;" >
+
+        <div class="container clearfix">
+            <h1 class="text-center">@Model.Car.Make @Model.Car.Model @Model.Car.Trim</h1>
+        </div>
+
+    </section>
 }
 
 <section id="content" class="clearfix">
@@ -21,7 +27,16 @@
                     <div id="section-features" class="page-section">
 
                         <h3 class="mb-3 form-heading">Overview</h3>
-                        <p>@Model.Description</p>
+                        @{
+                            if (string.IsNullOrWhiteSpace(Model.Description))
+                            {
+                                <p>@Model.Description</p>
+                            }
+                            else
+                            {
+                                <p>This car is so fresh, we haven't had time to write a description yet! Be sure to check back soon (before someone else gets a chance to)!</p>
+                            }
+                        }
                         <div class="row clearfix">
                         </div>
                     </div>
@@ -32,12 +47,21 @@
                         <h3 class="mb-3 form-heading">Gallery</h3>
                         
                         <div id="lightgallery">
-                            @foreach (var item in Model.Media)
-                            {
-                                var mediaPath = "/media/" + item.FileName;
-                                    <a href="@mediaPath">
-                                        <img class="_img-thumbnail" src="@mediaPath" alt="Image"/>
-                                    </a>
+                            @{
+                                if (Model.Media.Any())
+                                {
+                                    foreach (var item in Model.Media)
+                                    {
+                                        var mediaPath = "/media/" + item.FileName;
+                                        <a href="@mediaPath">
+                                            <img class="_img-thumbnail" src="@mediaPath" alt="Image"/>
+                                        </a>
+                                    }        
+                                }
+                                else
+                                {
+                                    <p>Images are currently on their way!</p> 
+                                }
                             }
                         </div>
                     </div>

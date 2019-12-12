@@ -24,6 +24,11 @@ namespace TheCarHub.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IList<IFormFile> files)
         {
+            if (files == null || !files.Any())
+            {
+                return BadRequest();
+            }
+            
             var fileNames = await _mediaService.UploadFiles(files);
 
             if (fileNames == null || !fileNames.Any())
@@ -39,12 +44,20 @@ namespace TheCarHub.Areas.Admin.Controllers
         // POST: Media/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed([FromBody] string fileName)
+        public async Task<IActionResult> Delete([FromBody] string fileName)
         {
+            if (fileName == null)
+            {
+                return BadRequest();
+            }
+            
             var media = 
                 await _mediaService.GetMediaByFileNameAsync(fileName);
 
-            if (media == null) return NotFound();
+            if (media == null)
+            {
+                return NotFound();
+            }
             
             var removalSuccess = _mediaService.RemoveMediaObject(media);
 
@@ -54,7 +67,7 @@ namespace TheCarHub.Areas.Admin.Controllers
             }
             else
             {
-                return Problem();
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
