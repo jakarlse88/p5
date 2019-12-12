@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TheCarHub.Data;
-using TheCarHub.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories
 {
@@ -17,53 +16,65 @@ namespace TheCarHub.Repositories
             _context = context;
         }
 
-        public void DeleteListing(int id)
+        public void TrackListing(Listing listing)
         {
-            ListingEntity listing =
-                _context
-                .Listings
-                .FirstOrDefault(l => l.ListingId == id);
-            
             if (listing != null)
             {
-                _context.Listings.Remove(listing);
-                _context.SaveChanges();
+                _context.Add(listing);
             }
         }
 
-        public async Task<IList<ListingEntity>> GetAllListings()
+        public async Task<IList<Listing>> GetAllListings()
         {
-            var results = await _context.Listings.ToListAsync();
+            var results = 
+                await _context
+                    .Listing
+                    .Include(l => l.Car)
+                    .Include(l => l.Status)                    
+                    .Include(l => l.Media)
+                    .Include(l => l.RepairJob)
+                    .ToListAsync();
 
             return results;
         }
 
-        public async Task<ListingEntity> GetListingById(int id)
+        public EntityEntry<Listing> GetListingEntityEntry(Listing entity)
         {
-            ListingEntity result =
+            if (entity == null) return null;
+            
+            var entry = _context.Entry(entity);
+
+            return entry;
+        }
+
+        public async Task<Listing> GetListingById(int id)
+        {
+            var result =
                 await _context
-                    .Listings
-                    .FirstOrDefaultAsync(l => l.ListingId == id);
+                    .Listing
+                    .Include(l => l.Car)
+                    .Include(l => l.Status)
+                    .Include(l => l.Media)
+                    .Include(l => l.RepairJob)
+                    .SingleOrDefaultAsync(l => l.Id == id);
 
             return result;
         }
 
-        public void SaveListing(ListingEntity listing)
+        public void AddListing(Listing listing)
         {
-            if (listing != null)
-            {
-                _context.Listings.Add(listing);
-                _context.SaveChanges();
-            }
+            if (listing == null) return;
+            
+            _context.Listing.Add(listing);
+            _context.SaveChanges();
         }
 
-        public void UpdateListing(ListingEntity listing)
+        public void UpdateListing(Listing listing)
         {
-            if (listing != null)
-            {
-                _context.Listings.Update(listing);
-                _context.SaveChanges();
-            }
+            if (listing == null) return;
+            
+            _context.Listing.Update(listing);
+            _context.SaveChanges();
         }
     }
 }

@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TheCarHub.Data;
 
 namespace TheCarHub.Migrations
@@ -19,18 +18,12 @@ namespace TheCarHub.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TheCarHub.Models.CarItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Car", b =>
                 {
-                    b.Property<int>("CarId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ListingItemId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LotDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Make")
                         .HasColumnType("nvarchar(max)");
@@ -38,169 +31,85 @@ namespace TheCarHub.Migrations
                     b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PurchaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("RepairCost")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Repairs")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("SaleDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("SellingPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Trim")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VIN")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Year")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
-                    b.HasKey("CarId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ListingItemId")
-                        .IsUnique();
-
-                    b.ToTable("Cars");
+                    b.ToTable("Car");
 
                     b.HasData(
                         new
                         {
-                            CarId = 1,
-                            ListingItemId = 1,
-                            LotDate = new DateTime(2019, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 1,
                             Make = "Mazda",
                             Model = "Miata",
-                            PurchaseDate = new DateTime(2019, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PurchasePrice = 1800m,
-                            RepairCost = 7600m,
-                            Repairs = "Full restoration",
-                            SaleDate = new DateTime(2019, 4, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SellingPrice = 9900m,
                             Trim = "LE",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1991)
+                            Year = 1991
                         },
                         new
                         {
-                            CarId = 2,
-                            ListingItemId = 2,
-                            LotDate = new DateTime(2019, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 2,
                             Make = "Jeep",
                             Model = "Liberty",
-                            PurchaseDate = new DateTime(2019, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PurchasePrice = 4500m,
-                            RepairCost = 350m,
-                            Repairs = "Front wheel bearings",
-                            SellingPrice = 5350m,
                             Trim = "Sport",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2007)
+                            Year = 2007
                         },
                         new
                         {
-                            CarId = 3,
-                            ListingItemId = 3,
-                            LotDate = new DateTime(2019, 4, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 3,
                             Make = "Ford",
                             Model = "Explorer",
-                            PurchaseDate = new DateTime(2019, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PurchasePrice = 24350m,
-                            RepairCost = 1100m,
-                            Repairs = "Tyres, brakes",
-                            SellingPrice = 25950m,
                             Trim = "XLT",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2017)
+                            Year = 2017
                         },
                         new
                         {
-                            CarId = 4,
-                            ListingItemId = 4,
-                            LotDate = new DateTime(2019, 4, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 4,
                             Make = "Honda",
                             Model = "Civic",
-                            PurchaseDate = new DateTime(2019, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PurchasePrice = 4000m,
-                            RepairCost = 475m,
-                            Repairs = "Ac, brakes",
-                            SaleDate = new DateTime(2019, 4, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SellingPrice = 4975m,
                             Trim = "LX",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2008)
+                            Year = 2008
                         },
                         new
                         {
-                            CarId = 5,
-                            ListingItemId = 5,
-                            LotDate = new DateTime(2019, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 5,
                             Make = "Volkswagen",
                             Model = "GTI",
-                            PurchaseDate = new DateTime(2019, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PurchasePrice = 15250m,
-                            RepairCost = 440m,
-                            Repairs = "Tyres",
-                            SaleDate = new DateTime(2019, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SellingPrice = 16190m,
                             Trim = "S",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2016)
+                            Year = 2016
                         },
                         new
                         {
-                            CarId = 6,
-                            ListingItemId = 6,
-                            LotDate = new DateTime(2019, 4, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = 6,
                             Make = "Ford",
                             Model = "Edge",
-                            PurchaseDate = new DateTime(2019, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PurchasePrice = 10990m,
-                            RepairCost = 950m,
-                            Repairs = "Tyres, brakes, AC",
-                            SaleDate = new DateTime(2019, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SellingPrice = 12440m,
                             Trim = "SEL",
                             VIN = "",
-                            Year = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(2013)
+                            Year = 2013
                         });
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.ImageItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Listing", b =>
                 {
-                    b.Property<int>("ImageItemId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ImageLocation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ListingItemId")
+                    b.Property<int>("CarId")
                         .HasColumnType("int");
-
-                    b.HasKey("ImageItemId");
-
-                    b.HasIndex("ListingItemId");
-
-                    b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("TheCarHub.Models.ListingItem", b =>
-                {
-                    b.Property<int>("ListingItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -211,72 +120,320 @@ namespace TheCarHub.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ListingStatus")
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PurchasePrice")
+                        .HasColumnType("money");
+
+                    b.Property<DateTime?>("SaleDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("SellingPrice")
+                        .HasColumnType("money");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ListingItemId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Listings");
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Listing");
 
                     b.HasData(
                         new
                         {
-                            ListingItemId = 1,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 272, DateTimeKind.Local).AddTicks(4370),
-                            Description = "",
-                            ListingStatus = "Available"
+                            Id = 1,
+                            CarId = 1,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "one description",
+                            PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0m,
+                            SellingPrice = 0m,
+                            StatusId = 2
                         },
                         new
                         {
-                            ListingItemId = 2,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2010),
-                            Description = "",
-                            ListingStatus = "Available"
+                            Id = 2,
+                            CarId = 2,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "two description",
+                            PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0m,
+                            SellingPrice = 0m,
+                            StatusId = 2
                         },
                         new
                         {
-                            ListingItemId = 3,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2070),
-                            Description = "",
-                            ListingStatus = "Available"
+                            Id = 3,
+                            CarId = 3,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "three description",
+                            PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0m,
+                            SellingPrice = 0m,
+                            StatusId = 1
                         },
                         new
                         {
-                            ListingItemId = 4,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2080),
-                            Description = "",
-                            ListingStatus = "Available"
+                            Id = 4,
+                            CarId = 4,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "four description",
+                            PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0m,
+                            SellingPrice = 0m,
+                            StatusId = 1
                         },
                         new
                         {
-                            ListingItemId = 5,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2080),
-                            Description = "",
-                            ListingStatus = "Available"
+                            Id = 5,
+                            CarId = 5,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "five description",
+                            PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0m,
+                            SellingPrice = 0m,
+                            StatusId = 2
                         },
                         new
                         {
-                            ListingItemId = 6,
-                            DateCreated = new DateTime(2019, 10, 25, 14, 49, 6, 279, DateTimeKind.Local).AddTicks(2090),
-                            Description = "",
-                            ListingStatus = "Available"
+                            Id = 6,
+                            CarId = 6,
+                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "six description",
+                            PurchaseDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0m,
+                            SellingPrice = 0m,
+                            StatusId = 2
                         });
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.CarItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Media", b =>
                 {
-                    b.HasOne("TheCarHub.Models.ListingItem", "Listing")
-                        .WithOne("Car")
-                        .HasForeignKey("TheCarHub.Models.CarItem", "ListingItemId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ListingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListingId");
+
+                    b.ToTable("Media");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FileName = "file one",
+                            ListingId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FileName = "file two",
+                            ListingId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FileName = "file three",
+                            ListingId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FileName = "file four",
+                            ListingId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FileName = "file five",
+                            ListingId = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FileName = "file six",
+                            ListingId = 6
+                        });
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.RepairJob", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("money");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ListingId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("money");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListingId")
+                        .IsUnique();
+
+                    b.ToTable("RepairJob");
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Status");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Available"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Sold"
+                        });
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tag");
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
+                {
+                    b.Property<int>("ListingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ListingId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ListingTag");
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
+                {
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MediaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TagId", "MediaId");
+
+                    b.HasIndex("MediaId");
+
+                    b.ToTable("MediaTag");
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.Listing", b =>
+                {
+                    b.HasOne("TheCarHub.Models.Entities.Car", "Car")
+                        .WithMany("Listings")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TheCarHub.Models.Entities.Status", "Status")
+                        .WithMany("Listings")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TheCarHub.Models.ImageItem", b =>
+            modelBuilder.Entity("TheCarHub.Models.Entities.Media", b =>
                 {
-                    b.HasOne("TheCarHub.Models.ListingItem", "Listing")
-                        .WithMany("Images")
-                        .HasForeignKey("ListingItemId")
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithMany("Media")
+                        .HasForeignKey("ListingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.Entities.RepairJob", b =>
+                {
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithOne("RepairJob")
+                        .HasForeignKey("TheCarHub.Models.Entities.RepairJob", "ListingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.ListingTag", b =>
+                {
+                    b.HasOne("TheCarHub.Models.Entities.Listing", "Listing")
+                        .WithMany("Tags")
+                        .HasForeignKey("ListingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TheCarHub.Models.MediaTag", b =>
+                {
+                    b.HasOne("TheCarHub.Models.Entities.Media", "Media")
+                        .WithMany("Tags")
+                        .HasForeignKey("MediaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TheCarHub.Models.Entities.Tag", "Tag")
+                        .WithMany("Tags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

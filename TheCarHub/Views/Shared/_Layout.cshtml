@@ -1,49 +1,244 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TheCarHub</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="SemiColonWeb"/>
+
+    <!-- Stylesheets
+    ============================================= -->
+    <link href="http://fonts.googleapis.com/css?family=Mukta+Vaani:300,400,500,600,700|Open+Sans:300,400,600,700,800,900" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="~/css/car/bootstrap.css"/>
+    <link rel="stylesheet" href="~/css/car/style.css" type="text/css"/>
+    <link rel="stylesheet" href="~/css/car/dark.css" type="text/css"/>
+
+    <link rel="stylesheet" href="~/css/car/swiper.css" type="text/css"/>
+
+    <!-- Bootstrap Select CSS -->
+    <link rel="stylesheet" href="~/css/car/bs-select.css" type="text/css"/>
+
+    <!-- Bootstrap Switch CSS -->
+    <link rel="stylesheet" href="~/css/car/components/bs-switches.css" type="text/css"/>
+
+    <!-- car Specific Stylesheet -->
+    <link rel="stylesheet" href="~/css/car/car.css" type="text/css"/>
+    <link rel="stylesheet" href="~/css/car/car-icons/style.css" type="text/css"/>
+    <link rel="stylesheet" href="~/css/car/fonts.css" type="text/css"/>
+    <!-- / -->
+
+    <link rel="stylesheet" href="~/css/car/font-icons.css" type="text/css"/>
+    <link rel="stylesheet" href="~/css/car/animate.css" type="text/css"/>
+    <link rel="stylesheet" href="~/css/car/magnific-popup.css" type="text/css"/>
+
+    <link rel="stylesheet" href="~/css/car/responsive.css" type="text/css"/>
+    <link rel="stylesheet" href="~/css/car-layout.css" type="text/css"/>
+    
+    <link rel="stylesheet" href="~/lightgallery/css/lightgallery.css" type="text/css" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    @* <link rel="stylesheet" href="../../css/colors.php?color=c85e51" type="text/css" /> *@
+
+    <!-- Document Title
+    ============================================= -->
+    <title>The Car Hub</title>
+
+    <style>
+
+		.dropdown-toggle::after { margin-left: 0.255em; }
+
+	</style>
+    
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">THE CAR HUB</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+<body class="stretched side-push-panel" data-loader-html="<div><img src='media-static/car/page-loader.gif' alt='Loader'></div>">
+
+<!-- Side Panel Overlay -->
+<div class="body-overlay"></div>
+
+<!-- Side Panel -->
+<div id="side-panel">
+
+    <div id="side-panel-trigger-close" class="side-panel-trigger">
+        <a href="#">
+            <i class="icon-line-cross"></i>
+        </a>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2019 - TheCarHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="side-panel-wrap">
+
+        <div class="widget clearfix">
+
+            <a asp-controller="Home" asp-action="Index">
+                <img src="media-static/car/logo@2x.png" alt="Canvas Logo" height="50">
+            </a>
+
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+
+    </div>
+
+</div>
+
+<!-- Document Wrapper
+============================================= -->
+<div id="wrapper" class="clearfix">
+
+    <!-- Header
+    ============================================= -->
+    <header id="header" class="static-sticky full-header clearfix">
+
+        <div id="header-wrap">
+
+            <div class="container-fluid clearfix">
+
+                <div id="primary-menu-trigger">
+                    <i class="icon-reorder"></i>
+                </div>
+
+                <!-- Logo
+                ============================================= -->
+                <div id="logo">
+                    <a asp-controller="Home" asp-action="Index" class="standard-logo">
+                        <h2>The Car Hub</h2>
+                    </a>
+                    <a asp-controller="Home" asp-action="Index" class="retina-logo">
+                        <h2>The Car Hub</h2>
+                    </a>
+                </div>
+                <!-- #logo end -->
+
+                <!-- Primary Navigation
+                ============================================= -->
+                <nav id="primary-menu" class="with-arrows clearfix">
+                    <ul>
+                        <li>
+                            <a asp-controller="Home" asp-action="Index">
+                                <div>Home</div>
+                            </a>
+                        </li>
+                        <!-- Mega Menu -->
+                        <li>
+                            <a asp-controller="Contact" asp-action="Index">
+                                <div>Contact</div>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- #primary-menu end -->
+                
+            </div>
+
+        </div>
+
+        <div id="header-trigger">
+            <i class="icon-line-menu"></i><i class="icon-line-cross"></i>
+        </div>
+
+    </header>
+    <!-- #header end -->
+
+    <!-- Page Title
+    ============================================= -->
+    @* <section id="page-title" class="page-title-parallax page-title-dark" style="background-image: url('../../wwwroot/media-static/car/hero-slider/2.jpg'); background-size: cover; padding: 120px 0;" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;"> *@
+    @RenderSection("PageTitle", false);
+    <!-- #page-title end -->
+
+    <!-- Content
+    ============================================= -->
+    @RenderBody()
+
+    <!-- Footer
+    ============================================= -->
+    <footer id="footer" class="dark noborder" style="background-color: #080808;">
+
+        <div class="container-fluid clearfix">
+
+            <!-- Footer Widgets
+            ============================================= -->
+            <div class="footer-widgets-wrap clearfix" style="padding: 30px;">
+
+                <div class="row clearfix">
+                    <div class="col-lg-6">
+
+                        <div class="col_one_fourth">
+                            <div class="widget widget_links clearfix">
+                                <h4>Site</h4>
+                                <ul>
+                                    <li>
+                                        <a asp-controller="Home" asp-action="Index">Home</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Contact" asp-action="Index">Contact Us</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col_one_fourth">
+                            <div class="widget widget_links clearfix">
+                                <h4>Admin</h4>
+                                <ul>
+                                    <li>
+                                        <a asp-area="Admin" asp-controller="Home" asp-action="Index">Dashboard</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-5 fright tright col_last">
+
+                        <img src="~/media-static/car/logo-footer.png" alt="" height="50" style="margin-top:1em ">
+                        <br>
+                        <div style="color: #444">
+                            <span>Theme &copy; Canvas Automotive. All Rights Reserved.</span>
+                            <br/>
+                            <span>Made with ASP.NET Core MVC 3 by Jon Karlsen, 2019.</span>
+                            <div class="clear"></div>
+                            <p style="margin-top: 10px;">Objectively restore standards compliant opportunities whereas one-to-one collaboration and idea-sharing.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div><!-- .footer-widgets-wrap end -->
+
+        </div>
+
+    </footer><!-- #footer end -->
+
+</div><!-- #wrapper end -->
+
+<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="icon-angle-up"></div>
+
+<!-- External JavaScripts
+============================================= -->
+<script src="~/js/car/jquery.js"></script>
+<script src="~/js/car/plugins.js"></script>
+
+<!-- Bootstrap Select Plugin -->
+<script src="~/js/car/components/bs-select.js"></script>
+
+<!-- Bootstrap Switch Plugin -->
+<script src="~/js/car/components/bs-switches.js"></script>
+
+<!-- Footer Scripts
+============================================= -->
+<script src="~/js/car/functions.js"></script>
+
+<!-- Lightgallery 
+============================================= -->
+<script src="~/lightgallery/js/lightgallery.js"></script>
+
+
+<script>
+
+		jQuery(".bt-switch").bootstrapSwitch();
+
+	</script>
+
+@RenderSection("Scripts", required: false)
 </body>
 </html>

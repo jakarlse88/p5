@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TheCarHub.Models;
 using TheCarHub.Data;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories 
 {
@@ -17,53 +13,13 @@ namespace TheCarHub.Repositories
             _context = context;
         }
 
-        public async Task<IList<CarEntity>> GetAllCars()
+        public EntityEntry<Car> GetCarEntityEntry(Car entity)
         {
-            var results = await _context.Cars.ToListAsync();
+            if (entity == null) return null;
 
-            return results;
-        }
+            var entry = _context.Entry(entity);
 
-        public async Task<CarEntity> GetCarById(int id)
-        {
-            CarEntity result = 
-                await _context
-                    .Cars
-                    .FirstOrDefaultAsync(x => x.CarId == id);
-            
-            return result;
-        }
-
-        public void DeleteCar(int id)
-        {
-            CarEntity car = 
-                _context
-                .Cars
-                .FirstOrDefault(c => c.CarId == id);
-
-            if (car != null)
-            {
-                _context.Cars.Remove(car);
-                _context.SaveChanges();
-            }
-        }
-
-        public void UpdateCar(CarEntity car)
-        {
-            if (car != null)
-            {
-                _context.Cars.Update(car);
-                _context.SaveChanges();
-            }
-        }
-
-        public void SaveCar(CarEntity car)
-        {
-            if (car != null)
-            {
-                _context.Cars.Add(car);
-                _context.SaveChanges();
-            }
+            return entry;
         }
     }
 }

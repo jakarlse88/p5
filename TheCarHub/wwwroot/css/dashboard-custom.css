@@ -1,0 +1,32 @@
+.form-heading {
+    color: black;
+}
+
+.form-heading:after {
+    content: "";
+    display: block;
+    margin: 0 0 2.7em;
+    width: 30%;
+    padding-top: 20px;
+    border-bottom: 2px solid #16aaff;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+#saleDatePicker {
+    display: none;
+}
+
+#edit-media-list {
+    display: none;
+}

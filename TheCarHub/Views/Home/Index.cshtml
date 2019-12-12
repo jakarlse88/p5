@@ -1,8 +1,106 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@using System.Globalization
+@model IEnumerable<TheCarHub.Models.ViewModels.ListingViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section PageTitle
+{
+    <section id="page-title" style="background-image: url('media-static/car/bg.jpg') !important;" class="page-title-parallax page-title-dark" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;" >
+
+        <div class="container clearfix">
+            <h1>Listings</h1>
+        </div>
+
+    </section>
+}
+
+<section id="content" class="clearfix" style="overflow: visible">
+
+    <div class="content-wrap notoppadding">
+
+        <div class="container">
+
+            <div class="card p-4 shadow" style="top: -60px;">
+                @* <form action="#" method="post" class="nobottommargin"> *@
+                <form asp-action="Index" method="get" class="nobottommargin">
+                    <div class="row clearfix">
+                        <div class="col-md-6 col-sm-6 col-12 mt-4 mt-md-0">
+                            <label for="">All Makes</label>
+
+                            <select name="SearchString" class="selectpicker form-control customjs" title="Select Make" data-size="10" data-live-search="true" multiple data-live-search="true" style="width:100%;">
+                                @{
+                                    var makeList = Model.Select(i => i.Car.Make).Distinct().ToList();
+
+                                    <optgroup label="All Makes">
+                                        @foreach (var item in makeList)
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-12 mt-4 mt-md-0">
+
+                            <button type="Submit" class="button button-3d button-rounded btn-block noleftmargin" style="margin-top: 29px;">Search</button>
+
+
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-6">
+                            <a asp-action="Index">
+                                <button class="button button-red button-3d button-rounded btn-block noleftmargin" style="margin-top: 29px;">Reset</button>
+                            </a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+        <div class="section nomargin pt-0 nobg">
+            <div class="container clearfix">
+
+                <div class="clear"></div>
+
+                <!-- Portfolio Items
+                ============================================= -->
+                <div id="portfolio" class="portfolio portfolio-3 grid-container clearfix" data-layout="fitRows">
+                    @foreach (var item in Model)
+                    {
+                        <article class="portfolio-item cf-sedan col-4" style="padding-bottom: 40px">
+                            <div class="portfolio-image">
+
+                                <a asp-controller="Home" asp-action="Listing" asp-route-id="@item.Id">
+                                    @{
+                                        var filePath = item.Media.FirstOrDefault()?.FileName != null ?
+                                            "media/" + item.Media.FirstOrDefault().FileName
+                                            : "media-static/car/hero-slider/1.jpg";
+
+                                        <img style="height: 250px; width: 370px; object-fit: cover;" src="@filePath" alt="Image"/>
+                                    }
+
+                                    <div class="filter-p-pricing">
+                                        <span class="p-price t700 ls1">@item.SellingPrice.ToString("C0", new CultureInfo("en-US"))</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="portfolio-desc giveMeEllipsis">
+                                <h3>
+                                    <a a asp-controller="Home" asp-action="Listing" asp-route-id="@item.Id">@item.Car.Year.ToString() @item.Car.Make @item.Car.Model</a>
+                                </h3>
+                                <span class="giveMeEllipsis">@item.Description</span>
+                            </div>
+                        </article>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<!-- #content end -->

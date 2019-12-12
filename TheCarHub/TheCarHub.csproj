@@ -5,12 +5,16 @@
     <UserSecretsId>aspnet-TheCarHub-75A9E3C5-BAB6-47D7-BE02-57C46EB12D0E</UserSecretsId>
   </PropertyGroup>
 
-
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="FluentValidation" Version="8.5.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.1" />
+    <PackageReference Include="MailKit" Version="2.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
@@ -18,6 +22,125 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="7.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\media" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Car\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Car\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Car\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Car\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Car\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Listing\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Listing\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Listing\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Listing\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Listing\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Media\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Media\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Media\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Media\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Media\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\10.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\11.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\12.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\8.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media\avatars\9.jpg" />
+    <_ContentIncludedByDefault Remove="Views\__Admin\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\__Admin\Listing.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\1.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\2.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\3.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\4.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\10.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\11.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\12.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\6.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\7.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\8.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\9.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\10.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\11.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\12.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\6.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\7.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\8.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\911cars\thumbs\9.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\single\features.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\moving-car\car-tier.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\moving-car\car.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\logos\audi.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\filter-cars\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\filter-cars\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\filter-cars\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\filter-cars\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\filter-cars\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\filter-cars\6.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\filter-cars\7.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\dealers\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\dealers\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\dealers\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\dealers\car-interior.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\dealers\car-light.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\dealers\car-seat.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\dealers\car-wheel.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\engines\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\engines\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\engines\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\engines\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\engines\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\engines\6.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\footer.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\lights\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\lights\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\lights\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\lights\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\lights\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\music\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\music\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\music\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\music\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\page-title.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\seats\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\seats\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\seats\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\seats\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\wheels\1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\wheels\2.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\wheels\3.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\wheels\4.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\wheels\5.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\accessories\wheels\6.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\cabriolet.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\cuv.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\hatchback.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\micro.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\minivan.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\pickup.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\sedan.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\supercar.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\suv.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\truck.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\media-static\car\icons\van.svg" />
   </ItemGroup>
 
 </Project>

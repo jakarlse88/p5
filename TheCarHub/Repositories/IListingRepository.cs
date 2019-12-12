@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TheCarHub.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories
 {
     public interface IListingRepository
     {
-        void UpdateListing(ListingEntity listing);
-        void SaveListing(ListingEntity listing);
-        void DeleteListing(int id);
-        Task<ListingEntity> GetListingById(int id);
-        Task<IList<ListingEntity>> GetAllListings();
+        void UpdateListing(Listing listing);
+        void AddListing(Listing listing);
+        void TrackListing(Listing listing);
+        Task<Listing> GetListingById(int id);
+        Task<IList<Listing>> GetAllListings();
+        EntityEntry<Listing> GetListingEntityEntry(Listing entity);
     }
 }

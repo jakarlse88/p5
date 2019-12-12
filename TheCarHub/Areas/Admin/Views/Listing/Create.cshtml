@@ -1,0 +1,173 @@
+@using TheCarHub.Utilities
+@model TheCarHub.Models.InputModels.ListingInputModel
+
+@{
+    ViewData["Title"] = "Create Listing";
+}
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-car icon-gradient bg-mean-fruit">
+                    </i>
+                </div>
+                <div>
+                    Create Listing
+                </div>
+            </div>
+            <div class="page-title-actions">
+                <a asp-area="Admin" asp-controller="Home" asp-action="Index">
+                    <button type="button" class="btn-shadow btn btn-info">
+                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="fas fa-home fa-w-20"></i>
+                        </span>
+                        Home
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto">
+        <form asp-action="Create" enctype="multipart/form-data" method="POST" id="create-listing-form" novalidate>
+            <div class="form-row">
+                <div class="col-6">
+                    <h4 class="form-heading">Car Information</h4>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <!-- CAR INFORMATION -->
+                    <div class="form-row">
+                        <div class="form-group col-7">
+                            <label asp-for="Car.VIN" class="control-label">VIN</label>
+                            <input asp-for="Car.VIN" class="form-control"/>
+                            <span asp-validation-for="Car.VIN" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-3">
+                            <label asp-for="Car.Year">Year</label>
+                            @{
+                                var yearSelectList = new SelectList(ListingControllerUtilities.PopulateCarYearSelect(), "Value", "Text");
+                                <select asp-for="Car.Year" class="form-control" asp-items="yearSelectList"></select>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-5">
+                            <label asp-for="Car.Make" class="control-label"></label>
+                            <input asp-for="Car.Make" class="form-control"/>
+                            <span asp-validation-for="Car.Make" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-5">
+                            <label asp-for="Car.Model" class="control-label"></label>
+                            <input asp-for="Car.Model" class="form-control"/>
+                            <span asp-validation-for="Car.Model" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-5">
+                            <label asp-for="Car.Trim" class="control-label"></label>
+                            <input asp-for="Car.Trim" class="form-control"/>
+                            <span asp-validation-for="Car.Trim" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-5">
+                            <label asp-for="PurchaseDate" class="control-label">Purchase Date</label>
+                            <input asp-for="PurchaseDate" class="form-control" type="date" value="2019-01-01" min="2019-01-01">
+                            <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-5">
+                            <label asp-for="PurchasePrice">Purchase Price</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">$</div>
+                                </div>
+                                <input asp-for="PurchasePrice" class="form-control __purchase-price" asp-format="{0:C}" type="number" value="0"/>
+                                <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- REPAIRJOB INFORMATION -->
+                <div class="col-6">
+                    <h4 class="form-heading">Repair Information</h4>
+                    <div class="form-row">
+                        <div class="form-group col-10">
+                            <label asp-for="RepairJob.Description" class="control-label">Description</label>
+                            <input asp-for="RepairJob.Description" class="form-control"/>
+                            <span asp-validation-for="RepairJob.Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-5">
+                            <label asp-for="RepairJob.Cost">Repair cost</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">$</div>
+                                </div>
+                                <input asp-for="RepairJob.Cost" class="form-control __repair-cost __numerical-input" asp-format="{0:C}" type="number" value="0"/>
+                                <span asp-validation-for="RepairJob.Cost" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--GENERAL INFORMATION -->
+            <div class="form-row">
+                <div class="col-12">
+                    <h4 class="form-heading mt-3">General Listing Information</h4>
+                    <div class="form-row">
+                        <div class="form-group col-7">
+                            <label asp-for="Title" class="control-label">Listing Title</label>
+                            <input asp-for="Title" class="form-control"/>
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-4">
+                            <label asp-for="SellingPrice">Selling price</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">$</div>
+                                </div>
+                                <input asp-for="SellingPrice" class="form-control __selling-price __numerical-input" asp-format="{0:C}" type="number" value="0" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-11">
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3" cols="50"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEDIA UPLOAD -->
+            <div id="drag-drop-area" asp-for="Files"></div>
+
+            <div class="img-select-hidden" hidden></div>
+
+            <div class="form-row">
+                <div class="form-group mx-auto">
+                    <button type="submit" class="btn btn-success btn-lg mt-4"><i class="fas fa-check"></i> Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script src="~/js/listing-common.js"></script>
+}

@@ -1,0 +1,109 @@
+@using System.Globalization
+@model TheCarHub.Models.ViewModels.ListingViewModel
+
+@section PageTitle
+{
+    <section id="page-title" style="background-image: url('/media-static/car/hero-slider/3.jpg') !important;" class="page-title-parallax page-title-dark" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;" >
+
+        <div class="container clearfix">
+            <h1 class="text-center">@Model.Car.Make @Model.Car.Model @Model.Car.Trim</h1>
+        </div>
+
+    </section>
+}
+
+<section id="content" class="clearfix">
+
+    <div class="content-wrap pt-5">
+
+        <div class="container">
+
+            <div class="row">
+                <!-- Posts -->
+                <div class="col-md-8">
+
+                    <!-- Page Section - features
+                    ============================================= -->
+                    <div id="section-features" class="page-section">
+
+                        <h3 class="mb-3 form-heading">Overview</h3>
+                        @{
+                            if (string.IsNullOrWhiteSpace(Model.Description))
+                            {
+                                <p>@Model.Description</p>
+                            }
+                            else
+                            {
+                                <p>This car is so fresh, we haven't had time to write a description yet! Be sure to check back soon (before someone else gets a chance to)!</p>
+                            }
+                        }
+                        <div class="row clearfix">
+                        </div>
+                    </div>
+
+                    <!-- Page Section - gallery
+                    ============================================= -->
+                    <div id="section-gallery" class="page-section my-5">
+                        <h3 class="mb-3 form-heading">Gallery</h3>
+                        
+                        <div id="lightgallery">
+                            @{
+                                if (Model.Media.Any())
+                                {
+                                    foreach (var item in Model.Media)
+                                    {
+                                        var mediaPath = "/media/" + item.FileName;
+                                        <a href="@mediaPath">
+                                            <img class="_img-thumbnail" src="@mediaPath" alt="Image"/>
+                                        </a>
+                                    }        
+                                }
+                                else
+                                {
+                                    <p>Images are currently on their way!</p> 
+                                }
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sidebar  
+                ============================================= -->
+                <div class="col-md-4">
+                    <div class="mb-4">
+                        <h2 class="mb-0 h1 t600 ls0">
+                            @Model.SellingPrice.ToString("C0", new CultureInfo("en-US"))
+                        </h2>
+                    </div>
+                    
+                    <div class="clear"></div>
+                    
+                    <mb-2>
+                        <small class="text-grey">Listing created:</small>
+                        <p>@Model.DateCreated.ToString("dd MMMM yyy")</p>
+                    </mb-2>
+                    
+                      @if (Model.DateLastUpdated != null)
+                      {
+                          <mb-2>
+                              <small class="text-grey">Listing last updated:</small>
+                              <p>@Model.DateLastUpdated.Value.ToString("dd MMMM yyy")</p>
+                          </mb-2>
+                      }
+                </div>
+                <!-- Sidebar end -->
+
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- #content end -->
+
+@section Scripts
+{
+    <script>
+        lightGallery(document.getElementById("lightgallery"));
+    </script>
+}

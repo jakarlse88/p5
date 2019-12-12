@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TheCarHub.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using TheCarHub.Models.Entities;
 
 namespace TheCarHub.Repositories
 {
     public interface ICarRepository
     {
-        void UpdateCar(CarEntity car);
-        void SaveCar(CarEntity car);
-        void DeleteCar(int id);
-        Task<CarEntity> GetCarById(int id);
-        Task<IList<CarEntity>> GetAllCars();
+        EntityEntry<Car> GetCarEntityEntry(Car car);
     }
 }

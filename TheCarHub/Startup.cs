@@ -1,18 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using TheCarHub.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TheCarHub.Repositories;
+using AutoMapper;
+using FluentValidation.AspNetCore;
+using TheCarHub.Models.Validators;
+using TheCarHub.Services;
+using TheCarHub.Utilities;
 
 namespace TheCarHub
 {
@@ -23,27 +23,63 @@ namespace TheCarHub
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ICarRepository, CarRepository>();
+            services.AddSingleton<IConfiguration>(Configuration);
 
+            services.AddSingleton<IFileUtility, FileUtility>();
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("AppReferential")));
+                
+                services.AddDbContext<AppIdentityDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("AppIdentity"))
+                );
+                
+                services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
+                services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
+            }
+            
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AppReferential"))
-            );
-
+                options.UseSqlServer(Configuration.GetConnectionString("AppReferentialLocal")));
+                
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AppIdentity"))
+                options.UseSqlServer(Configuration.GetConnectionString("AppIdentityLocal"))
             );
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppIdentityDbContext>();
                 
-            services.AddControllersWithViews();
+            services.AddTransient<ICarRepository, CarRepository>();
+            services.AddTransient<IListingRepository, ListingRepository>();
+            services.AddTransient<IMediaRepository, MediaRepository>();
+            services.AddTransient<IStatusRepository, StatusRepository>();
+            services.AddTransient<IRepairJobRepository, RepairJobRepository>();
+            
+            services.AddScoped<ICarService, CarService>();
+            services.AddScoped<IListingService, ListingService>();
+            services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IStatusService, StatusService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IRepairJobService, RepairJobService>();
 
-           services.AddRazorPages();
+            services.AddControllersWithViews()
+                .AddFluentValidation(fv =>
+                    {
+                        fv.RegisterValidatorsFromAssemblyContaining<ListingInputModelValidator>();
+                        fv.ImplicitlyValidateChildProperties = true;
+                        fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    }
+                );
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,9 +93,12 @@ namespace TheCarHub
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // The default HSTS value is 30 days. You may want to change this 
+                // for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -71,13 +110,19 @@ namespace TheCarHub
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                    "admin",
+                    "Admin",
+                    "Admin/{controller=Home}/{action=Index}/{id?}");
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                
                 endpoints.MapRazorPages();
             });
 
-            // IdentitySeedData.EnsurePopulated(app);
+            
         }
     }
 }
