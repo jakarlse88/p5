@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +27,7 @@ namespace TheCarHub.Data
                 PhoneNumberConfirmed = false
             };
 
-            PasswordHasher<IdentityUser> ph = new PasswordHasher<IdentityUser>();
+            var ph = new PasswordHasher<IdentityUser>();
             adminUser.PasswordHash = ph.HashPassword(adminUser, "P@ssword123");
 
             builder

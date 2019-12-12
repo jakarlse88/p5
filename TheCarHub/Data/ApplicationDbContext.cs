@@ -19,6 +19,7 @@ namespace TheCarHub.Data
         public DbSet<Listing> Listing { get; set; }
         public DbSet<Media> Media { get; set; }
         public DbSet<Status> Status { get; set; }
+        public DbSet<RepairJob> RepairJob { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -95,7 +96,7 @@ namespace TheCarHub.Data
                     {
                         Id = 5,
                         VIN = "",
-                        Year = 2016,
+                        Year = 2016, 
                         Make = "Volkswagen",
                         Model = "GTI",
                         Trim = "S",
