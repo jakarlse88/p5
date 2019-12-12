@@ -5,10 +5,6 @@
     <UserSecretsId>aspnet-TheCarHub-75A9E3C5-BAB6-47D7-BE02-57C46EB12D0E</UserSecretsId>
   </PropertyGroup>
 
-  <Target Name="Create Migrations Script" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
-    <Exec Command="dotnet ef migrations script --configuration $(Configuration) --no-build --idempotent --output $(TargetDir)/migrations.sql"/>
-  </Target>
-
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
