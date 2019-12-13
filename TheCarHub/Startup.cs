@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -97,6 +98,11 @@ namespace TheCarHub
                 // for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseDefaultFiles(new DefaultFilesOptions()
+            {
+                DefaultFileNames = new List<string> { "Index.html" } 
+            });
 
             app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
             
