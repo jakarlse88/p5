@@ -48,7 +48,7 @@ namespace TheCarHub.Utilities
                 _fileSystem.Path.GetExtension(file.FileName);
 
             var path =
-                _fileSystem.Path.Combine(webHostEnvironment.ContentRootPath,
+                _fileSystem.Path.Combine(webHostEnvironment.WebRootPath,
                     configuration["Media:Directory"], $"{fileName}");
 
             await using (var stream = _fileSystem.File.Create(path))

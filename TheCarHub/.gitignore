@@ -1,4 +1,6 @@
-wwwroot/media/
+wwwroot/media/**
+!wwwroot/media/**/
+!wwwroot/media/.gitkeep
 
 *.swp
 *.*~
@@ -39,4 +41,4 @@ msbuild.wrn
 .vs/
 
 # Images
-wwwroot/media/**/*
+# wwwroot/media/**/*

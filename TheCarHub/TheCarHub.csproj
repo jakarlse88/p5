@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\media" />
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Car\Create.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Car\Delete.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Car\Details.cshtml" />
