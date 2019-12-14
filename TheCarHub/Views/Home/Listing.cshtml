@@ -6,7 +6,7 @@
     <section id="page-title" style="background-image: url('/media-static/car/hero-slider/3.jpg') !important;" class="page-title-parallax page-title-dark" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;" >
 
         <div class="container clearfix">
-            <h1 class="text-center">@Model.Car.Make @Model.Car.Model @Model.Car.Trim</h1>
+            <h1 class="text-center">@Model.Car.Year.ToString() @Model.Car.Make @Model.Car.Model @Model.Car.Trim</h1>
         </div>
 
     </section>
@@ -28,7 +28,7 @@
 
                         <h3 class="mb-3 form-heading">Overview</h3>
                         @{
-                            if (string.IsNullOrWhiteSpace(Model.Description))
+                            if (Model.Description != null)
                             {
                                 <p>@Model.Description</p>
                             }
@@ -52,9 +52,9 @@
                                 {
                                     foreach (var item in Model.Media)
                                     {
-                                        var mediaPath = "/media/" + item.FileName;
+                                        var mediaPath = "https://csb05a6c77618cex4803xb98.blob.core.windows.net/carhub-media/" + item.FileName;
                                         <a href="@mediaPath">
-                                            <img class="_img-thumbnail" src="@mediaPath" alt="Image"/>
+                                            <img class="_img-thumbnail mb-1" src="@mediaPath" alt="Image"/>
                                         </a>
                                     }        
                                 }

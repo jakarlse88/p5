@@ -1,4 +1,5 @@
 @using System.Globalization
+@using Microsoft.EntityFrameworkCore.Internal
 @model IEnumerable<TheCarHub.Models.ViewModels.ListingViewModel>
 
 @{
@@ -76,9 +77,21 @@
 
                                 <a asp-controller="Home" asp-action="Listing" asp-route-id="@item.Id">
                                     @{
-                                        var filePath = item.Media.FirstOrDefault()?.FileName != null ?
-                                            "media/" + item.Media.FirstOrDefault().FileName
-                                            : "media-static/car/hero-slider/1.jpg";
+                                        string filePath;
+                                        
+                                        if (item.Media.Any())
+                                        {
+                                            filePath = item.Media.FirstOrDefault()?.FileName != null ?
+                                                "https://csb05a6c77618cex4803xb98.blob.core.windows.net/carhub-media/" + item.Media.FirstOrDefault().FileName :
+                                                "media-static/car/hero-slider/1.jpg";
+                                        }
+                                        else
+                                        {
+                                            filePath = "media-static/car/hero-slider/1.jpg";
+                                        }
+//                                        var filePath = item.Media.FirstOrDefault()?.FileName != null ?
+//                                            "https://csb05a6c77618cex4803xb98.blob.core.windows.net/carhub-media/" + item.Media.FirstOrDefault().FileName
+//                                            : "media-static/car/hero-slider/1.jpg";
 
                                         <img style="height: 250px; width: 370px; object-fit: cover;" src="@filePath" alt="Image"/>
                                     }
@@ -99,7 +112,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 </section>
