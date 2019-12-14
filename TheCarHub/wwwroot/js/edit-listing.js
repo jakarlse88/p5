@@ -28,7 +28,7 @@ $(document).ready(() => {
                 })
             });
 
-            fetch('/media/' + $(this).text())
+            fetch("https://csb05a6c77618cex4803xb98.blob.core.windows.net/carhub-media/" + $(this).text())
                 .then(res => res.blob())
                 .then(blob => {
                     uppy.addFile({

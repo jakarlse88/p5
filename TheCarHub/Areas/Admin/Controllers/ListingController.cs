@@ -87,7 +87,7 @@ namespace TheCarHub.Areas.Admin.Controllers
 
                 if (editSuccess)
                 {
-                    return RedirectToAction(nameof(Index), "Home");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 TempData["EditError"] =

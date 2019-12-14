@@ -130,6 +130,9 @@ namespace TheCarHub.Services
                 _repairJobService.MapRepairJobValues(inputModel.RepairJob, listing.RepairJob);
                 _mediaService.UpdateMediaCollection(inputModel.ImgNames, listing);
 
+                listing.DateCreated = DateTime.Today;
+                listing.DateLastUpdated = DateTime.Today;
+                
                 _listingRepository.AddListing(listing);
             }
         }
@@ -150,6 +153,8 @@ namespace TheCarHub.Services
                 _carService.MapCarValues(source.Car, entity.Car);
                 _repairJobService.MapRepairJobValues(source.RepairJob, entity.RepairJob);
                 _mediaService.UpdateMediaCollection(source.ImgNames, entity);
+                
+                entity.DateLastUpdated = DateTime.Today;
                 
                 _listingRepository.UpdateListing(entity);
 

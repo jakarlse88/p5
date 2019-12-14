@@ -42,7 +42,7 @@ namespace TheCarHub
                     options.UseSqlServer(Configuration.GetConnectionString("AppIdentity"))
                 );
                 
-                services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
+//                services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
 //                services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
             }
             
@@ -86,6 +86,8 @@ namespace TheCarHub
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            UpdateDatabase(app);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -127,8 +129,29 @@ namespace TheCarHub
                 
                 endpoints.MapRazorPages();
             });
-
+        }
+        
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
             
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<AppIdentityDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

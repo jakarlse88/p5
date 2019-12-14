@@ -29,7 +29,8 @@ namespace TheCarHub.Areas.Admin.Controllers
                 return BadRequest();
             }
             
-            var fileNames = await _mediaService.UploadFiles(files);
+//            var fileNames = await _mediaService.UploadFiles(files);
+            var fileNames = await _mediaService.UploadFileAzureBlobAsync(files);
 
             if (fileNames == null || !fileNames.Any())
             {
@@ -59,7 +60,7 @@ namespace TheCarHub.Areas.Admin.Controllers
                 return NotFound();
             }
             
-            var removalSuccess = _mediaService.RemoveMediaObject(media);
+            var removalSuccess = await _mediaService.RemoveAzureBlobMediaObjectAsync(media);
 
             if (removalSuccess)
             {

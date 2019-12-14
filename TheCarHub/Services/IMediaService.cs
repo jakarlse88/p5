@@ -9,7 +9,9 @@ namespace TheCarHub.Services
     {
         Task<Media> GetMediaByFileNameAsync(string fileName);
         bool RemoveMediaObject(Media media);
+        Task<bool> RemoveAzureBlobMediaObjectAsync(Media media);
         void UpdateMediaCollection(IEnumerable<string> fileNames, Listing entity);
         Task<List<string>> UploadFiles(IList<IFormFile> files);
+        Task<List<string>> UploadFileAzureBlobAsync(IList<IFormFile> files);
     }
 }
