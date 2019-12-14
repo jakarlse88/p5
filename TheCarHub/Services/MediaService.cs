@@ -226,8 +226,8 @@ namespace TheCarHub.Services
         private CloudBlobContainer GetAzureCloudBlobContainerReference(string containerName)
         {
             var credentials = new StorageCredentials(
-                "csb05a6c77618cex4803xb98",
-                "xlhGlMJLGMRcGgb/QpgMmPJKzdF2MGR8aZCxNkyR2SKvuwooIg/1xTKnp7UeNIGrFsfg0kC+ZLl5gZZKKkgyMA==");
+                _configuration["AZURE_BLOB_ACC_NAME"],
+                _configuration["AZURE_BLOB_KEY_VAL"]);
 
             var account = new CloudStorageAccount(credentials, true);
 
