@@ -1,6 +1,6 @@
 # The Car Hub
 
-[![Build Status](https://dev.azure.com/jakarlse88/MyProject/_apis/build/status/thecarhub%20-%20CI?branchName=master)](https://dev.azure.com/jakarlse88/MyProject/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/jakarlse88/The%20Car%20Hub/_apis/build/status/thecarhub%20-%20CI?branchName=master)](https://dev.azure.com/jakarlse88/The%20Car%20Hub/_build/latest?definitionId=1&branchName=master)
 
 Student project for OpenClassrooms .NET Back-End Developer Path, built with .NET Core MVC 3.0. 
 
