@@ -87,3 +87,19 @@ Slider-text
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3; /* number of lines to show */
 }
+
+/*--------------------
+Slider-text
+--------------------*/
+.preloader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vw;
+    z-index: 9999;
+    background-repeat: no-repeat;
+    background-color: #E6E6E6;
+    background-position: 50% 25vh;
+    background-size: 400px 300px;
+}
