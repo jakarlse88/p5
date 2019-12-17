@@ -60,14 +60,14 @@ namespace TheCarHub.Test
 
                 var service = new MediaService(repository, null, null, null);
 
-                result = await service.GetMediaByFileNameAsync("file one");
+                result = await service.GetMediaByFileNameAsync("jeep_liberty_2.jpg");
             }
 
             // Assert
             await using (var context = new ApplicationDbContext(options))
             {
                 Assert.NotNull(result);
-                Assert.Equal("file one", result.FileName);
+                Assert.Equal("jeep_liberty_2.jpg", result.FileName);
 
                 context.Database.EnsureDeleted();
             }

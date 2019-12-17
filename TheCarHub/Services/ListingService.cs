@@ -65,18 +65,22 @@ namespace TheCarHub.Services
 
             if (!string.IsNullOrEmpty(query))
             {
-                filteredListings = listings.Where(m => m.Status.Id == status && m.Car.Make.Contains(query));
+                filteredListings = listings
+                    .Where(m => m.Status.Id == status && 
+                         m.Car.Make.ToLower() == query.ToLower());
             }
             else
             {
-                filteredListings = listings.Where(m => m.Status.Id == status);
+                return new List<ListingViewModel>();
             }
 
             var enumeratedListings = filteredListings.ToList();
             
             if (enumeratedListings.Any())
             {
-                var viewModels = _mapper.Map<List<Listing>, List<ListingViewModel>>(enumeratedListings.ToList());
+                var viewModels = 
+                    _mapper.Map<List<Listing>, List<ListingViewModel>>
+                        (enumeratedListings.ToList());
                 
                 return viewModels;
             }

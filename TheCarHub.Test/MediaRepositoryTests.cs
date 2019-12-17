@@ -41,7 +41,7 @@ namespace TheCarHub.Test
             }
 
             // Assert
-            Assert.Equal(6, result.ToList().Count);
+            Assert.Equal(15, result.ToList().Count);
         }
 
 
@@ -79,7 +79,7 @@ namespace TheCarHub.Test
 
         [Theory]
         [InlineData(0)]
-        [InlineData(7)]
+        [InlineData(666)]
         [InlineData(-1)]
         public void TestDeleteMediaNull(int testId)
         {
@@ -135,7 +135,7 @@ namespace TheCarHub.Test
                 var result = context.Media.ToList();
 
                 Assert.Contains(result, m => m.FileName == "test file");
-                Assert.Equal(7, result.Count);
+                Assert.Equal(15, result.Count);
                 
                 context.Database.EnsureDeleted();
             }
@@ -164,7 +164,7 @@ namespace TheCarHub.Test
             {
                 var result = context.Media.ToList();
 
-                Assert.Equal(6, result.Count);
+                Assert.Equal(15, result.Count);
 
                 context.Database.EnsureDeleted();
             }

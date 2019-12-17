@@ -83,11 +83,13 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
 
-                SeedRepairJobData(context);
+//                SeedRepairJobData(context);
 
                 var repository = new RepairJobRepository(context);
 
-                var testEntity = context.RepairJob.FirstOrDefault();
+                var testEntity =
+                    context.RepairJob.FirstOrDefault(
+                        rj => rj.Id == 1);
 
                 // Act
                 result = repository.GetRepairJobEntityEntry(testEntity);

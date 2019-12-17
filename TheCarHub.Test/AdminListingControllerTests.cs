@@ -223,13 +223,20 @@ namespace TheCarHub.Test
                 .Verifiable();
             
             var controller = new ListingController(mockService.Object);
-            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
+            controller.TempData = 
+                new TempDataDictionary(
+                    new DefaultHttpContext(),
+                    Mock.Of<ITempDataProvider>());
 
             // Act
-            var result = await controller.Edit(1, new ListingInputModel {Id = 1, Description = "test"});
+            var result = 
+                await controller.Edit(
+                    1,
+                    new ListingInputModel {Id = 1, Description = "test"});
             
             // Assert
-            var redirectResult = Assert.IsAssignableFrom<RedirectToActionResult>(result);
+            var redirectResult = 
+                Assert.IsAssignableFrom<RedirectToActionResult>(result);
             Assert.Equal("Home", redirectResult.ControllerName);
             Assert.Equal("Index", redirectResult.ActionName);
             

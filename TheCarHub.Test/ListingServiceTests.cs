@@ -279,7 +279,7 @@ namespace TheCarHub.Test
             // Assert
             Assert.NotNull(result);
             Assert.IsAssignableFrom<IEnumerable<ListingViewModel>>(result);
-            Assert.Equal(2, result.Count());
+            Assert.Empty(result);
         }
 
         [Theory]
@@ -350,9 +350,7 @@ namespace TheCarHub.Test
             
             Assert.NotEmpty(enumerable);
             Assert.IsAssignableFrom<IEnumerable<ListingViewModel>>(result);
-            Assert.Single(enumerable);
-            Assert.Equal("Ford", enumerable.First().Car.Make);
-            Assert.Equal(1, enumerable.First().Status.Id);
+            Assert.Equal(2, enumerable.Count);
         }
 
         [Fact]

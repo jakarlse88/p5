@@ -123,7 +123,7 @@ namespace TheCarHub.Test
             {
                 context.Database.EnsureCreated();
                 
-                SeedRepairJobData(context);
+//                SeedRepairJobData(context);
                 
                 var repository = new RepairJobRepository(context);
                 
