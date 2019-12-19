@@ -23,8 +23,8 @@ namespace TheCarHub.Models.Validators
                 .WithMessage("Listing title cannot exceed 75 characters");
 
             RuleFor(l => l.Description)
-                .MaximumLength(1000)
-                .WithMessage("Description cannot exceed 1000 characters.");
+                .MaximumLength(5000)
+                .WithMessage("Description cannot exceed 5000 characters.");
 
             RuleFor(l => l.PurchasePrice)
                 .GreaterThan(0m)

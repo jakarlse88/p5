@@ -50,7 +50,7 @@ namespace TheCarHub.Test
             // Arrange
             var testString = "";
 
-            for (int i = 0; i <= 1001; i++)
+            for (int i = 0; i <= 5001; i++)
             {
                 testString += 'a';
             }
@@ -58,7 +58,7 @@ namespace TheCarHub.Test
             // Assert
             _validator
                 .ShouldHaveValidationErrorFor(model => model.Description, testString)
-                .WithErrorMessage("Description cannot exceed 1000 characters.");
+                .WithErrorMessage("Description cannot exceed 5000 characters.");
         }
 
         [Fact]
