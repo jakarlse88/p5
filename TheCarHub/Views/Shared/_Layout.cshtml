@@ -37,8 +37,6 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    @* <link rel="stylesheet" href="../../css/colors.php?color=c85e51" type="text/css" /> *@
-
     <!-- Document Title
     ============================================= -->
     <title>The Car Hub</title>
@@ -51,7 +49,15 @@
     
 </head>
 
-<body class="stretched side-push-panel" data-loader-html="<div><img src='media-static/car/page-loader.gif' alt='Loader'></div>">
+<body class="stretched side-push-panel">
+
+<!-- Preloader 
+============================================= -->
+@RenderSection("Preloader", false)
+@section Preloader
+{
+    <div class="preloader" style="background-image: url(/media-static/car/page-loader.gif)"></div>
+}
 
 <!-- Side Panel Overlay -->
 <div class="body-overlay"></div>
@@ -69,7 +75,7 @@
 
         <div class="widget clearfix">
 
-            <a asp-controller="Home" asp-action="Index">
+            <a asp-controller="FrontPage" asp-action="Index">
                 <img src="media-static/car/logo@2x.png" alt="Canvas Logo" height="50">
             </a>
 
@@ -98,10 +104,10 @@
                 <!-- Logo
                 ============================================= -->
                 <div id="logo">
-                    <a asp-controller="Home" asp-action="Index" class="standard-logo">
+                    <a asp-controller="FrontPage" asp-action="Index" class="standard-logo">
                         <h2>The Car Hub</h2>
                     </a>
-                    <a asp-controller="Home" asp-action="Index" class="retina-logo">
+                    <a asp-controller="FrontPage" asp-action="Index" class="retina-logo">
                         <h2>The Car Hub</h2>
                     </a>
                 </div>
@@ -112,7 +118,7 @@
                 <nav id="primary-menu" class="with-arrows clearfix">
                     <ul>
                         <li>
-                            <a asp-controller="Home" asp-action="Index">
+                            <a asp-controller="FrontPage" asp-action="Index">
                                 <div>Home</div>
                             </a>
                         </li>
@@ -125,7 +131,7 @@
                     </ul>
                 </nav>
                 <!-- #primary-menu end -->
-                
+
             </div>
 
         </div>
@@ -139,13 +145,17 @@
 
     <!-- Page Title
     ============================================= -->
-    @* <section id="page-title" class="page-title-parallax page-title-dark" style="background-image: url('../../wwwroot/media-static/car/hero-slider/2.jpg'); background-size: cover; padding: 120px 0;" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;"> *@
-    @RenderSection("PageTitle", false);
-    <!-- #page-title end -->
+    @RenderSection("PageTitle", false)
 
     <!-- Content
     ============================================= -->
     @RenderBody()
+    
+    <!-- Call us
+    ============================================= -->
+    <div class="container-fluid clearfix bg-light pb-1 pt-3" style="margin-bottom: -1em;">
+        <p class="text-center lead">Questions? Call us today at <strong>(123) 456-7890!</strong></p>
+    </div>
 
     <!-- Footer
     ============================================= -->
@@ -165,7 +175,7 @@
                                 <h4>Site</h4>
                                 <ul>
                                     <li>
-                                        <a asp-controller="Home" asp-action="Index">Home</a>
+                                        <a asp-controller="FrontPage" asp-action="Index">Home</a>
                                     </li>
                                     <li>
                                         <a asp-controller="Contact" asp-action="Index">Contact Us</a>
@@ -231,12 +241,11 @@
 ============================================= -->
 <script src="~/lightgallery/js/lightgallery.js"></script>
 
+<!-- Preloader 
+============================================= -->
+<script src="~/js/preloader.js"></script>
 
-<script>
-
-		jQuery(".bt-switch").bootstrapSwitch();
-
-	</script>
+@* <script>jQuery(".bt-switch").bootstrapSwitch();</script> *@
 
 @RenderSection("Scripts", required: false)
 </body>

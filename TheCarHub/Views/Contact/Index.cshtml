@@ -4,90 +4,96 @@
     ViewData["Title"] = "Contact us!";
 }
 
-@section PageTitle
+@section Preloader
 {
-    <section id="page-title" style="background-image: url('media-static/car/contact.jpg') !important;" class="page-title-parallax page-title-dark" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;" >
-
-        <div class="container clearfix">
-            <h1 style="color: black !important;">Contact</h1>
-            <p>It always has been, and will always be, about quality. Let us know how we can help you today!</p>
-        </div>
-
-    </section>
+    <div class="preloader" style="background-image: url('/media-static/car/page-loader.gif')"></div>
 }
 
-<section id="content">
+<div class="__preloader_content-container">
 
-    <div class="content-wrap">
+    @section PageTitle
+    {
+        <section id="page-title" style="background-image: url('media-static/car/contact.jpg') !important;" class="page-title-parallax page-title-dark" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;">
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+            <div class="container clearfix">
+                <h1 style="color: black !important;">Contact</h1>
+                <p>It always has been, and will always be, about quality. Let us know how we can help you today!</p>
+            </div>
 
-                    <div>
+        </section>
+    }
 
-                        <form asp-action="SendMessage" method="post" enctype="multipart/form-data" novalidate>
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <section id="content">
 
-                            <div class="col_one_third">
-                                <label asp-for="SenderName">Name <small class="text-danger">*</small></label>
-                                <input asp-for="SenderName" type="text" class="sm-form-control border-form-control"/>
-                                <span asp-validation-for="SenderName" class="text-danger"></span>
-                            </div>
+        <div class="content-wrap">
 
-                            <div class="col_one_third">
-                                <label asp-for="SenderEmail">Email <small>*</small></label>
-                                <input asp-for="SenderEmail" class="sm-form-control border-form-control"/>
-                                <span asp-validation-for="SenderEmail" class="text-danger"></span>
-                            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
 
-                            <div class="col_one_third col_last">
-                                <label asp-for="SenderPhoneNumber">Phone</label>
-                                <input asp-for="SenderPhoneNumber" class="sm-form-control border-form-control"/>
-                                <span asp-validation-for="SenderPhoneNumber" class="text-danger"></span>
-                            </div>
+                        <div>
 
-                            <div class="clear"></div>
+                            <form asp-action="SendMessage" method="post" enctype="multipart/form-data" novalidate>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                            <div class="col_full">
-                                <label asp-for="Subject">Subject <small>*</small></label>
-                                <input asp-for="Subject" class="sm-form-control border-form-control"/>
-                                <span asp-validation-for="Subject" class="text-danger"></span>
-                            </div>
+                                <div class="col_one_third">
+                                    <label asp-for="SenderName">Name <small class="text-danger">*</small></label>
+                                    <input asp-for="SenderName" type="text" class="sm-form-control border-form-control"/>
+                                    <span asp-validation-for="SenderName" class="text-danger"></span>
+                                </div>
 
-                            <div class="clear"></div>
+                                <div class="col_one_third">
+                                    <label asp-for="SenderEmail">Email <small>*</small></label>
+                                    <input asp-for="SenderEmail" class="sm-form-control border-form-control"/>
+                                    <span asp-validation-for="SenderEmail" class="text-danger"></span>
+                                </div>
 
-                            <div class="col_full">
-                                <label asp-for="Message">Message <small>*</small></label>
-                                <textarea asp-for="Message" class="sm-form-control border-form-control" rows="5" cols="30"></textarea>
-                                <span asp-validation-for="Message" class="text-danger"></span>
-                            </div>
+                                <div class="col_one_third col_last">
+                                    <label asp-for="SenderPhoneNumber">Phone</label>
+                                    <input asp-for="SenderPhoneNumber" class="sm-form-control border-form-control"/>
+                                    <span asp-validation-for="SenderPhoneNumber" class="text-danger"></span>
+                                </div>
 
-                            <div class="col_full">
-                                <button class="button button-3d nomargin" type="submit">Send Message</button>
-                            </div>
-                            
-                            <div class="clear"></div>
-                            
-                            <div class="col-full">
-                                @if (TempData["MessageFail"] != null)
-                                {
-                                    <p class="text-danger">@TempData["MessageFail"]</p>
-                                }
-                            </div>
+                                <div class="clear"></div>
 
-                        </form>
+                                <div class="col_full">
+                                    <label asp-for="Subject">Subject <small>*</small></label>
+                                    <input asp-for="Subject" class="sm-form-control border-form-control"/>
+                                    <span asp-validation-for="Subject" class="text-danger"></span>
+                                </div>
 
+                                <div class="clear"></div>
+
+                                <div class="col_full">
+                                    <label asp-for="Message">Message <small>*</small></label>
+                                    <textarea asp-for="Message" class="sm-form-control border-form-control" rows="5" cols="30"></textarea>
+                                    <span asp-validation-for="Message" class="text-danger"></span>
+                                </div>
+
+                                <div class="col_full">
+                                    <button class="button button-3d nomargin" type="submit">Send Message</button>
+                                </div>
+
+                                <div class="clear"></div>
+
+                                <div class="col-full">
+                                    @if (TempData["MessageFail"] != null)
+                                    {
+                                        <p class="text-danger">@TempData["MessageFail"]</p>
+                                    }
+                                </div>
+
+                            </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
-    </div>
-
-</section>
-
-
+    </section>
+</div>
 
 
 @section Scripts {
