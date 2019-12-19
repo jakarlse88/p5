@@ -414,7 +414,7 @@ namespace TheCarHub.Test
             // Assert
             Assert.NotNull(result);
             Assert.IsAssignableFrom<ListingInputModel>(result);
-            Assert.Equal("one description", result.Description);
+            Assert.Equal("1991 Mazda Miata", result.Title);
         }
 
         [Fact]
@@ -478,7 +478,7 @@ namespace TheCarHub.Test
             // Assert
             Assert.NotNull(result);
             Assert.IsAssignableFrom<ListingViewModel>(result);
-            Assert.Equal("one description", result.Description);
+            Assert.Equal("1991 Mazda Miata", result.Title);
         }
 
         [Fact]

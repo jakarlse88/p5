@@ -6,7 +6,7 @@ Student project for OpenClassrooms .NET Back-End Developer Path, built with .NET
 
 To view, either clone this repo or view the [web app on Azure](https://thecarhub.azurewebsites.net/).
 
-Note that the app is configured to use a local SQL Express server in development. Depending on your development environment, you may need to change the connection strings (defined in ``appsettings.json``).
+Note that the app is configured to use a local SQL Express server in development. Depending on your development environment, you may need to change the connection strings (defined in ``appsettings.json``). *Assessors:* there are additional configuration contained in `secrets.json`, which is included in the project deliverables submitted to OpenClassrooms. These are set as application settings in Azure.
 
 Current settings:
 ```json

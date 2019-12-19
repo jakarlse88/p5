@@ -16,27 +16,30 @@ namespace TheCarHub.Controllers
         }
 
         // GET: /
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string query)
         {
-            var viewModels = await _listingService
-                .GetAllListingsAsViewModel();
+            ViewData["Query"] = query;
 
-            return View(viewModels);
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                var viewModels = 
+                    await _listingService
+                        .GetAllListingsAsViewModel();
+                
+                return View(viewModels);
+            }
+            else
+            {
+                var viewModels =
+                    await _listingService
+                        .GetFilteredListingViewModels(
+                            1,
+                            query);
+                
+                return View(viewModels);
+            }
         }
     
-        // GET: /searchlistings?query
-        public async Task<IActionResult> SearchListings(string query)
-        {
-            ViewData["SearchString"] = query;
-
-            var viewModels = await _listingService
-                .GetFilteredListingViewModels(
-                    1,
-                    query);
-
-            return View("Index", viewModels);
-        }
-
         // GET: Listing/5
         public async Task<IActionResult> Listing(int? id)
         {

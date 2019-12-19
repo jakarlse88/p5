@@ -58,7 +58,7 @@ namespace TheCarHub.Test
                 var controller = new FrontPageController(service);
 
                 // Act
-                result = await controller.Index();
+                result = await controller.Index(null);
 
                 context.Database.EnsureDeleted();
             }
@@ -100,7 +100,7 @@ namespace TheCarHub.Test
 
             // Assert
             var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
-            var modelResult = Assert.IsAssignableFrom<ListingViewModel>(viewResult.Model);
+            Assert.IsAssignableFrom<ListingViewModel>(viewResult.Model);
 
             mockService
                 .Verify(x => x.GetListingViewModelByIdAsync(It.IsAny<int>()), Times.Once);
@@ -132,7 +132,7 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public async Task TestSearchListingsSearchStringNull()
+        public async Task TestIndexQueryInvalid()
         {
             // Arrange
             var options = BuildDbContextOptions();
@@ -155,7 +155,7 @@ namespace TheCarHub.Test
                 var controller = new FrontPageController(service);
 
                 // Act
-                result = await controller.SearchListings(null);
+                result = await controller.Index("test");
 
                 context.Database.EnsureDeleted();
             }
@@ -167,7 +167,7 @@ namespace TheCarHub.Test
         }
 
         [Fact]
-        public async Task TestSearchListingsSearchStringInvalid()
+        public async Task TestIndexQueryValid()
         {
             // Arrange
             var options = BuildDbContextOptions();
@@ -190,42 +190,7 @@ namespace TheCarHub.Test
                 var controller = new FrontPageController(service);
 
                 // Act
-                result = await controller.SearchListings("test");
-
-                context.Database.EnsureDeleted();
-            }
-
-            // Assert
-            var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
-            var modelResult = Assert.IsAssignableFrom<IEnumerable<ListingViewModel>>(viewResult.Model);
-            Assert.Empty(modelResult);
-        }
-
-        [Fact]
-        public async Task TestSearchListingsSearchStringValid()
-        {
-            // Arrange
-            var options = BuildDbContextOptions();
-
-            IActionResult result;
-
-            await using (var context = new ApplicationDbContext(options))
-            {
-                context.Database.EnsureCreated();
-
-                var repository = new ListingRepository(context);
-
-                var service = new ListingService(repository,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new Mapper(GetMapperConfig()));
-
-                var controller = new FrontPageController(service);
-
-                // Act
-                result = await controller.SearchListings("ford");
+                result = await controller.Index("ford");
 
                 context.Database.EnsureDeleted();
             }

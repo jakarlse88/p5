@@ -135,7 +135,7 @@ namespace TheCarHub.Test
                 var result = context.Media.ToList();
 
                 Assert.Contains(result, m => m.FileName == "test file");
-                Assert.Equal(15, result.Count);
+                Assert.Equal(16, result.Count);
                 
                 context.Database.EnsureDeleted();
             }

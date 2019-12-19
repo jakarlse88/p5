@@ -29,7 +29,6 @@ namespace TheCarHub.Areas.Admin.Controllers
                 return BadRequest();
             }
             
-//            var fileNames = await _mediaService.UploadFiles(files);
             var fileNames = await _mediaService.UploadFileAzureBlobAsync(files);
 
             if (fileNames == null || !fileNames.Any())

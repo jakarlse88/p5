@@ -52,7 +52,7 @@ namespace TheCarHub.Test
             Media result;
 
             // Act
-            using (var context = new ApplicationDbContext(options))
+            await using (var context = new ApplicationDbContext(options))
             {
                 context.Database.EnsureCreated();
 

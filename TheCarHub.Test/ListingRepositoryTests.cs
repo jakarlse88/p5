@@ -45,13 +45,13 @@ namespace TheCarHub.Test
         }
 
         [Theory]
-        [InlineData(1, "one description")]
-        [InlineData(2, "two description")]
-        [InlineData(3, "three description")]
-        [InlineData(4, "four description")]
-        [InlineData(5, "five description")]
-        [InlineData(6, "six description")]
-        public async void TestGetListingByIdValidId(int testId, string expectedMake)
+        [InlineData(1, "1991 Mazda Miata")]
+        [InlineData(2, "2007 Jeep Liberty")]
+        [InlineData(3, "2017 Ford Explorer")]
+        [InlineData(4, "2008 Honda Civic")]
+        [InlineData(5, "2016 Volkswagen GTI")]
+        [InlineData(6, "2013 Ford Edge")]
+        public async void TestGetListingByIdValidId(int testId, string expectedTitle)
         {
             // Arrange
             var options = BuildTestDbOptions();
@@ -70,7 +70,7 @@ namespace TheCarHub.Test
             }
 
             // Assert
-            Assert.Equal(expectedMake, result.Description);
+            Assert.Equal(expectedTitle, result.Title);
         }
 
         [Theory]

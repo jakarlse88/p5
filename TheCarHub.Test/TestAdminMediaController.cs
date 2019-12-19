@@ -53,7 +53,7 @@ namespace TheCarHub.Test
 
             var mockMediaService = new Mock<IMediaService>();
             mockMediaService
-                .Setup(x => x.UploadFiles(It.IsAny<List<IFormFile>>()))
+                .Setup(x => x.UploadFileAzureBlobAsync(It.IsAny<List<IFormFile>>()))
                 .ReturnsAsync(fileNames)
                 .Verifiable();
 
@@ -66,7 +66,7 @@ namespace TheCarHub.Test
             Assert.IsAssignableFrom<BadRequestResult>(result);
             
             mockMediaService
-                .Verify(x => x.UploadFiles(It.IsAny<List<IFormFile>>()), Times.Once);
+                .Verify(x => x.UploadFileAzureBlobAsync(It.IsAny<List<IFormFile>>()), Times.Once);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace TheCarHub.Test
 
             var mockMediaService = new Mock<IMediaService>();
             mockMediaService
-                .Setup(x => x.UploadFiles(It.IsAny<List<IFormFile>>()))
+                .Setup(x => x.UploadFileAzureBlobAsync(It.IsAny<List<IFormFile>>()))
                 .ReturnsAsync(fileNames)
                 .Verifiable();
 
@@ -92,7 +92,7 @@ namespace TheCarHub.Test
             var result = await controller.Upload(files);
             
             mockMediaService
-                .Verify(x => x.UploadFiles(It.IsAny<List<IFormFile>>()), Times.Once);
+                .Verify(x => x.UploadFileAzureBlobAsync(It.IsAny<List<IFormFile>>()), Times.Once);
         }
 
         [Fact]
@@ -113,7 +113,7 @@ namespace TheCarHub.Test
 
             var mockMediaService = new Mock<IMediaService>();
             mockMediaService
-                .Setup(x => x.UploadFiles(It.IsAny<List<IFormFile>>()))
+                .Setup(x => x.UploadFileAzureBlobAsync(It.IsAny<List<IFormFile>>()))
                 .ReturnsAsync(fileNames)
                 .Verifiable();
 
@@ -125,7 +125,7 @@ namespace TheCarHub.Test
             Assert.IsAssignableFrom<JsonResult>(result);
             
             mockMediaService
-                .Verify(x => x.UploadFiles(It.IsAny<List<IFormFile>>()), Times.Once);
+                .Verify(x => x.UploadFileAzureBlobAsync(It.IsAny<List<IFormFile>>()), Times.Once);
         }
 
         [Fact]
@@ -200,8 +200,8 @@ namespace TheCarHub.Test
 
             var mockMediaService = new Mock<IMediaService>();
             mockMediaService
-                .Setup(x => x.RemoveMediaObject(It.IsAny<Media>()))
-                .Returns(true);
+                .Setup(x => x.RemoveAzureBlobMediaObjectAsync(It.IsAny<Media>()))
+                .ReturnsAsync(true);
             
             mockMediaService
                 .Setup(x => x.GetMediaByFileNameAsync(It.IsAny<string>()))
