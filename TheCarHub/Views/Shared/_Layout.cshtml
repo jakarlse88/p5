@@ -37,8 +37,6 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    @* <link rel="stylesheet" href="../../css/colors.php?color=c85e51" type="text/css" /> *@
-
     <!-- Document Title
     ============================================= -->
     <title>The Car Hub</title>
@@ -51,12 +49,15 @@
     
 </head>
 
-@* <body class="stretched side-push-panel" data-loader-html="<div><img src='media-static/car/page-loader.gif' alt='Loader'></div>"> *@
 <body class="stretched side-push-panel">
 
 <!-- Preloader 
 ============================================= -->
 @RenderSection("Preloader", false)
+@section Preloader
+{
+    <div class="preloader" style="background-image: url(/media-static/car/page-loader.gif)"></div>
+}
 
 <!-- Side Panel Overlay -->
 <div class="body-overlay"></div>
@@ -144,13 +145,17 @@
 
     <!-- Page Title
     ============================================= -->
-    @* <section id="page-title" class="page-title-parallax page-title-dark" style="background-image: url('../../wwwroot/media-static/car/hero-slider/2.jpg'); background-size: cover; padding: 120px 0;" data-bottom-top="background-position:0px 0px;" data-top-bottom="background-position:0px -300px;"> *@
     @RenderSection("PageTitle", false)
-    <!-- #page-title end -->
 
     <!-- Content
     ============================================= -->
     @RenderBody()
+    
+    <!-- Call us
+    ============================================= -->
+    <div class="container-fluid clearfix bg-light pb-1 pt-3" style="margin-bottom: -1em;">
+        <p class="text-center lead">Questions? Call us today at <strong>(123) 456-7890!</strong></p>
+    </div>
 
     <!-- Footer
     ============================================= -->
