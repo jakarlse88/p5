@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TheCarHub.Models.InputModels;
 using TheCarHub.Models.ViewModels;
 using TheCarHub.Services;
 
@@ -25,20 +23,21 @@ namespace TheCarHub.Controllers
 
             return View(viewModels);
         }
-
-        public async Task<IActionResult> SearchListings(string searchString)
+    
+        // GET: /searchlistings?query
+        public async Task<IActionResult> SearchListings(string query)
         {
-            ViewData["SearchString"] = searchString;
+            ViewData["SearchString"] = query;
 
             var viewModels = await _listingService
                 .GetFilteredListingViewModels(
                     1,
-                    searchString);
+                    query);
 
             return View("Index", viewModels);
         }
 
-    // GET: Listing/5
+        // GET: Listing/5
         public async Task<IActionResult> Listing(int? id)
         {
             if (id == null)

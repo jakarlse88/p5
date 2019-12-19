@@ -29,30 +29,38 @@
         <div class="content-wrap notoppadding">
 
             <div class="container">
-            
-                        <div class="card p-4 shadow" style="top: -60px;">
-                            <form asp-action="SearchListings" method="get" class="nobottommargin">
-                                <div class="row clearfix">
-                                    <div class="col-md-6 col-sm-6 col-12 mt-4 mt-md-0">
-                                        <div class="form-group">
-                                             <label>Search car makes:</label>
-                                             <input name="SearchString" class="form-control" type="text"/>
-                                         </div>
-                                    </div>
-            
-                                    <div class="col-md-3 col-sm-6 col-12 mt-4 mt-md-0">
-                                        <button type="Submit" class="button button-3d button-rounded btn-block noleftmargin" style="margin-top: 29px;">Search</button>
-                                    </div>
-                                    
-                                    <div class="col-md-3 col-sm-6 col-6">
-                                        <a asp-action="Index">
-                                            <button class="button button-red button-3d button-rounded btn-block noleftmargin" style="margin-top: 29px;">Reset</button>
-                                        </a>
+
+                <div class="card p-4 shadow" style="top: -60px;">
+                    <div class="row clearfix">
+
+                        <div class="col-9">
+                            <form asp-action="SearchListings" method="post" class="row">
+
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label>Search car makes:</label>
+                                        <input name="Query" class="form-control" type="text"/>
                                     </div>
                                 </div>
-            
+
+                                <div class="col-4">
+                                    <a asp-action="SearchListings" asp-route-query="Query">
+                                        <button type="submit" class="button button-3d button-rounded btn-block noleftmargin" style="margin-top: 29px;">Search</button>
+                                    </a>
+                                </div>
+
                             </form>
                         </div>
+
+                        <div class="col-3">
+                            <a asp-action="Index">
+                                <button class="button button-red button-3d button-rounded btn-block noleftmargin" style="margin-top: 29px;">Reset</button>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
 
                 <div class="section nomargin pt-0 nobg">
                     <div class="container clearfix">
@@ -117,3 +125,7 @@
 </div>
 
 <!-- #content end -->
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
