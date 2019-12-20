@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,9 @@ namespace TheCarHub.Test
             _mockWebHostEnv = new Mock<IWebHostEnvironment>();
             _mockWebHostEnv
                 .Setup(x => x.WebRootPath)
-                .Returns("/Users/jkarlsen/code/p5/TheCarHub.Test/testroot/");
+                .Returns(Directory.GetCurrentDirectory() + 
+                         Path.DirectorySeparatorChar +
+                        "testroot");
         }
 
         [Fact]

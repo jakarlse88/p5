@@ -77,13 +77,18 @@ namespace TheCarHub.Services
             }
         }
         
-        private string FormatMessageBody(string senderName, string senderEmail, string senderPhone, string subject, string message)
+        private string FormatMessageBody(
+            string senderName,
+            string senderEmail,
+            string senderPhone,
+            string subject,
+            string message)
         {
             var templatePath =
                 _webHostEnvironment.WebRootPath +
-                Path.DirectorySeparatorChar.ToString() +
+                Path.DirectorySeparatorChar +
                 "Templates" +
-                Path.DirectorySeparatorChar.ToString() +
+                Path.DirectorySeparatorChar +
                 "ContactFormEmailTemplate.html";
 
             var builder = new BodyBuilder();

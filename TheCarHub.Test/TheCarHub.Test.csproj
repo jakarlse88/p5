@@ -24,7 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="testroot\media" />
+    <None Remove="testroot\Templates\ContactFormEmailTemplate.html" />
+    <Content Include="testroot\Templates\ContactFormEmailTemplate.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
