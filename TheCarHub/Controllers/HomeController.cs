@@ -6,11 +6,11 @@ using TheCarHub.Services;
 
 namespace TheCarHub.Controllers
 {
-    public class FrontPageController : Controller
+    public class HomeController : Controller
     {
         private readonly IListingService _listingService;
 
-        public FrontPageController(IListingService listingService)
+        public HomeController(IListingService listingService)
         {
             _listingService = listingService;
         }

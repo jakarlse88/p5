@@ -1,0 +1,17 @@
+language: csharp
+mono: -latest
+solution: TheCarHub.sln
+
+install:
+  - nuget restore TheCarHub.sln
+  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+script:
+  - msbuild /p:Configuration=Release TheCarHub.sln
+  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./TheCarHub.Tests/bin/Release/TheCarHub.Tests.dll
+
+  deploy:
+    provider: azure_web_apps
+    username: <username>
+    password: <encrypted password>
+    site: <site>
+    edge: true # opt in to dpl v2

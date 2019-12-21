@@ -125,7 +125,7 @@ namespace TheCarHub
                 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=FrontPage}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 
                 endpoints.MapRazorPages();
             });

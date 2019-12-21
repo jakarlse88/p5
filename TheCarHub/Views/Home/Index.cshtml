@@ -77,7 +77,7 @@
                                     <article class="portfolio-item cf-sedan col-4" style="padding-bottom: 40px">
                                         <div class="portfolio-image">
 
-                                            <a asp-controller="FrontPage" asp-action="Listing" asp-route-id="@item.Id">
+                                            <a asp-controller="Home" asp-action="Listing" asp-route-id="@item.Id">
                                                 @{
                                                     string filePath;
 
@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="portfolio-desc giveMeEllipsis">
                                             <h3>
-                                                <a a asp-controller="FrontPage" asp-action="Listing" asp-route-id="@item.Id">@item.Car.Year.ToString() @item.Car.Make @item.Car.Model</a>
+                                                <a a asp-controller="Home" asp-action="Listing" asp-route-id="@item.Id">@item.Car.Year.ToString() @item.Car.Make @item.Car.Model</a>
                                             </h3>
                                             <span class="giveMeEllipsis">@item.Description</span>
                                         </div>

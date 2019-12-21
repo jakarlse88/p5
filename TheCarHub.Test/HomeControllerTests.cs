@@ -17,7 +17,7 @@ using Xunit;
 
 namespace TheCarHub.Test
 {
-    public class FrontPageControllerTests
+    public class HomeControllerTests
     {
         private static DbContextOptions<ApplicationDbContext> BuildDbContextOptions()
         {
@@ -55,7 +55,7 @@ namespace TheCarHub.Test
                     null,
                     new Mapper(GetMapperConfig()));
 
-                var controller = new FrontPageController(service);
+                var controller = new HomeController(service);
 
                 // Act
                 result = await controller.Index(null);
@@ -72,7 +72,7 @@ namespace TheCarHub.Test
         public async Task TestListingIdNull()
         {
             // Arrange
-            var controller = new FrontPageController(null);
+            var controller = new HomeController(null);
 
             // Act
             var result = await controller.Listing(null);
@@ -93,7 +93,7 @@ namespace TheCarHub.Test
                 .ReturnsAsync(viewModel)
                 .Verifiable();
 
-            var controller = new FrontPageController(mockService.Object);
+            var controller = new HomeController(mockService.Object);
             
             // Act
             var result = await controller.Listing(1);
@@ -119,7 +119,7 @@ namespace TheCarHub.Test
                 .ReturnsAsync(viewModel)
                 .Verifiable();
 
-            var controller = new FrontPageController(mockService.Object);
+            var controller = new HomeController(mockService.Object);
             
             // Act
             var result = await controller.Listing(1);
@@ -152,7 +152,7 @@ namespace TheCarHub.Test
                     null,
                     new Mapper(GetMapperConfig()));
 
-                var controller = new FrontPageController(service);
+                var controller = new HomeController(service);
 
                 // Act
                 result = await controller.Index("test");
@@ -187,7 +187,7 @@ namespace TheCarHub.Test
                     null,
                     new Mapper(GetMapperConfig()));
 
-                var controller = new FrontPageController(service);
+                var controller = new HomeController(service);
 
                 // Act
                 result = await controller.Index("ford");
@@ -205,7 +205,7 @@ namespace TheCarHub.Test
         public void TestErrorStatusCode404()
         {
             // Arrange
-            var controller = new FrontPageController(null);
+            var controller = new HomeController(null);
 
             // Act
             var result = controller.Error(404);
