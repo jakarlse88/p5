@@ -95,7 +95,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">$</div>
                                 </div>
-                                <input asp-for="PurchasePrice" class="form-control __purchase-price" type="number" val="0"/>
+                                <input asp-for="PurchasePrice" class="form-control __purchase-price" type="text" asp-format="{0:#.###.###,##}" placeholder="0"/>
                                 <span asp-validation-for="PurchasePrice" class="text-danger"></span>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">$</div>
                                 </div>
-                                <input asp-for="RepairJob.Cost" class="form-control __repair-cost __numerical-input" type="number"/>
+                                <input asp-for="RepairJob.Cost" class="form-control __repair-cost __numerical-input" type="text" asp-format="{0:#.###.###,##}" placeholder="0"/>
                                 <span asp-validation-for="RepairJob.Cost" class="text-danger"></span>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">$</div>
                                 </div>
-                                <input asp-for="SellingPrice" class="form-control __selling-price __numerical-input" type="number" readonly/>
+                                <input asp-for="SellingPrice" class="form-control __selling-price __numerical-input" type="text" asp-format="{0:#.###.###,##}" placeholder="0" readonly/>
                             </div>
                         </div>
                     </div>

@@ -41,9 +41,6 @@ namespace TheCarHub
                 services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("AppIdentity"))
                 );
-                
-//                services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
-//                services.BuildServiceProvider().GetService<AppIdentityDbContext>().Database.Migrate();
             }
             
             services.AddDbContext<ApplicationDbContext>(options =>
