@@ -45,7 +45,7 @@ namespace TheCarHub.Controllers
                 return View("Index", inputModel);
             }
 
-            return RedirectToAction("Index", "FrontPage", inputModel);
+            return RedirectToAction("Index", "Home", inputModel);
         }
     }
 }
