@@ -1,4 +1,3 @@
-wwwroot/media/**
 !wwwroot/media/**/
 !wwwroot/media/.gitkeep
 

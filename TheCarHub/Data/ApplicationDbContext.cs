@@ -230,12 +230,6 @@ namespace TheCarHub.Data
                     },
                     new Media
                     {
-                        ListingId = 2,
-                        Id = 4,
-                        FileName = "jeep_liberty_3.jpg"
-                    },
-                    new Media
-                    {
                         ListingId = 3,
                         Id = 5,
                         FileName = "ford_explorer_1.jpg"
@@ -245,12 +239,6 @@ namespace TheCarHub.Data
                         ListingId = 3,
                         Id = 6,
                         FileName = "ford_explorer_2.jpg"
-                    },
-                    new Media
-                    {
-                        ListingId = 3,
-                        Id = 7,
-                        FileName = "ford_explorer_3.jpg"
                     },
                     new Media
                     {
@@ -278,27 +266,15 @@ namespace TheCarHub.Data
                     },
                     new Media
                     {
-                        ListingId = 5,
-                        Id = 12,
-                        FileName = "vw_gti_3.jpg"
-                    },
-                    new Media
-                    {
                         ListingId = 6,
                         Id = 13,
-                        FileName = "ford_edge_1.png"
+                        FileName = "ford_edge_1.jpg"
                     },
                     new Media
                     {
                         ListingId = 6,
                         Id = 14,
-                        FileName = "ford_edge_2.png"
-                    },
-                    new Media
-                    {
-                        ListingId = 6,
-                        Id = 15,
-                        FileName = "ford_edge_3.jpg"
+                        FileName = "ford_edge_2.jpg"
                     }
                 );
 

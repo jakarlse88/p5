@@ -84,7 +84,7 @@
                                                     if (item.Media.Any())
                                                     {
                                                         filePath = item.Media.FirstOrDefault()?.FileName != null ?
-                                                            "https://csb05a6c77618cex4803xb98.blob.core.windows.net/carhub-media/" + item.Media.FirstOrDefault().FileName :
+                                                            "media/" + item.Media.FirstOrDefault()?.FileName :
                                                             "media-static/car/hero-slider/1.jpg";
                                                     }
                                                     else
